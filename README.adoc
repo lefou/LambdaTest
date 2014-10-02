@@ -1,0 +1,3 @@
+= poor-mans-lambda-test
+
+Minimal Java8 Lambda enabled testing for TestNG
