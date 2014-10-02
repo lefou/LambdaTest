@@ -18,16 +18,22 @@ Here you see a basic test example, which produces a TestNG test class
 ----
 package org.example
 
-import static org.testng.Assert.assertEquals;
+import de.tobiasroeser.lambdatest.testng.FreeSpec;
 
-class SimpleTest extends GenericTest {{
+class SimpleTest extends FreeSpec {{
 
   test("1 + 1 = 2", () -> {
     assertEquals(1 + 1, 2);
   });
-  
-  test("division by zero", () -> {
-    pending();
+
+  test("a pending test", () -> pending());
+
+  test("divide by zero", () -> {
+    int a = 2;
+	int b = 0;
+    intercept(ArithmeticException.class, () -> {
+      int c = a / b;
+    });
   });
 
 }}
