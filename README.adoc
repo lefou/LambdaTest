@@ -1,4 +1,6 @@
 = poor-mans-lambda-test
+:toc:
+:toc-placement: preamble
 
 Minimal Java8 Lambda enabled testing for TestNG (and later maybe JUnit).
 
