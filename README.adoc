@@ -5,14 +5,27 @@ Minimal Java8 Lambda enabled testing for TestNG (and later maybe JUnit).
 == Motivation
 
 When constrained to work in a Java-only toolchain, I really miss my ScalaTest.
-I tried some lambda enabled test frameworks, but until now, I did not find a suitable solution.
+I tried some lambda enabled test frameworks, but until now,
+I did not find a suitable solution without compromizing the integration benefits.
+
 Thus I decided to hack a really small and generic base class that basically allows me write tests easier.
 I avoided to develop a completely new test stack,
-so for asserts and the like the tools of the underlying test framework (currently TestNG) should be use. 
+so for asserts and the like the tools of the underlying test framework (currently TestNG) are used. 
+
+Most important features (beside all those you gain from using TestNG already) are:
+
+* No longer requied to have each test in a separate method
+* Meaningful names for tests
+* Easy to write data-centric tests (e.g. generate as much test cases as you need in a loop)
+* Easy to intercept exceptions
+* Easy to add pending tests
+* Useful output per test
+
 
 == How to write tests
 
-Here you see a basic test example, which produces a TestNG test class
+Here you see a basic test example, which produces a TestNG test class.
+You need to extend from class `de.tobiasroeser.lambdatest.testng.FreeSpec`.
 
 [source,java]
 ----
@@ -38,6 +51,9 @@ class SimpleTest extends FreeSpec {{
 
 }}
 ----
+
+The methods `test`, `pending` and `intercept` are provided by `FreeSpec`
+whereas the usual `assertXXX` methods are provided by TestNG and are automatically in scope because `FreeSpec` extends `org.testng.Assert`.
 
 == Working on Java7
 TBD
