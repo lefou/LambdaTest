@@ -31,7 +31,7 @@ You need to extend from class `de.tobiasroeser.lambdatest.testng.FreeSpec`.
 
 [source,java]
 ----
-package org.example
+package org.example;
 
 import de.tobiasroeser.lambdatest.testng.FreeSpec;
 
