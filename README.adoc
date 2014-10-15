@@ -1,6 +1,7 @@
 = poor-mans-lambda-test
 :toc:
 :toc-placement: preamble
+:lambdatestversion: 0.0.1
 
 Minimal Java8 Lambda enabled testing for TestNG (and later maybe JUnit).
 
@@ -59,3 +60,34 @@ whereas the usual `assertXXX` methods are provided by TestNG and are automatical
 
 == Working on Java7
 TBD
+
+== Licence
+
+This project is published under the http://www.apache.org/licenses/LICENSE-2.0.txt[Apache Licence Version 2.0].
+
+== Maven
+
+To use this project in your Maven project:
+
+[source,xml,subs="attributes"]
+----
+<repositories>
+  <repository>
+    <snapshots>
+      <enabled>false</enabled>
+    </snapshots>
+    <id>bintray-lefou-poor-mans-lambda-test</id>
+    <name>bintray-lefou-poor-mans-lambda-test</name>
+    <url>http://dl.bintray.com/lefou/poor-mans-lambda-test</url>
+  </repository>
+</repositories>
+
+<dependencies>
+  <dependency>
+    <groupId>de.tobiasroeser</groupId>
+    <artifactId>de.tobiasroeser.lambdatest</artifactId>
+    <version>{lambdatestversion}</version>
+    <scope>test</scope>
+  </dependency>
+</dependencies>
+----
