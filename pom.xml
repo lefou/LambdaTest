@@ -6,13 +6,12 @@
 
 	<groupId>de.tobiasroeser</groupId>
 	<artifactId>de.tobiasroeser.lambdatest</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 
 	<properties>
-		<maven.compiler.source>1.5</maven.compiler.source>
-		<maven.compiler.target>1.5</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<bundle.namespace>${project.artifactId}</bundle.namespace>
 	</properties>
 
 	<dependencies>
