@@ -2,8 +2,24 @@ package de.tobiasroeser.lambdatest.internal;
 
 public class AnsiColor {
 
+	private static final char ESC = 27;
+	private static final String CSI = ESC + "[";
+
 	public enum Color {
-		YELLOW, GREEN, RED;
+		BLACK(0),
+		RED(1),
+		GREEN(2),
+		YELLOW(3),
+		BLUE(4),
+		MAGENTA(5),
+		CYAN(6),
+		WHITE(7);
+
+		public int code;
+
+		private Color(int code) {
+			this.code = code;
+		}
 	}
 
 	// ////////////////
@@ -19,9 +35,17 @@ public class AnsiColor {
 		return enabled;
 	}
 
-	public String fg(Color yellow) {
+	public String fg(Color color) {
 		if (isEnabled()) {
+			return CSI + (30 + color.code) + "m";
+		} else {
 			return "";
+		}
+	}
+
+	public String fgBright(Color color) {
+		if (isEnabled()) {
+			return CSI + (30 + color.code) + ";1m";
 		} else {
 			return "";
 		}
@@ -29,7 +53,7 @@ public class AnsiColor {
 
 	public String reset() {
 		if (isEnabled()) {
-			return "";
+			return CSI + "0m";
 		} else {
 			return "";
 		}
