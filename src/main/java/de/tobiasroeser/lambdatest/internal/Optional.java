@@ -76,8 +76,7 @@ public class Optional<T> implements Iterable<T>, Serializable {
 	}
 
 	public List<T> toList() {
-		return isDefined() ? Arrays.<T> asList(optional) : Collections
-				.<T> emptyList();
+		return isDefined() ? Arrays.<T> asList(optional) : Collections.<T> emptyList();
 	}
 
 	public Iterator<T> iterator() {
@@ -86,8 +85,7 @@ public class Optional<T> implements Iterable<T>, Serializable {
 
 	@SuppressWarnings("unchecked")
 	public <R> Optional<R> map(final F1<? super T, ? extends R> f) {
-		return (Optional<R>) (isEmpty() ? Optional.none() : Optional.some(f
-				.apply(get())));
+		return (Optional<R>) (isEmpty() ? Optional.none() : Optional.some(f.apply(get())));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -97,8 +95,7 @@ public class Optional<T> implements Iterable<T>, Serializable {
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + "(" + (isDefined() ? optional : "")
-				+ ")";
+		return getClass().getSimpleName() + "(" + (isDefined() ? optional : "") + ")";
 	}
 
 	@Override
@@ -106,8 +103,7 @@ public class Optional<T> implements Iterable<T>, Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (isNone ? 1231 : 1237);
-		result = prime * result
-				+ ((optional == null) ? 0 : optional.hashCode());
+		result = prime * result + ((optional == null) ? 0 : optional.hashCode());
 		return result;
 	}
 

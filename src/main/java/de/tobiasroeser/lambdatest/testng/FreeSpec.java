@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.testng.Assert;
 import org.testng.SkipException;
@@ -39,31 +40,61 @@ public class FreeSpec extends Assert {
 		throw new SkipException("Pending");
 	}
 
+	/**
+	 * Intercept exceptions of type <code>exceptionType</code> and fail if no
+	 * such exception or an exception with an incompatible type was thrown.
+	 * 
+	 * @param exceptionType
+	 *            The exception type to intercept.
+	 * @throws TextException
+	 *             If no exception or an exception with an incompatible type was
+	 *             thrown.
+	 */
 	public void intercept(final Class<? extends Exception> exceptionType,
 			final RunnableWithException throwing) throws Exception {
+		intercept(exceptionType, ".*", throwing);
+	}
+
+	public void intercept(final Class<? extends Exception> exceptionType,
+			String messageRegex, final RunnableWithException throwing)
+			throws Exception {
 		try {
 			throwing.run();
 		} catch (Exception e) {
 			if (exceptionType.isAssignableFrom(e.getClass())) {
-				return;
+				final boolean matches;
+				if (".*".equals(messageRegex)) {
+					matches = true;
+				} else {
+					final String msg = e.getMessage();
+					if (msg == null) {
+						matches = false;
+					} else {
+						matches = Pattern.matches(messageRegex, msg);
+					}
+					if (!matches)
+						return;
+					else {
+						throw new TestException(
+								"Exception was thrown with the wrong message: Expected: '" + messageRegex
+										+ "' but got '" + msg + "'", e);
+					}
+				}
 			}
-			throw new TestException("Expected throw exception of type ["
-					+ exceptionType.getName() + "] does not match ["
-					+ e.getClass().getName() + "]", e);
+			throw new TestException("Thrown exception of type [" + exceptionType.getName()
+					+ "] does not match expected type [" + e.getClass().getName() + "]", e);
 		}
-		throw new TestException("Expected exception of type ["
-				+ exceptionType.getName() + "] was not thrown");
+		throw new TestException("Expected exception of type [" + exceptionType.getName() + "] was not thrown");
 	}
 
 	@Test(dataProvider = "testCases")
-	public void runTests(final String name, final RunnableWithException testCase)
-			throws Exception {
+	public void runTests(final String name, final RunnableWithException testCase) throws Exception {
 		AnsiColor ansi = new AnsiColor();
 		final PrintStream out = System.out;
 
 		if (testNeverRun) {
-			out.println("Running " + ansi.fg(Color.YELLOW) + testCases.size()
-					+ ansi.reset() + " tests in " + ansi.fg(Color.YELLOW)
+			out.println("Running " + ansi.fg(Color.CYAN) + testCases.size()
+					+ ansi.reset() + " tests in " + ansi.fg(Color.CYAN)
 					+ getClass().getName() + ansi.reset() + ":");
 			testNeverRun = false;
 		}
@@ -71,11 +102,9 @@ public class FreeSpec extends Assert {
 		final String testName = name;
 		try {
 			testCase.run();
-			out.println(ansi.fg(Color.GREEN) + "-- SUCCESS " + testName
-					+ ansi.reset());
+			out.println(ansi.fg(Color.GREEN) + "-- SUCCESS " + testName + ansi.reset());
 		} catch (final SkipException e) {
-			out.println(ansi.fg(Color.YELLOW) + "-- SKIPPED " + testName
-					+ " (pending)" + ansi.reset());
+			out.println(ansi.fg(Color.YELLOW) + "-- SKIPPED " + testName + " (pending)" + ansi.reset());
 
 		} catch (final Throwable e) {
 			out.println(ansi.fg(Color.RED) + "-- FAILED  " + testName);
