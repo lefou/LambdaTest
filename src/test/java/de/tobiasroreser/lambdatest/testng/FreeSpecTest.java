@@ -77,5 +77,20 @@ public class FreeSpecTest extends FreeSpec {
 			}
 		});
 
+		test("intercept with wrong type but correct message",
+				() -> {
+					try {
+						new FreeSpec().intercept(InterceptTestSubException.class, "\\Qmsg\\E", () -> {
+							throw new InterceptTestException("msg");
+						});
+					} catch (Exception e) {
+						assertTrue(e instanceof TestException, "Expected different exception type");
+						assertEquals(
+								e.getMessage().trim(),
+								"Thrown exception of type [de.tobiasroreser.lambdatest.testng.FreeSpecTest$InterceptTestSubException]"
+										+ " does not match expected type [de.tobiasroreser.lambdatest.testng.FreeSpecTest$InterceptTestException]");
+					}
+				});
+
 	}
 }
