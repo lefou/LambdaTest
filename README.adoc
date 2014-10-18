@@ -59,7 +59,11 @@ The methods `test`, `pending` and `intercept` are provided by `FreeSpec`
 whereas the usual `assertXXX` methods are provided by TestNG and are automatically in scope because `FreeSpec` extends `org.testng.Assert`.
 
 == Working on Java7
-TBD
+
+This project does not use any Java 8 API.
+Of course a Java 8 compiler needs to be used but afterwards postprocessing with tools like RetroLambda is supported.
+If done so, you can run these test with older version of Java, e.g. Java7 or Java6.
+
 
 == Licence
 
