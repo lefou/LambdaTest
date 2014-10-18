@@ -25,9 +25,8 @@ public class FreeSpecTest extends FreeSpec {
 				new FreeSpec().intercept(InterceptTestException.class, () -> {
 					throw new InterceptTestException("msg");
 				});
-				assertTrue(false, "Expected thrown exception");
 			} catch (Exception e) {
-				assertTrue(e instanceof TestException, "Expected thrown TestException");
+				assertTrue(false, "Expected no exception thrown");
 			}
 		});
 
@@ -36,9 +35,8 @@ public class FreeSpecTest extends FreeSpec {
 				new FreeSpec().intercept(InterceptTestException.class, () -> {
 					throw new InterceptTestSubException("msg");
 				});
-				assertTrue(false, "Expected thrown exception");
 			} catch (Exception e) {
-				assertTrue(e instanceof TestException, "Expected thrown TestException");
+				assertTrue(false, "Expected no exception thrown");
 			}
 		});
 
@@ -49,7 +47,7 @@ public class FreeSpecTest extends FreeSpec {
 							throw new InterceptTestException("msg");
 						});
 					} catch (Exception e) {
-						assertTrue(e instanceof TestException, "Expected thrown TestException");
+						assertTrue(e instanceof TestException, "Expected different exception type");
 						assertEquals(
 								e.getMessage().trim(),
 								"Thrown exception of type [de.tobiasroreser.lambdatest.testng.FreeSpecTest$InterceptTestSubException]"
@@ -57,14 +55,25 @@ public class FreeSpecTest extends FreeSpec {
 					}
 				});
 
-		test("intercept with correct type and message regex", () -> {
+		test("intercept with correct type and message", () -> {
 			try {
 				new FreeSpec().intercept(InterceptTestException.class, "\\Qmsg\\E", () -> {
-					throw new InterceptTestSubException("msg");
+					throw new InterceptTestException("msg");
 				});
-				assertTrue(false, "Expected thrown exception");
 			} catch (Exception e) {
-				assertTrue(e instanceof TestException, "Expected thrown TestException");
+				assertTrue(false, "Expected no exception thrown");
+			}
+		});
+
+		test("intercept with correct type but wrong message", () -> {
+			try {
+				new FreeSpec().intercept(InterceptTestException.class, "Msg", () -> {
+					throw new InterceptTestException("msg");
+				});
+			} catch (Exception e) {
+				assertTrue(e instanceof TestException, "Expected different exception type");
+				assertEquals(e.getMessage().trim(),
+						"Exception was thrown with the wrong message: Expected: 'Msg' but got 'msg'.");
 			}
 		});
 

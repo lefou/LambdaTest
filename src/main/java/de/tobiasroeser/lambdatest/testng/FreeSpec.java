@@ -62,23 +62,25 @@ public class FreeSpec extends Assert {
 			throwing.run();
 		} catch (Exception e) {
 			if (exceptionType.isAssignableFrom(e.getClass())) {
+				final String msg = e.getMessage();
 				final boolean matches;
-				if (".*".equals(messageRegex)) {
-					matches = true;
-				} else {
-					final String msg = e.getMessage();
-					if (msg == null) {
-						matches = false;
+				{
+					if (".*".equals(messageRegex)) {
+						matches = true;
 					} else {
-						matches = Pattern.matches(messageRegex, msg);
+						if (msg == null) {
+							matches = false;
+						} else {
+							matches = Pattern.matches(messageRegex, msg);
+						}
 					}
-					if (!matches)
-						return;
-					else {
-						throw new TestException(
-								"Exception was thrown with the wrong message: Expected: '" + messageRegex
-										+ "' but got '" + msg + "'", e);
-					}
+				}
+				if (matches)
+					return;
+				else {
+					throw new TestException(
+							"Exception was thrown with the wrong message: Expected: '" + messageRegex
+									+ "' but got '" + msg + "'.", e);
 				}
 			}
 			throw new TestException("Thrown exception of type [" + exceptionType.getName()
