@@ -22,7 +22,7 @@ Most important features (beside all those you gain from using TestNG already) ar
 * Easy to write data-centric tests (e.g. generate as much test cases as you need in a loop)
 * Easy to intercept exceptions
 * Easy to add pending tests
-* Useful output per test
+* Nice colored output per test case
 
 
 == How to write tests
