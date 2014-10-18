@@ -95,3 +95,14 @@ To use this project in your Maven project:
   </dependency>
 </dependencies>
 ----
+
+== Changelog
+
+=== 0.0.2 - 2014-10-18
+
+* Colored output
+* Added support to match exception messages with regex in intecept
+
+=== 0.0.1 - 2014-10-15
+
+* First release
