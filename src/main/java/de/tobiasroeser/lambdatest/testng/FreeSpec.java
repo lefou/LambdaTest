@@ -17,11 +17,43 @@ import org.testng.annotations.Test;
 import de.tobiasroeser.lambdatest.internal.AnsiColor;
 import de.tobiasroeser.lambdatest.internal.AnsiColor.Color;
 
+/**
+ * Inherit from this class to create a new test suite and use the
+ * {@link FreeSpec#test} method to add test cases.
+ * <p/>
+ * Besides the typically <code>assertXXX</code> methods from {@link Assert},
+ * which are already in scope when inherit from this class, you can use the
+ * following methods:
+ * <ul>
+ * <li>{@link FreeSpec#intercept(Class, RunnableWithException)} and
+ * {@link FreeSpec#intercept(Class, String, RunnableWithException)} to intercept
+ * and assert expected exceptions.</li>
+ * <li>{@link FreeSpec#pending()} to mark a test case as pending</li>
+ * </ul>
+ * 
+ * {@link FreeSpec#intercept(Class, String, RunnableWithException)}
+ * 
+ * TODO: example
+ *
+ */
 public class FreeSpec extends Assert {
 
 	private List<Object[]> testCases = new LinkedList<>();
 	private boolean testNeverRun = true;
 
+	/**
+	 * Adds a test to the test suite.
+	 * 
+	 * @param name
+	 *            The name of the new test.
+	 * @param testCase
+	 *            The test case. It should return when it is successful, else it
+	 *            should throw an exception. Exceptions of type
+	 *            {@link TestException} which are typically thrown by
+	 *            Assert.assertXXX methods (e.g.
+	 *            {@link Assert#assertEquals(String, String)}) are specially
+	 *            recognized by TestNG.
+	 */
 	public void test(final String name, final RunnableWithException testCase) {
 		final String testName = getClass().getSimpleName() + ": " + name;
 
@@ -31,11 +63,10 @@ public class FreeSpec extends Assert {
 		this.testCases.add(new Object[] { testName, testCase });
 	}
 
-	@DataProvider
-	public Iterator<Object[]> testCases() {
-		return testCases.iterator();
-	}
-
+	/**
+	 * Marks the test as pending. Instructions after <code>pending()</code> will
+	 * not be executed and TestNG marks the test as skipped.
+	 */
 	public void pending() {
 		throw new SkipException("Pending");
 	}
@@ -55,6 +86,21 @@ public class FreeSpec extends Assert {
 		intercept(exceptionType, ".*", throwing);
 	}
 
+	/**
+	 * Intercept exceptions of type <code>exceptionType</code> and fail if no
+	 * such exception or an exception with an incompatible type was thrown or it
+	 * the message does not match a given pattern.
+	 * 
+	 * @param exceptionType
+	 *            The exception type to intercept.
+	 * @param messageRegex
+	 *            A regular expression pattern to match the expected message.
+	 *            See {@link Pattern} for details.
+	 * @throws TextException
+	 *             If no exception or an exception with an incompatible type was
+	 *             thrown or if the message of the exception does not match the
+	 *             expected pattern.
+	 */
 	public void intercept(final Class<? extends Exception> exceptionType,
 			String messageRegex, final RunnableWithException throwing)
 			throws Exception {
@@ -89,8 +135,13 @@ public class FreeSpec extends Assert {
 		throw new TestException("Expected exception of type [" + exceptionType.getName() + "] was not thrown");
 	}
 
-	@Test(dataProvider = "testCases")
-	public void runTests(final String name, final RunnableWithException testCase) throws Exception {
+	@DataProvider(name = "freeSpecTestCases")
+	public Iterator<Object[]> freeSpecTestCases() {
+		return testCases.iterator();
+	}
+
+	@Test(dataProvider = "freeSpecTestCases")
+	public void runFreeSpecTestCases(final String name, final RunnableWithException testCase) throws Exception {
 		AnsiColor ansi = new AnsiColor();
 		final PrintStream out = System.out;
 
