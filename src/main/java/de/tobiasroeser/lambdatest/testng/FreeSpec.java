@@ -20,7 +20,7 @@ import de.tobiasroeser.lambdatest.internal.AnsiColor.Color;
 /**
  * Inherit from this class to create a new test suite and use the
  * {@link FreeSpec#test} method to add test cases.
- * <p/>
+ * <p>
  * Besides the typically <code>assertXXX</code> methods from {@link Assert},
  * which are already in scope when inherit from this class, you can use the
  * following methods:
@@ -30,8 +30,6 @@ import de.tobiasroeser.lambdatest.internal.AnsiColor.Color;
  * and assert expected exceptions.</li>
  * <li>{@link FreeSpec#pending()} to mark a test case as pending</li>
  * </ul>
- * 
- * {@link FreeSpec#intercept(Class, String, RunnableWithException)}
  * 
  * TODO: example
  *
@@ -77,9 +75,11 @@ public class FreeSpec extends Assert {
 	 * 
 	 * @param exceptionType
 	 *            The exception type to intercept.
-	 * @throws TextException
-	 *             If no exception or an exception with an incompatible type was
-	 *             thrown.
+	 * @param throwing
+	 *            The execution block which is expected to throw the exception.
+	 * @throws Exception
+	 *             If no exception was thrown or an exception with an
+	 *             incompatible type was thrown.
 	 */
 	public void intercept(final Class<? extends Exception> exceptionType,
 			final RunnableWithException throwing) throws Exception {
@@ -96,10 +96,12 @@ public class FreeSpec extends Assert {
 	 * @param messageRegex
 	 *            A regular expression pattern to match the expected message.
 	 *            See {@link Pattern} for details.
-	 * @throws TextException
-	 *             If no exception or an exception with an incompatible type was
-	 *             thrown or if the message of the exception does not match the
-	 *             expected pattern.
+	 * @param throwing
+	 *            The execution block which is expected to throw the exception.
+	 * @throws Exception
+	 *             If no exception was thrown or an exception with an
+	 *             incompatible type was thrown or if the message of the
+	 *             exception did not match the expected pattern.
 	 */
 	public void intercept(final Class<? extends Exception> exceptionType,
 			String messageRegex, final RunnableWithException throwing)
