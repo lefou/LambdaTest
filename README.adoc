@@ -1,7 +1,7 @@
 = poor-mans-lambda-test
 :toc:
 :toc-placement: preamble
-:lambdatestversion: 0.0.1
+:lambdatestversion: 0.0.2
 
 Minimal Java8 Lambda enabled testing for TestNG (and later maybe JUnit).
 
@@ -73,7 +73,7 @@ This project is published under the http://www.apache.org/licenses/LICENSE-2.0.t
 
 To use this project in your Maven project:
 
-[source,xml,subs="attributes"]
+[source,xml]
 ----
 <repositories>
   <repository>
@@ -90,7 +90,7 @@ To use this project in your Maven project:
   <dependency>
     <groupId>de.tobiasroeser</groupId>
     <artifactId>de.tobiasroeser.lambdatest</artifactId>
-    <version>{lambdatestversion}</version>
+    <version>0.0.2</version>
     <scope>test</scope>
   </dependency>
 </dependencies>
