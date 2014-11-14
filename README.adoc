@@ -58,6 +58,25 @@ class SimpleTest extends FreeSpec {{
 The methods `test`, `pending` and `intercept` are provided by `FreeSpec`
 whereas the usual `assertXXX` methods are provided by TestNG and are automatically in scope because `FreeSpec` extends `org.testng.Assert`.
 
+The output of the test suite above whould look like this (executed via `mvn test`):
+
+----
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running org.example.SimpleTest
+Configuring TestNG with: org.apache.maven.surefire.testng.conf.TestNG652Configurator@759ebb3d
+Running 3 tests in org.example.SimpleTest:
+-- SUCCESS SimpleTest: 1 + 1 = 2
+-- SKIPPED SimpleTest: a pending test (pending)
+-- SUCCESS SimpleTest: divide by zero
+Tests run: 3, Faiulres: 0, Errors: 0, Skipped: 0, Time elapsed: 0.395 sec
+
+Results :
+
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+----
+
 == Working on Java7
 
 This project does not use any Java 8 API.
