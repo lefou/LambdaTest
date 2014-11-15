@@ -3,6 +3,8 @@
 :toc-placement: preamble
 :lambdatestversion: 0.0.2
 
+image:https://travis-ci.org/lefou/poor-mans-lambda-test.svg?branch=master["Build Status", link="https://travis-ci.org/lefou/poor-mans-lambda-test"]
+
 Minimal Java8 Lambda enabled testing for TestNG (and later maybe JUnit).
 
 == Motivation
