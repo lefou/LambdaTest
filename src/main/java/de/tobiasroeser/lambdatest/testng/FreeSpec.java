@@ -180,8 +180,6 @@ public class FreeSpec {
 				System.out.print(ansi.reset());
 			}
 			throw e;
-		} finally {
-			out.close();
 		}
 	}
 }
