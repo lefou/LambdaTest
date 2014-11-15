@@ -159,7 +159,7 @@ public class FreeSpec {
 			out.println(ansi.fg(Color.GREEN) + "-- SUCCESS " + testName + ansi.reset());
 		} catch (final SkipException e) {
 			out.println(ansi.fg(Color.YELLOW) + "-- SKIPPED " + testName + " (pending)" + ansi.reset());
-
+			throw e;
 		} catch (final Throwable e) {
 			try {
 				out.println(ansi.fg(Color.RED) + "-- FAILED  " + testName);
