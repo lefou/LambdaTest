@@ -16,6 +16,7 @@ import org.testng.annotations.Test;
 
 import de.tobiasroeser.lambdatest.internal.AnsiColor;
 import de.tobiasroeser.lambdatest.internal.AnsiColor.Color;
+import de.tobiasroeser.lambdatest.internal.Util;
 
 /**
  * Inherit from this class to create a new test suite and use the
@@ -23,7 +24,8 @@ import de.tobiasroeser.lambdatest.internal.AnsiColor.Color;
  * <p>
  * It provides the following methods:
  * <ul>
- * <li>@linke {@link FreeSpec#test(String, RunnableWithException)} to declare a test case
+ * <li>@linke {@link FreeSpec#test(String, RunnableWithException)} to declare a
+ * test case
  * <li>{@link FreeSpec#intercept(Class, RunnableWithException)} and
  * {@link FreeSpec#intercept(Class, String, RunnableWithException)} to intercept
  * and assert expected exceptions.</li>
@@ -35,7 +37,7 @@ import de.tobiasroeser.lambdatest.internal.AnsiColor.Color;
  */
 public class FreeSpec {
 
-	private List<Object[]> testCases = new LinkedList<>();
+	private List<LambdaTestCase> testCases = new LinkedList<>();
 	private volatile boolean testNeverRun = true;
 
 	/**
@@ -54,10 +56,10 @@ public class FreeSpec {
 	public void test(final String name, final RunnableWithException testCase) {
 		final String testName = getClass().getSimpleName() + ": " + name;
 
-		if (find(testCases, tc -> testName.equals(tc[0])).isDefined()) {
+		if (find(testCases, tc -> testName.equals(tc.getName())).isDefined()) {
 			System.out.println("Test with non-unique name added: " + testName);
 		}
-		this.testCases.add(new Object[] { testName, testCase });
+		this.testCases.add(new LambdaTestCase(testName, testCase));
 	}
 
 	/**
@@ -138,12 +140,12 @@ public class FreeSpec {
 
 	@DataProvider(name = "freeSpecTestCases")
 	public Iterator<Object[]> freeSpecTestCases() {
-		return testCases.iterator();
+		return Util.map(testCases, (tc) -> new Object[] { tc }).iterator();
 	}
 
 	@Test(dataProvider = "freeSpecTestCases")
-	public void runFreeSpecTestCases(final String name, final RunnableWithException testCase) throws Exception {
-		AnsiColor ansi = new AnsiColor();
+	public void runFreeSpecTestCases(final LambdaTestCase testCase) throws Exception {
+		final AnsiColor ansi = new AnsiColor();
 		final PrintStream out = System.out;
 
 		if (testNeverRun) {
@@ -153,9 +155,9 @@ public class FreeSpec {
 			testNeverRun = false;
 		}
 
-		final String testName = name;
+		final String testName = testCase.getName();
 		try {
-			testCase.run();
+			testCase.getTest().run();
 			out.println(ansi.fg(Color.GREEN) + "-- SUCCESS " + testName + ansi.reset());
 		} catch (final SkipException e) {
 			out.println(ansi.fg(Color.YELLOW) + "-- SKIPPED " + testName + " (pending)" + ansi.reset());
