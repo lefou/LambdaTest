@@ -21,10 +21,9 @@ import de.tobiasroeser.lambdatest.internal.AnsiColor.Color;
  * Inherit from this class to create a new test suite and use the
  * {@link FreeSpec#test} method to add test cases.
  * <p>
- * Besides the typically <code>assertXXX</code> methods from {@link Assert},
- * which are already in scope when inherit from this class, you can use the
- * following methods:
+ * It provides the following methods:
  * <ul>
+ * <li>@linke {@link FreeSpec#test(String, RunnableWithException)} to declare a test case
  * <li>{@link FreeSpec#intercept(Class, RunnableWithException)} and
  * {@link FreeSpec#intercept(Class, String, RunnableWithException)} to intercept
  * and assert expected exceptions.</li>
