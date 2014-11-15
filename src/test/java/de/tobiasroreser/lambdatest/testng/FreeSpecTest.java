@@ -1,5 +1,8 @@
 package de.tobiasroreser.lambdatest.testng;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+
 import org.testng.TestException;
 
 import de.tobiasroeser.lambdatest.testng.FreeSpec;

@@ -34,7 +34,7 @@ import de.tobiasroeser.lambdatest.internal.AnsiColor.Color;
  * TODO: example
  *
  */
-public class FreeSpec extends Assert {
+public class FreeSpec {
 
 	private List<Object[]> testCases = new LinkedList<>();
 	private boolean testNeverRun = true;
