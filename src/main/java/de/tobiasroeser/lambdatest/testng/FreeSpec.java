@@ -37,7 +37,7 @@ import de.tobiasroeser.lambdatest.internal.AnsiColor.Color;
 public class FreeSpec {
 
 	private List<Object[]> testCases = new LinkedList<>();
-	private boolean testNeverRun = true;
+	private volatile boolean testNeverRun = true;
 
 	/**
 	 * Adds a test to the test suite.
@@ -162,18 +162,24 @@ public class FreeSpec {
 			out.println(ansi.fg(Color.YELLOW) + "-- SKIPPED " + testName + " (pending)" + ansi.reset());
 
 		} catch (final Throwable e) {
-			out.println(ansi.fg(Color.RED) + "-- FAILED  " + testName);
-			// System.out.println(e.getMessage());
-			e.printStackTrace(out);
-			Throwable oldCause = e;
-			Throwable cause = e.getCause();
-			while (cause != null && cause != oldCause) {
-				out.print("Caused by: ");
+			try {
+				out.println(ansi.fg(Color.RED) + "-- FAILED  " + testName);
+				// System.out.println(e.getMessage());
 				e.printStackTrace(out);
-				oldCause = cause;
-				cause = cause.getCause();
+				Throwable oldCause = e;
+				Throwable cause = e.getCause();
+				// unpack exception stack
+				while (cause != null && cause != oldCause) {
+					out.print("Caused by: ");
+					cause.printStackTrace(out);
+					oldCause = cause;
+					cause = cause.getCause();
+				}
+			} catch (Throwable t) {
+				// ignore any further errors, just in case
+			} finally {
+				System.out.print(ansi.reset());
 			}
-			System.out.print(ansi.reset());
 			throw e;
 		} finally {
 			out.close();
