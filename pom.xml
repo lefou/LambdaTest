@@ -8,6 +8,26 @@
 	<artifactId>de.tobiasroeser.lambdatest</artifactId>
 	<version>0.0.3-SNAPSHOT</version>
 
+        <name>Poor Mans Lambda Test</name>
+        <description>Minimal Java8 Lambda enabled testing for TestNG</description>
+	<url>https://github.com/lefou/poor-mans-lambda-test</url>
+        <licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<url>https://github.com/lefou/poor-mans-lambda-test</url>
+	</scm>
+	<developers>
+		<developer>
+			<name>Tobias Roeser</name>
+			<email>le.petit.fou@web.de</email>
+		</developer>
+	</developers>
+
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
