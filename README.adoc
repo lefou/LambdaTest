@@ -1,7 +1,8 @@
 = poor-mans-lambda-test
 :toc:
 :toc-placement: preamble
-:lambdatestversion: 0.0.2
+// also update version in pom.xml example
+:lambdatestversion: 0.0.3
 
 image:https://travis-ci.org/lefou/poor-mans-lambda-test.svg?branch=master["Build Status", link="https://travis-ci.org/lefou/poor-mans-lambda-test"]
 image:https://www.codacy.com/project/badge/b05b1dc99f98423eb05862de7fcf3662["Codacy Badge", link="https://www.codacy.com/public/lepetitfou_3463/poor-mans-lambda-test"]
@@ -114,7 +115,7 @@ To use this project in your Maven project:
   <dependency>
     <groupId>de.tobiasroeser</groupId>
     <artifactId>de.tobiasroeser.lambdatest</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <scope>test</scope>
   </dependency>
   <dependency>
