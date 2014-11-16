@@ -128,6 +128,12 @@ To use this project in your Maven project:
 
 == Changelog
 
+=== 0.0.3 - 2014-11-16
+
+* Fixed issue with missapplied close of STDOUT stream
+* Fixed bug preventing from TestNG seeing pending tests as skipped
+* de.tobiasroeser.lambdatest.testng.FreeSpec class no longer inherits org.testng.Assert
+
 === 0.0.2 - 2014-10-18
 
 * Colored output
