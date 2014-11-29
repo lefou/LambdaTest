@@ -24,12 +24,14 @@ import de.tobiasroeser.lambdatest.internal.Util;
  * <p>
  * It provides the following methods:
  * <ul>
- * <li>@linke {@link FreeSpec#test(String, RunnableWithException)} to declare a
+ * <li>{@link FreeSpec#test(String, RunnableWithException)} to declare a new
  * test case
  * <li>{@link FreeSpec#intercept(Class, RunnableWithException)} and
  * {@link FreeSpec#intercept(Class, String, RunnableWithException)} to intercept
  * and assert expected exceptions.</li>
- * <li>{@link FreeSpec#pending()} to mark a test case as pending</li>
+ * <li>{@link FreeSpec#pending()} to mark a test case as pending. All code
+ * before it's usage including assert will be executed, but code after it will
+ * be skipped. Thus you can mark a test also as work-in-progress.</li>
  * </ul>
  * 
  * TODO: example
