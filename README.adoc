@@ -19,6 +19,8 @@ Thus I decided to hack a really small and generic base class that basically allo
 I avoided to develop a completely new test stack,
 so for asserts and the like the tools of the underlying test framework (currently TestNG) are used. 
 
+== What you get
+
 Most important features (beside all those you gain from using TestNG already) are:
 
 * No longer requied to have each test in a separate method
@@ -82,17 +84,24 @@ Total tests run: 3, Failures: 0, Skips: 1
 ----
 
 You should write your test cases so that they don't need to be executed in order.
+Currently, TestNG has no option to run these tests in parallel, but this might change in future.
 
 == Working on Java7 or below
 
 This project does not use any Java 8 API!
-Of course a Java 8 compiler needs to be used (to use the nice Closures) but afterwards postprocessing with tools like RetroLambda is supported.
-If done so, you can run these test with older version of Java, e.g. Java7 or Java6.
+So, it would be possible to use this test library on older Java Runtimes (down to Java5).
+Currently, the binaries are compiled to Java8, but if you are interested in using it on Java7 or below, let me know or open a ticket, and I will create a new release that support it.
+In such a case I would use the great retrolambda project do create compatible binaries.
 
+Of course if you want to gain the benefits of using the nice Java 8 Closures a Java 8 compiler needs to be used.
 
 == Licence
 
 This project is published under the http://www.apache.org/licenses/LICENSE-2.0.txt[Apache Licence Version 2.0].
+
+== Contribution
+
+Feedback, reported issues and pull requests  are highly appreciated. You can also find me on Twitter as https://twitter.com/TobiasRoeser[@TobiasRoeser].
 
 == Maven
 
@@ -100,20 +109,9 @@ To use this project in your Maven project:
 
 [source,xml]
 ----
-<repositories>
-  <repository>
-    <snapshots>
-      <enabled>false</enabled>
-    </snapshots>
-    <id>bintray-lefou-poor-mans-lambda-test</id>
-    <name>bintray-lefou-poor-mans-lambda-test</name>
-    <url>http://dl.bintray.com/lefou/poor-mans-lambda-test</url>
-  </repository>
-</repositories>
-
 <dependencies>
   <dependency>
-    <groupId>de.tobiasroeser</groupId>
+    <groupId>de.tototec</groupId>
     <artifactId>de.tobiasroeser.lambdatest</artifactId>
     <version>0.0.3</version>
     <scope>test</scope>
@@ -128,6 +126,10 @@ To use this project in your Maven project:
 ----
 
 == Changelog
+
+=== 2014-11-29
+
+* Rerelease of 0.0.3 under "de.tototec" groupId. You can now grap it directly from Maven Central without configuring a dedicated bintray repositor.
 
 === 0.0.3 - 2014-11-16
 
