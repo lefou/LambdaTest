@@ -5,7 +5,7 @@
 :lambdatestversion: 0.0.3
 
 image:https://travis-ci.org/lefou/poor-mans-lambda-test.svg?branch=master["Build Status", link="https://travis-ci.org/lefou/poor-mans-lambda-test"]
-image:https://www.codacy.com/project/badge/b05b1dc99f98423eb05862de7fcf3662["Codacy Badge", link="https://www.codacy.com/public/lepetitfou_3463/poor-mans-lambda-test"]
+image:https://img.shields.io/codacy/b05b1dc99f98423eb05862de7fcf3662.svg["Codacy Badge", link="https://www.codacy.com/public/lepetitfou_3463/poor-mans-lambda-test"]
 
 Minimal Java8 Lambda enabled testing for TestNG (and later maybe JUnit).
 
