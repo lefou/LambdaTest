@@ -1,4 +1,4 @@
-= poor-mans-lambda-test
+= (Poor Mans) Lambda Test
 :toc:
 :toc-placement: preamble
 // also update version in pom.xml example
