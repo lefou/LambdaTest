@@ -1,6 +1,7 @@
 package de.tobiasroreser.lambdatest.testng;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 import org.testng.TestException;
@@ -11,13 +12,13 @@ import de.tobiasroeser.lambdatest.testng.FreeSpec;
 public class FreeSpecTest extends FreeSpec {
 
 	public static class InterceptTestException extends RuntimeException {
-		public InterceptTestException(String msg) {
+		public InterceptTestException(final String msg) {
 			super(msg);
 		}
 	}
 
 	public static class InterceptTestSubException extends InterceptTestException {
-		public InterceptTestSubException(String msg) {
+		public InterceptTestSubException(final String msg) {
 			super(msg);
 		}
 	}
@@ -25,20 +26,22 @@ public class FreeSpecTest extends FreeSpec {
 	{
 		test("intercept by type works", () -> {
 			try {
-				new FreeSpec().intercept(InterceptTestException.class, () -> {
+				final InterceptTestException ex = new FreeSpec().intercept(InterceptTestException.class, () -> {
 					throw new InterceptTestException("msg");
 				});
-			} catch (Exception e) {
+				assertEquals(ex.getMessage(), "msg");
+			} catch (final Exception e) {
 				assertTrue(false, "Expected no exception thrown");
 			}
 		});
 
 		test("intercept by type works for sub types", () -> {
 			try {
-				new FreeSpec().intercept(InterceptTestException.class, () -> {
+				final InterceptTestException ex = new FreeSpec().intercept(InterceptTestException.class, () -> {
 					throw new InterceptTestSubException("msg");
 				});
-			} catch (Exception e) {
+				assertEquals(ex.getMessage(), "msg");
+			} catch (final Exception e) {
 				assertTrue(false, "Expected no exception thrown");
 			}
 		});
@@ -49,7 +52,8 @@ public class FreeSpecTest extends FreeSpec {
 						new FreeSpec().intercept(InterceptTestSubException.class, () -> {
 							throw new InterceptTestException("msg");
 						});
-					} catch (Exception e) {
+						assertFalse(true);
+					} catch (final Exception e) {
 						assertTrue(e instanceof TestException, "Expected different exception type");
 						assertEquals(
 								e.getMessage().trim(),
@@ -58,22 +62,26 @@ public class FreeSpecTest extends FreeSpec {
 					}
 				});
 
-		test("intercept with correct type and message", () -> {
-			try {
-				new FreeSpec().intercept(InterceptTestException.class, "\\Qmsg\\E", () -> {
-					throw new InterceptTestException("msg");
+		test("intercept with correct type and message",
+				() -> {
+					try {
+						final InterceptTestException ex = new FreeSpec().intercept(InterceptTestException.class,
+								"\\Qmsg\\E", () -> {
+									throw new InterceptTestException("msg");
+								});
+						assertEquals(ex.getMessage(), "msg");
+					} catch (final Exception e) {
+						assertTrue(false, "Expected no exception thrown");
+					}
 				});
-			} catch (Exception e) {
-				assertTrue(false, "Expected no exception thrown");
-			}
-		});
 
 		test("intercept with correct type but wrong message", () -> {
 			try {
 				new FreeSpec().intercept(InterceptTestException.class, "Msg", () -> {
 					throw new InterceptTestException("msg");
 				});
-			} catch (Exception e) {
+				assertFalse(true);
+			} catch (final Exception e) {
 				assertTrue(e instanceof TestException, "Expected different exception type");
 				assertEquals(e.getMessage().trim(),
 						"Exception was thrown with the wrong message: Expected: 'Msg' but got 'msg'.");
@@ -86,7 +94,8 @@ public class FreeSpecTest extends FreeSpec {
 						new FreeSpec().intercept(InterceptTestSubException.class, "\\Qmsg\\E", () -> {
 							throw new InterceptTestException("msg");
 						});
-					} catch (Exception e) {
+						assertFalse(true);
+					} catch (final Exception e) {
 						assertTrue(e instanceof TestException, "Expected different exception type");
 						assertEquals(
 								e.getMessage().trim(),

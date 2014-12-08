@@ -83,8 +83,7 @@ Total tests run: 3, Failures: 0, Skips: 1
 
 ----
 
-You should write your test cases so that they don't need to be executed in order.
-Currently, TestNG has no option to run these tests in parallel, but this might change in future.
+You should write your test cases so that they don't need to be executed in order. LambdaTest is able to run tests in parallel, if you enable it explicitly with `FreeSpec.setRunInParallel(true)`.
 
 == Working on Java7 or below
 

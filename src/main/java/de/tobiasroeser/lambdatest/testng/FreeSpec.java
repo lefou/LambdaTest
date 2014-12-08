@@ -3,6 +3,7 @@ package de.tobiasroeser.lambdatest.testng;
 import static de.tobiasroeser.lambdatest.internal.Util.find;
 
 import java.io.PrintStream;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,7 +34,7 @@ import de.tobiasroeser.lambdatest.internal.Util;
  * before it's usage including assert will be executed, but code after it will
  * be skipped. Thus you can mark a test also as work-in-progress.</li>
  * </ul>
- * 
+ *
  * TODO: example
  *
  */
@@ -41,10 +42,15 @@ public class FreeSpec {
 
 	private List<LambdaTestCase> testCases = new LinkedList<>();
 	private volatile boolean testNeverRun = true;
+	private boolean runInParallel = false;
+
+	public void setRunInParallel(final boolean runInParallel) {
+		this.runInParallel = runInParallel;
+	}
 
 	/**
 	 * Adds a test to the test suite.
-	 * 
+	 *
 	 * @param name
 	 *            The name of the new test.
 	 * @param testCase
@@ -75,7 +81,7 @@ public class FreeSpec {
 	/**
 	 * Intercept exceptions of type <code>exceptionType</code> and fail if no
 	 * such exception or an exception with an incompatible type was thrown.
-	 * 
+	 *
 	 * @param exceptionType
 	 *            The exception type to intercept.
 	 * @param throwing
@@ -143,21 +149,19 @@ public class FreeSpec {
 		throw new TestException("Expected exception of type [" + exceptionType.getName() + "] was not thrown");
 	}
 
-	@DataProvider(name = "freeSpecTestCases")
-	public Iterator<Object[]> freeSpecTestCases() {
-		return Util.map(testCases, (tc) -> new Object[] { tc }).iterator();
-	}
-
-	@Test(dataProvider = "freeSpecTestCases")
-	public void runFreeSpecTestCases(final LambdaTestCase testCase) throws Exception {
+	private void runTestCase(final LambdaTestCase testCase) throws Exception {
 		final AnsiColor ansi = new AnsiColor();
 		final PrintStream out = System.out;
 
 		if (testNeverRun) {
-			out.println("Running " + ansi.fg(Color.CYAN) + testCases.size()
-					+ ansi.reset() + " tests in " + ansi.fg(Color.CYAN)
-					+ getClass().getName() + ansi.reset() + ":");
-			testNeverRun = false;
+			synchronized (this) {
+				if (testNeverRun) {
+					out.println("Running " + ansi.fg(Color.CYAN) + testCases.size()
+							+ ansi.reset() + " tests in " + ansi.fg(Color.CYAN)
+							+ getClass().getName() + ansi.reset() + ":");
+					testNeverRun = false;
+				}
+			}
 		}
 
 		final String testName = testCase.getName();
@@ -181,7 +185,7 @@ public class FreeSpec {
 					oldCause = cause;
 					cause = cause.getCause();
 				}
-			} catch (Throwable t) {
+			} catch (final Throwable t) {
 				// ignore any further errors, just in case
 			} finally {
 				System.out.print(ansi.reset());
@@ -189,4 +193,33 @@ public class FreeSpec {
 			throw e;
 		}
 	}
+
+	@DataProvider(name = "freeSpecTestCases", parallel = false)
+	public Iterator<Object[]> freeSpecTestCases() {
+		if (!runInParallel) {
+			return Util.map(testCases, (tc) -> new Object[] { tc }).iterator();
+		} else {
+			return Collections.<Object[]> emptyList().iterator();
+		}
+	}
+
+	@Test(dataProvider = "freeSpecTestCases")
+	public void runFreeSpecTestCases(final LambdaTestCase testCase) throws Exception {
+		runTestCase(testCase);
+	}
+
+	@DataProvider(name = "freeSpecParallelTestCases", parallel = true)
+	public Iterator<Object[]> freeSpecParallelTestCases() {
+		if (runInParallel) {
+			return Util.map(testCases, (tc) -> new Object[] { tc }).iterator();
+		} else {
+			return Collections.<Object[]> emptyList().iterator();
+		}
+	}
+
+	@Test(dataProvider = "freeSpecParallelTestCases")
+	public void runFreeSpecParallelTestCases(final LambdaTestCase testCase) throws Exception {
+		runTestCase(testCase);
+	}
+
 }
