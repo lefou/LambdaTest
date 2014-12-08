@@ -2,7 +2,7 @@
 :toc:
 :toc-placement: preamble
 // also update version in pom.xml example
-:lambdatestversion: 0.0.3
+:lambdatestversion: 0.1.0
 
 image:https://travis-ci.org/lefou/poor-mans-lambda-test.svg?branch=master["Build Status", link="https://travis-ci.org/lefou/poor-mans-lambda-test"]
 image:https://img.shields.io/codacy/b05b1dc99f98423eb05862de7fcf3662.svg["Codacy Badge", link="https://www.codacy.com/public/lepetitfou_3463/poor-mans-lambda-test"]
@@ -29,6 +29,39 @@ Most important features (beside all those you gain from using TestNG already) ar
 * Easy to intercept exceptions
 * Easy to mark pending tests
 * Nice colored output per test case
+
+
+== Download from Maven Central
+
+LambdaTest is available from http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22de.tototec%22%20AND%20a%3A%22de.tobiasroeser.lambdatest%22[Maven central repository].
+
+Maven users can use the following dependency declaration:
+
+[source,xml]
+----
+<dependencies>
+  <dependency>
+    <groupId>de.tototec</groupId>
+    <artifactId>de.tobiasroeser.lambdatest</artifactId>
+    <version>0.1.0</version>
+    <scope>test</scope>
+  </dependency>
+  <dependency>
+    <groupId>org.testng</groupId>
+    <artifactId>testng</artifactId>
+    <version>6.8.8</version>
+    <scope>test</scope>
+  </dependency>
+</dependencies>
+----
+
+http://sbuild.org[SBuild] users can use the following dependencies:
+
+[source,scala,subs="attributes"]
+----
+"mvn:de.tototoec:de.tobiasroeser.lambdatest:{lambdatestversion}" ~
+  "mvn:org.testng:testng:6.8.8"
+----
 
 
 == Writing tests with Lambda Test
@@ -89,22 +122,9 @@ You should write your test cases so that they don't need to be executed in order
 
 This project does not use any Java 8 API!
 So, it would be possible to use this test library on older Java Runtimes (down to Java5).
-Currently, the binaries are compiled to Java8, but if you are interested in using it on Java7 or below, let me know or open a ticket, and I will create a new release that support it.
-In such a case I would use the great retrolambda project do create compatible binaries.
+Currently, the binaries are compiled to Java8, Java7 and Java6. To use the non-Java8 version with Maven, use a classifier ("java7", or "java6") to download the version you want. The compatibility packages are produced with the great https://github.com/orfjackal/retrolambda[retrolambda project].
 
-Of course if you want to gain the benefits of using the nice Java 8 Closures a Java 8 compiler needs to be used.
-
-== Licence
-
-This project is published under the http://www.apache.org/licenses/LICENSE-2.0.txt[Apache Licence Version 2.0].
-
-== Contribution
-
-Feedback, reported issues and pull requests  are highly appreciated. You can also find me on Twitter as https://twitter.com/TobiasRoeser[@TobiasRoeser].
-
-== Maven
-
-To use this project in your Maven project:
+To use the Java7 version in Maven:
 
 [source,xml]
 ----
@@ -112,7 +132,8 @@ To use this project in your Maven project:
   <dependency>
     <groupId>de.tototec</groupId>
     <artifactId>de.tobiasroeser.lambdatest</artifactId>
-    <version>0.0.3</version>
+    <version>0.1.0</version>
+    <classifier>java7</classifier>
     <scope>test</scope>
   </dependency>
   <dependency>
@@ -124,7 +145,35 @@ To use this project in your Maven project:
 </dependencies>
 ----
 
+or in SBuild:
+
+[source,scala,subs="attributes"]
+----
+"mvn:de.tototoec:de.tobiasroeser.lambdatest:{lambdatestversion};classifier=java7" ~
+  "mvn:org.testng:testng:6.8.8"
+----
+
+
+
+Of course if you want to gain the benefits of using the nice Java 8 Closures a Java 8 compiler needs to be used.
+
+== Licence
+
+This project is published under the http://www.apache.org/licenses/LICENSE-2.0.txt[Apache Licence Version 2.0].
+
+== Contribution
+
+Feedback, reported issues and pull requests are highly appreciated. You can also find me on Twitter as https://twitter.com/TobiasRoeser[@TobiasRoeser].
+
+
 == Changelog
+
+=== 0.1.0 - 2014-12-08
+
+* Also release compatibility packages for older Java runtimes: Java7 and Java6. They are available via the "java7" and "java6" classifier.
+* FreeSpec.intercept now returns the intercepted exception.
+* Added FreeSpec.setRunInParallel to enable option to run tests in parallel.
+* Introduced LambdaTest interface (implemented by testng.FreeSpec) to contain the common API.
 
 === 2014-11-29
 
