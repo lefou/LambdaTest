@@ -15,6 +15,7 @@ import org.testng.TestException;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import de.tobiasroeser.lambdatest.LambdaTest;
 import de.tobiasroeser.lambdatest.internal.AnsiColor;
 import de.tobiasroeser.lambdatest.internal.AnsiColor.Color;
 import de.tobiasroeser.lambdatest.internal.Util;
@@ -38,7 +39,7 @@ import de.tobiasroeser.lambdatest.internal.Util;
  * TODO: example
  *
  */
-public class FreeSpec {
+public class FreeSpec implements LambdaTest {
 
 	private List<LambdaTestCase> testCases = new LinkedList<>();
 	private volatile boolean testNeverRun = true;
@@ -74,6 +75,7 @@ public class FreeSpec {
 	 * Marks the test as pending. Instructions after <code>pending()</code> will
 	 * not be executed and TestNG marks the test as skipped.
 	 */
+	@Override
 	public void pending() {
 		throw new SkipException("Pending");
 	}
@@ -86,10 +88,12 @@ public class FreeSpec {
 	 *            The exception type to intercept.
 	 * @param throwing
 	 *            The execution block which is expected to throw the exception.
+	 * @return The intercepted exception.
 	 * @throws Exception
 	 *             If no exception was thrown or an exception with an
 	 *             incompatible type was thrown.
 	 */
+	@Override
 	public <T extends Throwable> T intercept(final Class<T> exceptionType,
 			final RunnableWithException throwing) throws Exception {
 		return intercept(exceptionType, ".*", throwing);
@@ -107,11 +111,13 @@ public class FreeSpec {
 	 *            See {@link Pattern} for details.
 	 * @param throwing
 	 *            The execution block which is expected to throw the exception.
+	 * @return The intercepted exception.
 	 * @throws Exception
 	 *             If no exception was thrown or an exception with an
 	 *             incompatible type was thrown or if the message of the
 	 *             exception did not match the expected pattern.
 	 */
+	@Override
 	public <T extends Throwable> T intercept(final Class<T> exceptionType,
 			final String messageRegex, final RunnableWithException throwing)
 			throws Exception {
