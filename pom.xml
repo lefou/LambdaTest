@@ -8,10 +8,10 @@
 	<artifactId>de.tobiasroeser.lambdatest</artifactId>
 	<version>0.0.4-SNAPSHOT</version>
 
-        <name>Poor Mans Lambda Test</name>
-        <description>Minimal Java8 Lambda enabled testing for TestNG</description>
+	<name>Poor Mans Lambda Test</name>
+	<description>Minimal Java8 Lambda enabled testing for TestNG</description>
 	<url>https://github.com/lefou/poor-mans-lambda-test</url>
-        <licenses>
+	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
@@ -34,6 +34,10 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
+	<prerequisites>
+		<maven>3.1</maven>
+	</prerequisites>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.testng</groupId>
@@ -41,5 +45,66 @@
 			<version>6.8.8</version>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>net.orfjackal.retrolambda</groupId>
+				<artifactId>retrolambda-maven-plugin</artifactId>
+				<version>1.8.0</version>
+				<executions>
+					<execution>
+						<id>process-java7-classes</id>
+						<goals>
+							<goal>process-main</goal>
+						</goals>
+						<configuration>
+							<target>1.7</target>
+							<mainOutputDir>${project.build.directory}/java7-classes</mainOutputDir>
+						</configuration>
+					</execution>
+					<execution>
+						<id>process-java6-classes</id>
+						<goals>
+							<goal>process-main</goal>
+						</goals>
+						<configuration>
+							<target>1.6</target>
+							<mainOutputDir>${project.build.directory}/java6-classes</mainOutputDir>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.5</version>
+				<executions>
+					<execution>
+						<id>jar-java7</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<classifier>java7</classifier>
+							<classesDirectory>${project.build.directory}/java7-classes</classesDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>jar-java6</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<classifier>java6</classifier>
+							<classesDirectory>${project.build.directory}/java6-classes</classesDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>
