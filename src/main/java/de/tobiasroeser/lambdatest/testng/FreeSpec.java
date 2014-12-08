@@ -84,16 +84,16 @@ public class FreeSpec {
 	 *             If no exception was thrown or an exception with an
 	 *             incompatible type was thrown.
 	 */
-	public void intercept(final Class<? extends Exception> exceptionType,
+	public <T extends Throwable> T intercept(final Class<T> exceptionType,
 			final RunnableWithException throwing) throws Exception {
-		intercept(exceptionType, ".*", throwing);
+		return intercept(exceptionType, ".*", throwing);
 	}
 
 	/**
 	 * Intercept exceptions of type <code>exceptionType</code> and fail if no
 	 * such exception or an exception with an incompatible type was thrown or it
 	 * the message does not match a given pattern.
-	 * 
+	 *
 	 * @param exceptionType
 	 *            The exception type to intercept.
 	 * @param messageRegex
@@ -106,12 +106,12 @@ public class FreeSpec {
 	 *             incompatible type was thrown or if the message of the
 	 *             exception did not match the expected pattern.
 	 */
-	public void intercept(final Class<? extends Exception> exceptionType,
-			String messageRegex, final RunnableWithException throwing)
+	public <T extends Throwable> T intercept(final Class<T> exceptionType,
+			final String messageRegex, final RunnableWithException throwing)
 			throws Exception {
 		try {
 			throwing.run();
-		} catch (Exception e) {
+		} catch (final Throwable e) {
 			if (exceptionType.isAssignableFrom(e.getClass())) {
 				final String msg = e.getMessage();
 				final boolean matches;
@@ -126,9 +126,12 @@ public class FreeSpec {
 						}
 					}
 				}
-				if (matches)
-					return;
-				else {
+				if (matches) {
+					// safe cast, as I check isAssignableFrom before
+					@SuppressWarnings("unchecked")
+					final T t = (T) e;
+					return t;
+				} else {
 					throw new TestException(
 							"Exception was thrown with the wrong message: Expected: '" + messageRegex
 									+ "' but got '" + msg + "'.", e);
