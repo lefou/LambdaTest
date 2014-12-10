@@ -144,15 +144,15 @@ public class FreeSpec implements LambdaTest {
 					final T t = (T) e;
 					return t;
 				} else {
-					throw new TestException(
+					throw new AssertionError(
 							"Exception was thrown with the wrong message: Expected: '" + messageRegex
 									+ "' but got '" + msg + "'.", e);
 				}
 			}
-			throw new TestException("Thrown exception of type [" + exceptionType.getName()
+			throw new AssertionError("Thrown exception of type [" + exceptionType.getName()
 					+ "] does not match expected type [" + e.getClass().getName() + "]", e);
 		}
-		throw new TestException("Expected exception of type [" + exceptionType.getName() + "] was not thrown");
+		throw new AssertionError("Expected exception of type [" + exceptionType.getName() + "] was not thrown");
 	}
 
 	private void runTestCase(final LambdaTestCase testCase) throws Exception {
