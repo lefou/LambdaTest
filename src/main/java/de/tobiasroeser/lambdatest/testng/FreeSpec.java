@@ -15,6 +15,8 @@ import org.testng.TestException;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import de.tobiasroeser.lambdatest.Expect;
+import de.tobiasroeser.lambdatest.Intercept;
 import de.tobiasroeser.lambdatest.LambdaTest;
 import de.tobiasroeser.lambdatest.internal.AnsiColor;
 import de.tobiasroeser.lambdatest.internal.AnsiColor.Color;
@@ -44,9 +46,24 @@ public class FreeSpec implements LambdaTest {
 	private List<LambdaTestCase> testCases = new LinkedList<>();
 	private volatile boolean testNeverRun = true;
 	private boolean runInParallel = false;
+	private boolean expectFailFast;
 
+	@Override
 	public void setRunInParallel(final boolean runInParallel) {
+		if (!testNeverRun) {
+			System.out.println("Tests already started. Cannot change settings.");
+			return;
+		}
 		this.runInParallel = runInParallel;
+	}
+
+	@Override
+	public void setExpectFailFast(final boolean failFast) {
+		if (!testNeverRun) {
+			System.out.println("Tests already started. Cannot change settings.");
+			return;
+		}
+		this.expectFailFast = failFast;
 	}
 
 	/**
@@ -96,7 +113,7 @@ public class FreeSpec implements LambdaTest {
 	@Override
 	public <T extends Throwable> T intercept(final Class<T> exceptionType,
 			final RunnableWithException throwing) throws Exception {
-		return intercept(exceptionType, ".*", throwing);
+		return Intercept.intercept(exceptionType, throwing);
 	}
 
 	/**
@@ -121,41 +138,10 @@ public class FreeSpec implements LambdaTest {
 	public <T extends Throwable> T intercept(final Class<T> exceptionType,
 			final String messageRegex, final RunnableWithException throwing)
 			throws Exception {
-		try {
-			throwing.run();
-		} catch (final Throwable e) {
-			if (exceptionType.isAssignableFrom(e.getClass())) {
-				final String msg = e.getMessage();
-				final boolean matches;
-				{
-					if (".*".equals(messageRegex)) {
-						matches = true;
-					} else {
-						if (msg == null) {
-							matches = false;
-						} else {
-							matches = Pattern.matches(messageRegex, msg);
-						}
-					}
-				}
-				if (matches) {
-					// safe cast, as I check isAssignableFrom before
-					@SuppressWarnings("unchecked")
-					final T t = (T) e;
-					return t;
-				} else {
-					throw new AssertionError(
-							"Exception was thrown with the wrong message: Expected: '" + messageRegex
-									+ "' but got '" + msg + "'.", e);
-				}
-			}
-			throw new AssertionError("Thrown exception of type [" + exceptionType.getName()
-					+ "] does not match expected type [" + e.getClass().getName() + "]", e);
-		}
-		throw new AssertionError("Expected exception of type [" + exceptionType.getName() + "] was not thrown");
+		return Intercept.intercept(exceptionType, messageRegex, throwing);
 	}
 
-	private void runTestCase(final LambdaTestCase testCase) throws Exception {
+	private void runTestCase(final LambdaTestCase testCase) throws Throwable {
 		final AnsiColor ansi = new AnsiColor();
 		final PrintStream out = System.out;
 
@@ -172,7 +158,30 @@ public class FreeSpec implements LambdaTest {
 
 		final String testName = testCase.getName();
 		try {
-			testCase.getTest().run();
+			Expect.setup(expectFailFast);
+			Throwable uncatchedTestError = null;
+			Throwable delayedTestError = null;
+			try {
+				testCase.getTest().run();
+			} catch (final Throwable t) {
+				uncatchedTestError = t;
+			}
+			try {
+				Expect.finish();
+			} catch (final Throwable t) {
+				delayedTestError = t;
+			}
+			if (uncatchedTestError != null && delayedTestError != null) {
+				throw new AssertionError(
+						"An error occured (see root cause) after some expectations failed. Failed Expectations:\n"
+								+ delayedTestError.getMessage(), uncatchedTestError);
+			} else if (uncatchedTestError != null) {
+				// if this was a SkipException, we still detect it, else some
+				// other errors occurred before
+				throw uncatchedTestError;
+			} else if (delayedTestError != null) {
+				throw delayedTestError;
+			}
 			out.println(ansi.fg(Color.GREEN) + "-- SUCCESS " + testName + ansi.reset());
 		} catch (final SkipException e) {
 			out.println(ansi.fg(Color.YELLOW) + "-- SKIPPED " + testName + " (pending)" + ansi.reset());
@@ -210,7 +219,7 @@ public class FreeSpec implements LambdaTest {
 	}
 
 	@Test(dataProvider = "freeSpecTestCases")
-	public void runFreeSpecTestCases(final LambdaTestCase testCase) throws Exception {
+	public void runFreeSpecTestCases(final LambdaTestCase testCase) throws Throwable {
 		runTestCase(testCase);
 	}
 
@@ -224,7 +233,7 @@ public class FreeSpec implements LambdaTest {
 	}
 
 	@Test(dataProvider = "freeSpecParallelTestCases")
-	public void runFreeSpecParallelTestCases(final LambdaTestCase testCase) throws Exception {
+	public void runFreeSpecParallelTestCases(final LambdaTestCase testCase) throws Throwable {
 		runTestCase(testCase);
 	}
 
