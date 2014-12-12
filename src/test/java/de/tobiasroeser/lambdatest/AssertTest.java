@@ -57,24 +57,24 @@ public class AssertTest {
 					Assert.assertEquals(new String[] { "a" }, "a");
 				});
 		intercept(AssertionError.class,
-				"\\QArray length of 1 does not match expected length of 0. Expected [] but was [a]\\E", () -> {
+				"\\QActual array length of 1 does not match expected length of 0. Expected [] but was [a]\\E", () -> {
 					Assert.assertEquals(new String[] { "a" }, new String[] {});
 				});
 		intercept(AssertionError.class,
-				"\\QArray length of 0 does not match expected length of 1. Expected [a] but was []\\E", () -> {
+				"\\QActual array length of 0 does not match expected length of 1. Expected [a] but was []\\E", () -> {
 					Assert.assertEquals(new String[] {}, new String[] { "a" });
 				});
 		intercept(AssertionError.class,
-				"\\QArray length of 1 does not match expected length of 2. Expected [a,b] but was [a]\\E", () -> {
+				"\\QActual array length of 1 does not match expected length of 2. Expected [a,b] but was [a]\\E", () -> {
 					Assert.assertEquals(new String[] { "a" }, new String[] { "a", "b" });
 				});
 		intercept(AssertionError.class,
-				"\\QArray length of 2 does not match expected length of 1. Expected [a] but was [a,b]\\E", () -> {
+				"\\QActual array length of 2 does not match expected length of 1. Expected [a] but was [a,b]\\E", () -> {
 					Assert.assertEquals(new String[] { "a", "b" }, new String[] { "a" });
 				});
 		intercept(
 				AssertionError.class,
-				"\\QArrays differ at index 0. Expected [b] but was [a]. Element difference error: Actual a is not equal to b\\E",
+				"\\QArrays differ at index 0. Expected [b] but was [a]. Error for element at index 0: Actual a is not equal to b\\E",
 				() -> {
 					Assert.assertEquals(new String[] { "a" }, new String[] { "b" });
 				});

@@ -75,15 +75,56 @@ public class Expect {
 		expectEquals(actual, expected, null);
 	}
 
-	// public static void expectEquals(final boolean actual, final boolean
-	// expected, final String msg) {
-	// expectEquals(Boolean.valueOf(actual), Boolean.valueOf(expected), msg);
-	// }
-	//
-	// public static void expectEquals(final boolean actual, final boolean
-	// expected) {
-	// expectEquals(actual, expected, null);
-	// }
+	public static void expectNotEquals(final Object actual, final Object expected, final String msg) {
+		try {
+			Assert.assertNotEquals(actual, expected, msg);
+		} catch (final AssertionError e) {
+			final ExpectContext context = threadContext.get();
+			if (context != null && context.getFailEarly()) {
+				context.addAssertionError(e);
+			} else {
+				throw e;
+			}
+		}
+	}
+
+	public static void expectNotEquals(final Object actual, final Object expected) {
+		expectNotEquals(actual, expected, null);
+	}
+
+	public static void expectTrue(final boolean actual, final String msg) {
+		try {
+			Assert.assertTrue(actual, msg);
+		} catch (final AssertionError e) {
+			final ExpectContext context = threadContext.get();
+			if (context != null && context.getFailEarly()) {
+				context.addAssertionError(e);
+			} else {
+				throw e;
+			}
+		}
+	}
+
+	public static void expectTrue(final boolean actual) {
+		expectTrue(actual, null);
+	}
+
+	public static void expectFalse(final boolean actual, final String msg) {
+		try {
+			Assert.assertFalse(actual, msg);
+		} catch (final AssertionError e) {
+			final ExpectContext context = threadContext.get();
+			if (context != null && context.getFailEarly()) {
+				context.addAssertionError(e);
+			} else {
+				throw e;
+			}
+		}
+	}
+
+	public static void expectFalse(final boolean actual) {
+		expectFalse(actual, null);
+	}
 
 	public static <T extends Throwable> T intercept(final Class<T> exceptionType,
 			final RunnableWithException throwing) throws Exception {
@@ -115,6 +156,5 @@ public class Expect {
 			return Collections.emptyList();
 		}
 	}
-
 
 }

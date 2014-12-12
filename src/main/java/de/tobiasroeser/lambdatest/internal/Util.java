@@ -73,4 +73,13 @@ public class Util {
 		return mkString(Arrays.asList(source), prefix, separator, suffix, convert);
 	}
 
+	public static <T> List<T> filter(final Iterable<T> source, final F1<? super T, Boolean> accept) {
+		final List<T> result = new LinkedList<T>();
+		for (final T t : source) {
+			if (accept.apply(t)) {
+				result.add(t);
+			}
+		}
+		return result;
+	}
 }
