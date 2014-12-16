@@ -1,6 +1,7 @@
 package de.tobiasroeser.lambdatest.internal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,4 +27,17 @@ public class Util {
 		return result;
 	}
 
+	public static <T, R> List<R> map(final T[] source, final F1<? super T, ? extends R> convert) {
+		return map(Arrays.asList(source), convert);
+	}
+
+	public static <T> List<T> filter(final Iterable<T> source, final F1<? super T, Boolean> accept) {
+		final List<T> result = new LinkedList<T>();
+		for (final T t : source) {
+			if (accept.apply(t)) {
+				result.add(t);
+			}
+		}
+		return result;
+	}
 }

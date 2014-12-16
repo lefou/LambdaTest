@@ -1,6 +1,8 @@
 package de.tobiasroeser.lambdatest.testng;
 
 import static de.tobiasroeser.lambdatest.internal.Util.find;
+import static de.tobiasroeser.lambdatest.internal.Util.filter;
+import static de.tobiasroeser.lambdatest.internal.Util.map;
 
 import java.io.PrintStream;
 import java.util.Collections;
@@ -63,6 +65,17 @@ public class FreeSpec implements LambdaTest {
 	 *            recognized by TestNG.
 	 */
 	public void test(final String name, final RunnableWithException testCase) {
+		String whitelist = System.getenv("TESTCLASSESWHITELIST");
+		if (whitelist == null || whitelist.length() == 0) {
+			whitelist = System.getProperty("de.tobiasroeser.lambdatest.testClassesWhitelist");
+		}
+		if (whitelist != null && whitelist.length() > 0) {
+			final List<String> classes = filter(map(whitelist.split("[,]"), c -> c.trim()), c -> c.length() > 0);
+			if (!classes.contains(getClass().getName())) {
+				return;
+			}
+		}
+
 		final String testName = getClass().getSimpleName() + ": " + name;
 
 		if (find(testCases, tc -> testName.equals(tc.getName())).isDefined()) {
