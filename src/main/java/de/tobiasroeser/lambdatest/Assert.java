@@ -99,6 +99,27 @@ public class Assert {
 		}
 
 		// now we know actual and expected differ
+
+		if (expected instanceof String && actual instanceof String) {
+			final char[] expChars = ((String) expected).toCharArray();
+			final char[] actChars = ((String) actual).toCharArray();
+			final int start = -1;
+			for (int i = 0; i < expChars.length; ++i) {
+				if (actChars.length > i) {
+					if (expChars[i] != actChars[i]) {
+						final String actualWithMarker = ((String) actual).substring(0, i) + "[*]"
+								+ ((String) actual).substring(i);
+						fail(msg, "Strings differ at index {0} (see [*] marker). Expected \"{1}\" but was \"{2}\".", i, expected,
+								actualWithMarker);
+					}
+				}
+				else {
+					fail(msg, "Strings differ at index {0}. Actual is too short. Expected \"{1}\" but was \"{2}\".", i,
+							expected, actual);
+				}
+			}
+		}
+
 		// we try to analyze some kind of collections and iterators
 
 		String itName = null;

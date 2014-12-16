@@ -4,9 +4,6 @@ import static de.tobiasroeser.lambdatest.Expect.expectEquals;
 import static de.tobiasroeser.lambdatest.Intercept.intercept;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
-import static org.testng.Assert.assertTrue;
-
-import java.util.regex.Pattern;
 
 import org.testng.annotations.Test;
 
@@ -133,16 +130,18 @@ public class ExpectTest {
 					expectEquals(new String[] {}, new String[] { "a" });
 				});
 		intercept(AssertionError.class,
-				"\\QActual array length of 1 does not match expected length of 2. Expected [a,b] but was [a]\\E", () -> {
+				"\\QActual array length of 1 does not match expected length of 2. Expected [a,b] but was [a]\\E",
+				() -> {
 					expectEquals(new String[] { "a" }, new String[] { "a", "b" });
 				});
 		intercept(AssertionError.class,
-				"\\QActual array length of 2 does not match expected length of 1. Expected [a] but was [a,b]\\E", () -> {
+				"\\QActual array length of 2 does not match expected length of 1. Expected [a] but was [a,b]\\E",
+				() -> {
 					expectEquals(new String[] { "a", "b" }, new String[] { "a" });
 				});
 		intercept(
 				AssertionError.class,
-				"\\QArrays differ at index 0. Expected [b] but was [a]. Error for element at index 0: Actual a is not equal to b\\E",
+				"\\QArrays differ at index 0. Expected [b] but was [a]. Error for element at index 0: Strings differ at index 0 (see [*] marker). Expected \"b\" but was \"[*]a\".\\E",
 				() -> {
 					expectEquals(new String[] { "a" }, new String[] { "b" });
 				});
