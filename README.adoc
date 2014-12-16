@@ -1,7 +1,7 @@
 = (Poor Mans) Lambda Test
 :toc:
 :toc-placement: preamble
-// also update version in pom.xml example
+// also update version in pom.xml example (2x)
 :lambdatestversion: 0.1.0
 
 image:https://travis-ci.org/lefou/poor-mans-lambda-test.svg?branch=master["Build Status", link="https://travis-ci.org/lefou/poor-mans-lambda-test"]
@@ -11,21 +11,19 @@ Minimal Java8 Lambda enabled testing for TestNG (and later maybe JUnit).
 
 == Motivation
 
-When constrained to work in a Java-only toolchain, I really miss my ScalaTest.
-I tried some lambda enabled test frameworks, but until now,
-I did not find a suitable solution without compromizing the integration benefits.
+When constrained to work in a Java-only toolchain, I really miss my http://scalatest.org[ScalaTest].
+I tried some lambda enabled test frameworks, but until now, did not find a suitable solution without compromizing the integration benefits.
 
-Thus I decided to hack a really small and generic base class that basically allows me write tests easier.
-I avoided to develop a completely new test stack,
-so for asserts and the like the tools of the underlying test framework (currently TestNG) are used. 
+Thus I decided to hack a really small and generic base class that basically allows me write tests easier. Since then it evolved a bit but basically, it provides Lambda-enabled test and nice assert/expect constructs on top of an existing unit test framework (currently TestNG). 
 
 == What you get
 
 Most important features (beside all those you gain from using TestNG already) are:
 
-* No longer requied to have each test in a separate method
+* Write test via API (No longer required to have each test in a separate annotated method)
 * Meaningful names for tests
-* Easy to write data-centric tests (e.g. generate as much test cases as you need in a loop)
+* Easy to write data-centric tests (e.g. generate as much test cases as you need programmatically, e.g. in a loop)
+* Opt-in to not fail fast when using `expectXXX`-methods (see more than the first assertion error)
 * Easy to intercept exceptions
 * Easy to mark pending tests
 * Nice colored output per test case
@@ -73,14 +71,14 @@ You need to extend from class `de.tobiasroeser.lambdatest.testng.FreeSpec`.
 ----
 package org.example;
 
-import static org.testng.Assert.assertEquals;
+import static de.tobiasroeser.lambdatest.Expect.expectEquals;
 
 import de.tobiasroeser.lambdatest.testng.FreeSpec;
 
 class SimpleTest extends FreeSpec {{
 
   test("1 + 1 = 2", () -> {
-    assertEquals(1 + 1, 2);
+    expectEquals(1 + 1, 2);
   });
 
   test("a pending test", () -> pending());
@@ -97,9 +95,10 @@ class SimpleTest extends FreeSpec {{
 ----
 
 The methods `test`, `pending` and `intercept` are provided by `FreeSpec`
-whereas the usual `assertXXX` methods are provided by TestNG (in this case from `org.testng.Assert`).
+whereas the usual `expectXXX` methods are provided by `Expect`.
 
 The output of this test suite above would look like this:
+
 ----
 [TestNG] Running:
   Command line suite
@@ -117,6 +116,27 @@ Total tests run: 3, Failures: 0, Skips: 1
 ----
 
 You should write your test cases so that they don't need to be executed in order. LambdaTest is able to run tests in parallel, if you enable it explicitly with `FreeSpec.setRunInParallel(true)`.
+
+You can disable fail fast behaviour for assertion/expectations with `FreeSpec.setExpectFailFast(false)`. Than, the first failing assertion error will non abort the test but the test is optimistically continued. Further failing assertion errors are collected and reported at the end of the test.
+
+== Writing assertions with `Expect`
+
+As an alternative to the assertion methods provides by other unit testing framework, you can instead use `Expect` and it's `expectXXX`-methods.
+
+Why should you, you ask` Here are some reasons:
+
+* Nice output of differences of various collections
+* non-fail-fast behaviour to collect as much assertion errors as possible in one test run
+
+
+_TBD_
+
+=== Using `Expect` without `FreeSpec`
+
+You can also use the `Expect` class outside of the `FreeSpec` test suites. 
+In that case, you have to take care of setup and finalization yourself.
+
+_TBD_
 
 == Working on Java7 or below
 
