@@ -146,9 +146,7 @@ public class ExpectTest {
 					expectEquals(new String[] { "a" }, new String[] { "b" });
 				});
 
-		// intercept(AssertionError.class, () -> {
 		Expect.finish();
-		// });
 		assertEquals(Expect.__TEST_threadContext(), null);
 	}
 
@@ -162,41 +160,13 @@ public class ExpectTest {
 		expectEquals(null, null);
 		expectEquals(new String[] {}, new String[] {});
 		expectEquals(new String[] { "a" }, new String[] { "a" });
-		// intercept(AssertionError.class,
-		// "\\QExpected an array, but got a java.lang.String\\E", () -> {
 		expectEquals("a", new String[] { "a" });
-		// });
-		// intercept(AssertionError.class,
-		// "\\QGot an array, but did not expected one. Expected a java.lang.String\\E",
-		// () -> {
 		expectEquals(new String[] { "a" }, "a");
-		// });
-		// intercept(AssertionError.class,
-		// "\\QArray length of 1 does not match expected length of 0. Expected [] but was [a]\\E",
-		// () -> {
 		expectEquals(new String[] { "a" }, new String[] {});
-		// });
-		// intercept(AssertionError.class,
-		// "\\QArray length of 0 does not match expected length of 1. Expected [a] but was []\\E",
-		// () -> {
 		expectEquals(new String[] {}, new String[] { "a" });
-		// });
-		// intercept(AssertionError.class,
-		// "\\QArray length of 1 does not match expected length of 2. Expected [a,b] but was [a]\\E",
-		// () -> {
 		expectEquals(new String[] { "a" }, new String[] { "a", "b" });
-		// });
-		// intercept(AssertionError.class,
-		// "\\QArray length of 2 does not match expected length of 1. Expected [a] but was [a,b]\\E",
-		// () -> {
 		expectEquals(new String[] { "a", "b" }, new String[] { "a" });
-		// });
-		// intercept(
-		// AssertionError.class,
-		// "\\QArrays differ at index 0. Expected [b] but was [a]. Element difference error: Actual a is not equal to b\\E",
-		// () -> {
 		expectEquals(new String[] { "a" }, new String[] { "b" });
-		// });
 
 		intercept(AssertionError.class, "\\Q7 expectations failed\\E[\\s\\S]*", () -> {
 			Expect.finish();
