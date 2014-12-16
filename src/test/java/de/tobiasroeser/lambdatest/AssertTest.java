@@ -40,7 +40,7 @@ public class AssertTest {
 			Assert.assertEquals(null, "b");
 		});
 		intercept(AssertionError.class,
-				"\\QStrings differ at index 0 (see [*] marker). Expected \"b\" but was \"[*]a\".\\E", () -> {
+				"\\QStrings differ at index 0 (see [*] marker). Expected \"[*]b\" but was \"[*]a\".\\E", () -> {
 					Assert.assertEquals("a", "b");
 				});
 	}
@@ -77,7 +77,7 @@ public class AssertTest {
 				});
 		intercept(
 				AssertionError.class,
-				"\\QArrays differ at index 0. Expected [b] but was [a]. Error for element at index 0: Strings differ at index 0 (see [*] marker). Expected \"b\" but was \"[*]a\".\\E",
+				"\\QArrays differ at index 0. Expected [b] but was [a]. Error for element at index 0: Strings differ at index 0 (see [*] marker). Expected \"[*]b\" but was \"[*]a\".\\E",
 				() -> {
 					Assert.assertEquals(new String[] { "a" }, new String[] { "b" });
 				});

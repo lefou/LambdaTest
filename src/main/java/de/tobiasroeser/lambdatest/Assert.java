@@ -103,13 +103,15 @@ public class Assert {
 		if (expected instanceof String && actual instanceof String) {
 			final char[] expChars = ((String) expected).toCharArray();
 			final char[] actChars = ((String) actual).toCharArray();
-			final int start = -1;
 			for (int i = 0; i < expChars.length; ++i) {
 				if (actChars.length > i) {
 					if (expChars[i] != actChars[i]) {
+						final String expectedWithMarker = ((String) expected).substring(0, i) + "[*]"
+								+ ((String) expected).substring(i);
 						final String actualWithMarker = ((String) actual).substring(0, i) + "[*]"
 								+ ((String) actual).substring(i);
-						fail(msg, "Strings differ at index {0} (see [*] marker). Expected \"{1}\" but was \"{2}\".", i, expected,
+						fail(msg, "Strings differ at index {0} (see [*] marker). Expected \"{1}\" but was \"{2}\".", i,
+								expectedWithMarker,
 								actualWithMarker);
 					}
 				}
@@ -118,6 +120,13 @@ public class Assert {
 							expected, actual);
 				}
 			}
+			if (expChars.length > actChars.length) {
+				fail(msg, "Strings differ at index {0}. Actual is too long. Expected \"{1}\" but was \"{2}\".",
+						expChars.length, expected, actual);
+			}
+		}
+		if (Boolean.class.isAssignableFrom(expected.getClass()) && Boolean.class.isAssignableFrom(actual.getClass())) {
+			fail(msg, "Actual {0} is not equal to {1}", actual, expected);
 		}
 
 		// we try to analyze some kind of collections and iterators
@@ -141,8 +150,9 @@ public class Assert {
 		if (expected instanceof Set<?> && actual instanceof Set<?>) {
 			// we know they are not equal but have same size, so it is enough to
 			// find the diff candidates
-			final List<?> missingInActual = Util.filter((Iterable<?>) expected, exp -> ((Set<?>) actual).contains(exp));
-			final List<?> spareInActual = Util.filter((Iterable<?>) actual, act -> ((Set<?>) expected).contains(act));
+			final List<?> missingInActual = Util
+					.filter((Iterable<?>) expected, exp -> !((Set<?>) actual).contains(exp));
+			final List<?> spareInActual = Util.filter((Iterable<?>) actual, act -> !((Set<?>) expected).contains(act));
 			fail(msg,
 					"Sets are not equal. Expected {0} but was {1}. Expected elements missing in actual set: {2}. Unexpected elements in actual set: {3}",
 					expected, actual,
@@ -200,6 +210,14 @@ public class Assert {
 							expected, actual, e.getMessage());
 				}
 			}
+		}
+
+		// also try to make a toString() output comparison
+		try {
+			assertEquals(actual.toString(), expected.toString());
+		} catch (final AssertionError e) {
+			fail(msg, "Actual {0} is not equal to {1}. Also their toString() differ: {2}", actual, expected,
+					e.getMessage());
 		}
 
 		fail(msg, "Actual {0} is not equal to {1}", actual, expected);
