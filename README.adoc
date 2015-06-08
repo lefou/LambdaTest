@@ -57,7 +57,7 @@ http://sbuild.org[SBuild] users can use the following dependencies:
 
 [source,scala,subs="attributes"]
 ----
-"mvn:de.tototoec:de.tobiasroeser.lambdatest:{lambdatestversion}" ~
+"mvn:de.tototec:de.tobiasroeser.lambdatest:{lambdatestversion}" ~
   "mvn:org.testng:testng:6.8.8"
 ----
 
