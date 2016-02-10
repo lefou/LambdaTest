@@ -19,7 +19,7 @@ public class Expect {
 
 	private static ThreadLocal<ExpectContext> threadContext = new ThreadLocal<ExpectContext>();
 
-	static ExpectContext __TEST_threadContext() {
+	/* package */ static ExpectContext __TEST_threadContext() {
 		return threadContext.get();
 	}
 
