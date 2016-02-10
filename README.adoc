@@ -1,4 +1,4 @@
-= (Poor Mans) Lambda Test
+= Lambda Test
 :toc:
 :toc-placement: preamble
 :lambdatestversion: 0.1.0
