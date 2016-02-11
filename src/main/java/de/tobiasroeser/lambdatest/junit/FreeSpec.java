@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.junit.internal.AssumptionViolatedException;
 import org.junit.runner.RunWith;
 import org.testng.Assert;
 import org.testng.TestException;
@@ -72,22 +73,13 @@ public class FreeSpec implements LambdaTest {
 		this.testCases.add(new LambdaTestCase(testName, testCase));
 	}
 
-	public static class SkipException extends RuntimeException {
-		private static final long serialVersionUID = 1L;
-
-		public SkipException() {
-			super("Pending");
-		}
-
-	}
-
 	/**
 	 * Marks the test as pending. Instructions after <code>pending()</code> will
 	 * not be executed and TestNG marks the test as skipped.
 	 */
 	@Override
 	public void pending() {
-		throw new SkipException();
+		throw new AssumptionViolatedException("Pending");
 	}
 
 	/**

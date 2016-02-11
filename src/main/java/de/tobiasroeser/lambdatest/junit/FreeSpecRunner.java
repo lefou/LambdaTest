@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.util.Collections;
 import java.util.List;
 
+import org.junit.internal.AssumptionViolatedException;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
@@ -13,7 +14,6 @@ import org.junit.runners.model.InitializationError;
 import de.tobiasroeser.lambdatest.Expect;
 import de.tobiasroeser.lambdatest.internal.AnsiColor;
 import de.tobiasroeser.lambdatest.internal.AnsiColor.Color;
-import de.tobiasroeser.lambdatest.junit.FreeSpec.SkipException;
 import de.tobiasroeser.lambdatest.shared.LambdaTestCase;
 
 public class FreeSpecRunner extends ParentRunner<LambdaTestCase> {
@@ -100,9 +100,9 @@ public class FreeSpecRunner extends ParentRunner<LambdaTestCase> {
 				throw delayedTestError;
 			}
 			out.println(ansi.fg(Color.GREEN) + "-- SUCCESS " + testName + ansi.reset());
-		} catch (final SkipException e) {
+		} catch (final AssumptionViolatedException e) {
 			out.println(ansi.fg(Color.YELLOW) + "-- SKIPPED " + testName + " (pending)" + ansi.reset());
-			runNotifier.fireTestIgnored(description);
+			runNotifier.fireTestAssumptionFailed(new Failure(description, e));
 		} catch (final Throwable e) {
 			try {
 				out.println(ansi.fg(Color.RED) + "-- FAILED  " + testName);

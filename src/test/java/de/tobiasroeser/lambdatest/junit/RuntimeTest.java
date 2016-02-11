@@ -54,7 +54,7 @@ public class RuntimeTest {
 		final Result result = JUnitCore.runClasses(SimplePendingTest.class);
 		assertEquals(result.getRunCount(), 1);
 		assertEquals(result.getFailureCount(), 0);
-		assertEquals(result.getIgnoreCount(), 1);
+		assertEquals(result.getIgnoreCount(), 0);
 	}
 
 }
