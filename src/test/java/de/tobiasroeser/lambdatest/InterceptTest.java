@@ -22,7 +22,7 @@ public class InterceptTest {
 		}
 	}
 
-	@Test
+	@Test(groups = { "intercept" })
 	public void testInterceptByTypeWorks() {
 		try {
 			final InterceptTestException ex = intercept(InterceptTestException.class, () -> {
@@ -34,7 +34,7 @@ public class InterceptTest {
 		}
 	}
 
-	@Test
+	@Test(groups = { "intercept" })
 	public void testInterceptByTypeWorksForSubTypes() {
 		try {
 			final InterceptTestException ex = intercept(InterceptTestException.class, () -> {
@@ -46,7 +46,7 @@ public class InterceptTest {
 		}
 	}
 
-	@Test
+	@Test(groups = { "intercept" })
 	public void testInterceptByTypeIgnoresSuperTypes() {
 		try {
 			intercept(InterceptTestSubException.class, () -> {
@@ -62,7 +62,7 @@ public class InterceptTest {
 		}
 	}
 
-	@Test
+	@Test(groups = { "intercept" })
 	public void testInterceptWithCorrectTypeAndMessage() {
 		try {
 			final InterceptTestException ex = intercept(InterceptTestException.class, "\\Qmsg\\E", () -> {
@@ -74,7 +74,7 @@ public class InterceptTest {
 		}
 	}
 
-	@Test
+	@Test(groups = { "intercept" })
 	public void testInterceptWithCorrectTypeButWrongMessage() {
 		try {
 			intercept(InterceptTestException.class, "Msg", () -> {
@@ -88,7 +88,7 @@ public class InterceptTest {
 		}
 	}
 
-	@Test
+	@Test(groups = { "intercept" })
 	public void testInterceptWithWrongTypeButCorrectMessage() {
 		try {
 			intercept(InterceptTestSubException.class, "\\Qmsg\\E", () -> {

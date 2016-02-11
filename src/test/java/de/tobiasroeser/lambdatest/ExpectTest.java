@@ -20,7 +20,7 @@ public class ExpectTest {
 		Expect.expectEquals(1, 1, "ONE");
 	}
 
-	@Test
+	@Test(dependsOnGroups = { "intercept" })
 	public void testBaseFailure() throws Exception {
 		Expect.clear();
 		assertEquals(Expect.__TEST_threadContext(), null);
@@ -50,7 +50,7 @@ public class ExpectTest {
 		assertEquals(Expect.__TEST_threadContext(), null);
 	}
 
-	@Test
+	@Test(dependsOnGroups = { "intercept" })
 	public void testOneFailingAssert() throws Exception {
 		Expect.clear();
 		assertEquals(Expect.__TEST_threadContext(), null);
@@ -75,7 +75,7 @@ public class ExpectTest {
 		assertEquals(Expect.__TEST_threadContext(), null);
 	}
 
-	@Test
+	@Test(dependsOnGroups = { "intercept" })
 	public void testTwoFailingAssert() throws Exception {
 		Expect.clear();
 		assertEquals(Expect.__TEST_threadContext(), null);
@@ -104,7 +104,7 @@ public class ExpectTest {
 		assertEquals(Expect.__TEST_threadContext(), null);
 	}
 
-	@Test
+	@Test(dependsOnGroups = { "intercept" })
 	public void testExpectEqualsStringArrayFailEarly() throws Exception {
 		Expect.clear();
 		assertEquals(Expect.__TEST_threadContext(), null);
@@ -150,7 +150,7 @@ public class ExpectTest {
 		assertEquals(Expect.__TEST_threadContext(), null);
 	}
 
-	@Test
+	@Test(dependsOnGroups = { "intercept" })
 	public void testExpectEqualsStringArrayNotFailEarly() throws Exception {
 		Expect.clear();
 		assertEquals(Expect.__TEST_threadContext(), null);

@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
  */
 public class AssertTest {
 
-	@Test
+	@Test(dependsOnGroups = { "intercept" })
 	public void testAssertEqualsBoolean() throws Exception {
 		Assert.assertEquals(true, true);
 		Assert.assertEquals(false, false);
@@ -28,7 +28,7 @@ public class AssertTest {
 		});
 	}
 
-	@Test
+	@Test(dependsOnGroups = { "intercept" })
 	public void testAssertEqualsString() throws Exception {
 		Assert.assertEquals(null, null);
 		Assert.assertEquals("a", "a");
@@ -45,7 +45,7 @@ public class AssertTest {
 				});
 	}
 
-	@Test
+	@Test(dependsOnGroups = { "intercept" })
 	public void testAssertEqualsStringArray() throws Exception {
 		Assert.assertEquals(null, null);
 		Assert.assertEquals(new String[] {}, new String[] {});
