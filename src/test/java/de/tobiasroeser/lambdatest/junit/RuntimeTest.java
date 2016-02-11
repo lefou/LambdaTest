@@ -29,6 +29,7 @@ public class RuntimeTest {
 		public SimplePendingTest() {
 			test("should be pending", () -> {
 				pending();
+				Assert.fail("should not be reached");
 			});
 		}
 	}
