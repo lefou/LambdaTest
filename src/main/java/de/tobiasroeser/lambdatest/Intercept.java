@@ -2,8 +2,6 @@ package de.tobiasroeser.lambdatest;
 
 import java.util.regex.Pattern;
 
-import de.tobiasroeser.lambdatest.testng.RunnableWithException;
-
 public class Intercept {
 
 	/**

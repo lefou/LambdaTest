@@ -1,31 +1,22 @@
-package de.tobiasroeser.lambdatest.testng;
+package de.tobiasroeser.lambdatest.junit;
 
 import static de.tobiasroeser.lambdatest.internal.Util.find;
 
-import java.io.PrintStream;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.junit.runner.RunWith;
 import org.testng.Assert;
-import org.testng.SkipException;
 import org.testng.TestException;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
-import de.tobiasroeser.lambdatest.Expect;
 import de.tobiasroeser.lambdatest.Intercept;
 import de.tobiasroeser.lambdatest.LambdaTest;
 import de.tobiasroeser.lambdatest.RunnableWithException;
-import de.tobiasroeser.lambdatest.internal.AnsiColor;
-import de.tobiasroeser.lambdatest.internal.AnsiColor.Color;
-import de.tobiasroeser.lambdatest.internal.Util;
 import de.tobiasroeser.lambdatest.shared.LambdaTestCase;
 
 /**
- * Inherit from this class to create a new TestNG test suite and use the
+ * Inherit from this class to create a new JUnit test suite and use the
  * {@link FreeSpec#test} method to add test cases.
  * <p>
  * It provides the following methods:
@@ -43,28 +34,19 @@ import de.tobiasroeser.lambdatest.shared.LambdaTestCase;
  * TODO: example
  *
  */
+@RunWith(FreeSpecRunner.class)
 public class FreeSpec implements LambdaTest {
 
 	private final List<LambdaTestCase> testCases = new LinkedList<>();
-	private volatile boolean testNeverRun = true;
-	private boolean runInParallel = false;
 	private boolean expectFailFast;
 
 	@Override
 	public void setRunInParallel(final boolean runInParallel) {
-		if (!testNeverRun) {
-			System.out.println("Tests already started. Cannot change settings.");
-			return;
-		}
-		this.runInParallel = runInParallel;
+		System.out.println("RunInParallel not supported under JUnit.");
 	}
 
 	@Override
 	public void setExpectFailFast(final boolean failFast) {
-		if (!testNeverRun) {
-			System.out.println("Tests already started. Cannot change settings.");
-			return;
-		}
 		this.expectFailFast = failFast;
 	}
 
@@ -90,13 +72,22 @@ public class FreeSpec implements LambdaTest {
 		this.testCases.add(new LambdaTestCase(testName, testCase));
 	}
 
+	public static class SkipException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+
+		public SkipException() {
+			super("Pending");
+		}
+
+	}
+
 	/**
 	 * Marks the test as pending. Instructions after <code>pending()</code> will
 	 * not be executed and TestNG marks the test as skipped.
 	 */
 	@Override
 	public void pending() {
-		throw new SkipException("Pending");
+		throw new SkipException();
 	}
 
 	/**
@@ -139,104 +130,16 @@ public class FreeSpec implements LambdaTest {
 	@Override
 	public <T extends Throwable> T intercept(final Class<T> exceptionType,
 			final String messageRegex, final RunnableWithException throwing)
-			throws Exception {
+					throws Exception {
 		return Intercept.intercept(exceptionType, messageRegex, throwing);
 	}
 
-	private void runTestCase(final LambdaTestCase testCase) throws Throwable {
-		final AnsiColor ansi = new AnsiColor();
-		final PrintStream out = System.out;
-
-		if (testNeverRun) {
-			synchronized (this) {
-				if (testNeverRun) {
-					out.println("Running " + ansi.fg(Color.CYAN) + testCases.size()
-							+ ansi.reset() + " tests in " + ansi.fg(Color.CYAN)
-							+ getClass().getName() + ansi.reset() + ":");
-					testNeverRun = false;
-				}
-			}
-		}
-
-		final String testName = testCase.getName();
-		try {
-			Expect.setup(expectFailFast);
-			Throwable uncatchedTestError = null;
-			Throwable delayedTestError = null;
-			try {
-				testCase.getTest().run();
-			} catch (final Throwable t) {
-				uncatchedTestError = t;
-			}
-			try {
-				Expect.finish();
-			} catch (final Throwable t) {
-				delayedTestError = t;
-			}
-			if (uncatchedTestError != null && delayedTestError != null) {
-				throw new AssertionError(
-						"An error occured (see root cause) after some expectations failed. Failed Expectations:\n"
-								+ delayedTestError.getMessage(), uncatchedTestError);
-			} else if (uncatchedTestError != null) {
-				// if this was a SkipException, we still detect it, else some
-				// other errors occurred before
-				throw uncatchedTestError;
-			} else if (delayedTestError != null) {
-				throw delayedTestError;
-			}
-			out.println(ansi.fg(Color.GREEN) + "-- SUCCESS " + testName + ansi.reset());
-		} catch (final SkipException e) {
-			out.println(ansi.fg(Color.YELLOW) + "-- SKIPPED " + testName + " (pending)" + ansi.reset());
-			throw e;
-		} catch (final Throwable e) {
-			try {
-				out.println(ansi.fg(Color.RED) + "-- FAILED  " + testName);
-				// System.out.println(e.getMessage());
-				e.printStackTrace(out);
-				Throwable oldCause = e;
-				Throwable cause = e.getCause();
-				// unpack exception stack
-				while (cause != null && cause != oldCause) {
-					out.print("Caused by: ");
-					cause.printStackTrace(out);
-					oldCause = cause;
-					cause = cause.getCause();
-				}
-			} catch (final Throwable t) {
-				// ignore any further errors, just in case
-			} finally {
-				System.out.print(ansi.reset());
-			}
-			throw e;
-		}
+	protected List<LambdaTestCase> getTestCases() {
+		return testCases;
 	}
 
-	@DataProvider(name = "freeSpecTestCases", parallel = false)
-	public Iterator<Object[]> freeSpecTestCases() {
-		if (!runInParallel) {
-			return Util.map(testCases, (tc) -> new Object[] { tc }).iterator();
-		} else {
-			return Collections.<Object[]> emptyList().iterator();
-		}
-	}
-
-	@Test(dataProvider = "freeSpecTestCases")
-	public void runFreeSpecTestCases(final LambdaTestCase testCase) throws Throwable {
-		runTestCase(testCase);
-	}
-
-	@DataProvider(name = "freeSpecParallelTestCases", parallel = true)
-	public Iterator<Object[]> freeSpecParallelTestCases() {
-		if (runInParallel) {
-			return Util.map(testCases, (tc) -> new Object[] { tc }).iterator();
-		} else {
-			return Collections.<Object[]> emptyList().iterator();
-		}
-	}
-
-	@Test(dataProvider = "freeSpecParallelTestCases")
-	public void runFreeSpecParallelTestCases(final LambdaTestCase testCase) throws Throwable {
-		runTestCase(testCase);
+	protected boolean getExpectFailFast() {
+		return expectFailFast;
 	}
 
 }

@@ -1,4 +1,9 @@
-package de.tobiasroeser.lambdatest.testng;
+package de.tobiasroeser.lambdatest.shared;
+
+import java.util.Collections;
+import java.util.List;
+
+import de.tobiasroeser.lambdatest.RunnableWithException;
 
 /**
  * A single test case, meant to be internally used by {@link FreeSpec}.
@@ -6,12 +11,18 @@ package de.tobiasroeser.lambdatest.testng;
  */
 public class LambdaTestCase {
 
+	private final List<String> sections;
 	private final String name;
 	private final RunnableWithException test;
 
-	public LambdaTestCase(String name, RunnableWithException test) {
+	public LambdaTestCase(final List<String> sections, final String name, final RunnableWithException test) {
+		this.sections = Collections.unmodifiableList(sections);
 		this.name = name;
 		this.test = test;
+	}
+
+	public LambdaTestCase(final String name, final RunnableWithException test) {
+		this(Collections.emptyList(), name, test);
 	}
 
 	/**
@@ -22,6 +33,10 @@ public class LambdaTestCase {
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	public List<String> getSections() {
+		return sections;
 	}
 
 	public String getName() {

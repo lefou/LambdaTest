@@ -10,7 +10,7 @@
 
 	<name>Poor Mans Lambda Test</name>
 	<description>Minimal Java8 Lambda enabled testing for TestNG</description>
-	<url>https://github.com/lefou/poor-mans-lambda-test</url>
+	<url>https://github.com/lefou/LambdaTest</url>
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
@@ -19,7 +19,7 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>https://github.com/lefou/poor-mans-lambda-test</url>
+		<url>https://github.com/lefou/LambdaTest</url>
 	</scm>
 	<developers>
 		<developer>
@@ -43,6 +43,13 @@
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<version>6.8.8</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

@@ -1,4 +1,4 @@
-package de.tobiasroeser.lambdatest.testng;
+package de.tobiasroeser.lambdatest;
 
 /**
  * A Runnable with is permitted to throw exceptions.

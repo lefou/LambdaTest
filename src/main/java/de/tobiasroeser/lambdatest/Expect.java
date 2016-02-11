@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 
 import de.tobiasroeser.lambdatest.internal.Util;
-import de.tobiasroeser.lambdatest.testng.RunnableWithException;
 
 /**
  * Idea for context (held in a threadlocal)
