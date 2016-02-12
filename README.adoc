@@ -3,6 +3,7 @@
 :toc-placement: preamble
 :lambdatestversion: 0.1.0
 :testngversion: 6.8.8
+:junitversion: 4.11
 
 image:https://travis-ci.org/lefou/poor-mans-lambda-test.svg?branch=master["Build Status", link="https://travis-ci.org/lefou/poor-mans-lambda-test"]
 image:https://www.codacy.com/project/badge/b05b1dc99f98423eb05862de7fcf3662["Codacy Badge", link="https://www.codacy.com/public/lepetitfou_3463/poor-mans-lambda-test"]
@@ -50,6 +51,14 @@ Maven users can use the following dependency declaration:
     <version>{lambdatestversion}</version>
     <scope>test</scope>
   </dependency>
+  <!-- If you use LambdaTest with JUnit -->
+  <dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>{junitversion}</version>
+    <scope>test</scope>
+  </dependency>
+  <!-- If you use LambdaTest with TestNG -->
   <dependency>
     <groupId>org.testng</groupId>
     <artifactId>testng</artifactId>
@@ -61,6 +70,14 @@ Maven users can use the following dependency declaration:
 
 http://sbuild.org[SBuild] users can use the following dependencies:
 
+.Use with JUnit
+[source,scala,subs="attributes"]
+----
+"mvn:de.tototec:de.tobiasroeser.lambdatest:{lambdatestversion}" ~
+  "mvn:junit:junit:{junitversion}"
+----
+
+.Use with TestNG
 [source,scala,subs="attributes"]
 ----
 "mvn:de.tototec:de.tobiasroeser.lambdatest:{lambdatestversion}" ~
@@ -76,6 +93,8 @@ You need to extend from class `de.tobiasroeser.lambdatest.testng.FreeSpec`.
 [source,java]
 ----
 import static de.tobiasroeser.lambdatest.Expect.expectEquals;
+// You can also use JUnit based tests with
+// import de.tobiasroeser.lambdatest.junit.FreeSpec;
 import de.tobiasroeser.lambdatest.testng.FreeSpec;
 
 class SimpleTest extends FreeSpec {
@@ -102,6 +121,7 @@ The methods `test`, `pending` and `intercept` are provided by `FreeSpec`
 whereas the usual `expectXXX` methods are provided by `Expect`.
 
 The output of this test suite above would look like this:
+_(Actually it is also nicely coloured)_
 
 ----
 [TestNG] Running:
@@ -132,7 +152,7 @@ As an alternative to the assertion methods provides by other unit testing framew
 Why should you, you ask? Here are some reasons:
 
 * Nice output of differences of various collections
-* non-fail-fast behaviour to collect as much assertion errors as possible in one test run
+* optional non-fail-fast behaviour to collect as much assertion errors as possible in one test run
 
 
 _TBD_
@@ -175,6 +195,14 @@ To use the Java7 version in Maven:
 
 or in SBuild:
 
+.Use with JUnit
+[source,scala,subs="attributes"]
+----
+"mvn:de.tototoec:de.tobiasroeser.lambdatest:{lambdatestversion};classifier=java7" ~
+  "mvn:junit:junit:{junitversion}"
+----
+
+.Use with TestNG
 [source,scala,subs="attributes"]
 ----
 "mvn:de.tototoec:de.tobiasroeser.lambdatest:{lambdatestversion};classifier=java7" ~
@@ -191,18 +219,26 @@ This project is published under the http://www.apache.org/licenses/LICENSE-2.0.t
 
 == Contribution
 
-Feedback, reported issues and pull requests are highly appreciated.
-You can also find me on Twitter as https://twitter.com/TobiasRoeser[@TobiasRoeser].
+Your feedback is highly appreciated.
 
+For questions please use the https://gitter.im/lefou/LambdaTest[Gitter chatroom].
+
+To report issues or send pull request, use https://github.com/lefou/LambdaTest[GitHub].
+
+You can also find me on https://twitter.com/TobiasRoeser[Twitter as @TobiasRoeser].
+
+If you like LambdaTest, please star it on https://github.com/lefou/LambdaTest[GitHub]. This will help me to set my priorities. Thanks!
 
 == Changelog
 
-=== \{master}
+=== LambdaTest 0.2.0 - 2016-02-12
 
-* Introduced new Assert and Expect classes.
+* Added JUnit support.
+  You can now use `de.tobiasroeser.lambdatest.junit.FreeSpec` for JUnit based tests in addition to the already existing  `de.tobiasroeser.lambdatest.testng.FreeSpec` for TestNG based tests.
+* Introduced new `Assert` and `Expect` classes. Expect-based asserts also support deferred exceptions. FreeSpec already integrates the setup of Expect.
 
 
-=== 0.1.0 - 2014-12-08
+=== LambdaTest 0.1.0 - 2014-12-08
 
 * Also release compatibility packages for older Java runtimes: Java7 and Java6.
 They are available via the "java7" and "java6" classifier.
@@ -210,22 +246,22 @@ They are available via the "java7" and "java6" classifier.
 * Added FreeSpec.setRunInParallel to enable option to run tests in parallel.
 * Introduced LambdaTest interface (implemented by testng.FreeSpec) to contain the common API.
 
-=== 2014-11-29
+=== Rerelease of LambdaTest 0.0.3 - 2014-11-29
 
 * Rerelease of 0.0.3 under "de.tototec" groupId.
 You can now grab it directly from Maven Central without configuring a dedicated bintray repository.
 
-=== 0.0.3 - 2014-11-16
+=== LambdaTest 0.0.3 - 2014-11-16
 
 * Fixed issue with missapplied close of STDOUT stream
 * Fixed bug preventing from TestNG seeing pending tests as skipped
 * de.tobiasroeser.lambdatest.testng.FreeSpec class no longer inherits org.testng.Assert
 
-=== 0.0.2 - 2014-10-18
+=== LambdaTest 0.0.2 - 2014-10-18
 
 * Colored output
 * Added support to match exception messages with regex in intecept
 
-=== 0.0.1 - 2014-10-15
+=== LambdaTest 0.0.1 - 2014-10-15
 
 * First release
