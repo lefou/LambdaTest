@@ -22,12 +22,11 @@ import de.tobiasroeser.lambdatest.internal.Util;
 
 public class RuntimeTest {
 
+	private static final boolean runInnerTests = System.getProperty("RUN_INNER_TEST", "0").equals("1");
+
 	public static class SimpleFailureTest extends FreeSpec {
-
 		public SimpleFailureTest() {
-			System.out.println("Loaded class " + this);
-
-			if (System.getProperty("RUN_INNER_TEST", "0").equals("1")) {
+			if (runInnerTests) {
 				test("should fail", () -> {
 					Assert.assertTrue(false);
 				});
@@ -37,7 +36,7 @@ public class RuntimeTest {
 
 	public static class SimplePendingTest extends FreeSpec {
 		public SimplePendingTest() {
-			if (System.getProperty("RUN_INNER_TEST", "0").equals("1")) {
+			if (runInnerTests) {
 				test("should be pending", () -> {
 					pending();
 					Assert.fail("should not be reached");
@@ -48,7 +47,7 @@ public class RuntimeTest {
 
 	public static class SimpleSuccessTest extends FreeSpec {
 		public SimpleSuccessTest() {
-			if (System.getProperty("RUN_INNER_TEST", "0").equals("1")) {
+			if (runInnerTests) {
 				test("should succeed", () -> {
 					Assert.assertTrue(true);
 				});
@@ -61,6 +60,10 @@ public class RuntimeTest {
 		List<String> output;
 	}
 
+	/**
+	 * Need to test in separate process/JVM to avoid classes of the outer and
+	 * inner TestNG instances. Thank you global singletons. :(
+	 */
 	private JvmResult testInJvm(final String className) throws Exception {
 		final ClassLoader cl = getClass().getClassLoader();
 		if (cl instanceof URLClassLoader) {
@@ -99,7 +102,7 @@ public class RuntimeTest {
 	}
 
 	@Test(groups = { "testng" })
-	public void testSuccess() throws Exception {
+	public void testSuccessInSubProcess() throws Exception {
 		final JvmResult result = testInJvm(SimpleSuccessTest.class.getName());
 		assertEquals(result.exitCode, 0);
 		final Optional<String> line = Util.find(result.output, l -> l.startsWith("Total tests run"));
@@ -108,7 +111,7 @@ public class RuntimeTest {
 	}
 
 	@Test(groups = { "testng" })
-	public void testFailure() throws Exception {
+	public void testFailureInSubProcess() throws Exception {
 		final JvmResult result = testInJvm(SimpleFailureTest.class.getName());
 		assertEquals(result.exitCode, 1);
 		final Optional<String> line = Util.find(result.output, l -> l.startsWith("Total tests run"));
@@ -117,7 +120,7 @@ public class RuntimeTest {
 	}
 
 	@Test(groups = { "testng" })
-	public void testPending() throws Exception {
+	public void testPendingInSubProcess() throws Exception {
 		final JvmResult result = testInJvm(SimplePendingTest.class.getName());
 		assertNotEquals(result.exitCode, 0);
 		final Optional<String> line = Util.find(result.output, l -> l.startsWith("Total tests run"));
