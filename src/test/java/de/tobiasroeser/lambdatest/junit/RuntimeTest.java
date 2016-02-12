@@ -35,7 +35,7 @@ public class RuntimeTest {
 	}
 
 	@Test(groups = { "junit" })
-	public void testSuccessTest() {
+	public void testSuccess() {
 		final Result result = JUnitCore.runClasses(SimpleSuccessTest.class);
 		assertEquals(result.getRunCount(), 1);
 		assertEquals(result.getFailureCount(), 0);
@@ -43,7 +43,7 @@ public class RuntimeTest {
 	}
 
 	@Test(groups = { "junit" })
-	public void testFailureTest() {
+	public void testFailure() {
 		final Result result = JUnitCore.runClasses(SimpleFailureTest.class);
 		assertEquals(result.getRunCount(), 1);
 		assertEquals(result.getFailureCount(), 1);
@@ -51,7 +51,7 @@ public class RuntimeTest {
 	}
 
 	@Test(groups = { "junit" })
-	public void testPendingTest() {
+	public void testPending() {
 		final Result result = JUnitCore.runClasses(SimplePendingTest.class);
 		assertEquals(result.getRunCount(), 1);
 		assertEquals(result.getFailureCount(), 0);
