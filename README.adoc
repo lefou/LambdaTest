@@ -1,14 +1,14 @@
 = Lambda Test
 :toc:
 :toc-placement: preamble
-:lambdatestversion: 0.1.0
+:lambdatestversion: 0.2.0
 :testngversion: 6.8.8
 :junitversion: 4.11
 
 image:https://travis-ci.org/lefou/poor-mans-lambda-test.svg?branch=master["Build Status", link="https://travis-ci.org/lefou/poor-mans-lambda-test"]
 image:https://www.codacy.com/project/badge/b05b1dc99f98423eb05862de7fcf3662["Codacy Badge", link="https://www.codacy.com/public/lepetitfou_3463/poor-mans-lambda-test"]
 
-Minimal Java8 Lambda enabled testing for TestNG (and later maybe JUnit).
+Minimal Java8 Lambda enabled testing for JUnit and TestNG.
 
 The latest released version is LambdaTest {lambdatestversion}.
 
@@ -21,17 +21,17 @@ When constrained to work in a Java-only toolchain, I really miss my http://scala
 I tried some lambda enabled test frameworks, but until now, did not find a suitable solution without compromizing the integration benefits.
 
 Thus I decided to hack a really small and generic base class that basically allows me write tests easier.
-Since then it evolved a bit but basically, it provides Lambda-enabled test and nice assert/expect constructs on top of an existing unit test framework (currently TestNG).
+Since then it evolved a bit but basically, it provides Lambda-enabled test and nice assert/expect constructs on top of an existing unit test framework (JUnit or TestNG).
 
-== What you get
+== Features
 
-Most important features (beside all those you gain from using TestNG already) are:
+Most important features are:
 
 * Write test via API (No longer required to have each test in a separate annotated method)
 * Meaningful names for tests
 * Easy to write data-centric tests (e.g. generate as much test cases as you need programmatically, e.g. in a loop)
-* Opt-in to not fail fast when using `expectXXX`-methods (see more than the first assertion error)
 * Easy to intercept exceptions
+* Opt-in to not fail fast when using `expectXXX`-methods (see more than the first assertion error)
 * Easy to mark pending tests
 * Nice colored output per test case
 
