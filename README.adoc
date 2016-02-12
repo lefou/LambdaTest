@@ -167,9 +167,10 @@ _TBD_
 
 == Working on Java7 or below
 
-This project does not use any Java 8 API!
-So, it would be possible to use this test library on older Java Runtimes (down to Java5).
-Currently, the binaries are compiled to Java8, Java7 and Java6.
+Even though writing functional test makes most sence under Java 8,
+there are enough reasons to also use them on older Java versions which do not provide nice closures.
+
+LambdaTest does not use any Java 8 API! Therefore, there is nothing that stops you. You can download precompiled binaries of LambdaTest for older Java Runtimes down to Java 6.
 To use the non-Java8 version with Maven, use a classifier ("java7", or "java6") to download the version you want.
 The compatibility packages are produced with the great https://github.com/orfjackal/retrolambda[retrolambda project].
 
@@ -185,34 +186,49 @@ To use the Java7 version in Maven:
     <classifier>java7</classifier>
     <scope>test</scope>
   </dependency>
-  <dependency>
-    <groupId>org.testng</groupId>
-    <artifactId>testng</artifactId>
-    <version>{testngversion}</version>
-    <scope>test</scope>
-  </dependency>
+  <!-- Also you need one of JUnit or TestNG, see above -->
 </dependencies>
 ----
 
 or in SBuild:
 
-.Use with JUnit
 [source,scala,subs="attributes"]
 ----
-"mvn:de.tototoec:de.tobiasroeser.lambdatest:{lambdatestversion};classifier=java7" ~
-  "mvn:junit:junit:{junitversion}"
+"mvn:de.tototoec:de.tobiasroeser.lambdatest:{lambdatestversion};classifier=java7"
 ----
 
-.Use with TestNG
-[source,scala,subs="attributes"]
+Instead of Java 8 Closures, you have to create anonymous classes.
+
+[source,java]
 ----
-"mvn:de.tototoec:de.tobiasroeser.lambdatest:{lambdatestversion};classifier=java7" ~
-  "mvn:org.testng:testng:{testngversion}"
+import static de.tobiasroeser.lambdatest.Expect.expectEquals;
+import de.tobiasroeser.lambdatest.RunnableWithException;
+import de.tobiasroeser.lambdatest.junit.FreeSpec;
+
+class SimpleTest extends FreeSpec {
+  public SimpleTest() {
+
+  test("1 + 1 = 2", new RunnableWithException() {
+    public void run() throws Exception {
+      expectEquals(1 + 1, 2);
+    }
+  });
+
+  test("divide by zero", new RunnableWithException() {
+    public void run() throws Exception {
+      int a = 2;
+      int b = 0;
+      intercept(ArithmeticException.class, new RunnableWithException() {
+        public void run() throws Exception {
+          int c = a / b;
+        }
+      });
+    }
+  });
+
+}}
 ----
 
-
-
-Of course if you want to gain the benefits of using the nice Java 8 Closures a Java 8 compiler needs to be used.
 
 == Licence
 
