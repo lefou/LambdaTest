@@ -14,7 +14,7 @@ import org.testng.TestException;
 import de.tobiasroeser.lambdatest.Intercept;
 import de.tobiasroeser.lambdatest.LambdaTest;
 import de.tobiasroeser.lambdatest.RunnableWithException;
-import de.tobiasroeser.lambdatest.shared.LambdaTestCase;
+import de.tobiasroeser.lambdatest.internal.LambdaTestCase;
 
 /**
  * Inherit from this class to create a new JUnit test suite and use the

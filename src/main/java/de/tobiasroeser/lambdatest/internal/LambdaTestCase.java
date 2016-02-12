@@ -1,4 +1,4 @@
-package de.tobiasroeser.lambdatest.shared;
+package de.tobiasroeser.lambdatest.internal;
 
 import java.util.Collections;
 import java.util.List;
@@ -6,7 +6,9 @@ import java.util.List;
 import de.tobiasroeser.lambdatest.RunnableWithException;
 
 /**
- * A single test case, meant to be internally used by {@link FreeSpec}.
+ * A single test case, meant to be internally used by
+ * {@link de.tobiasroeser.lambdatest.junit.FreeSpec} and
+ * {@link de.tobiasroeser.lambdatest.testng.FreeSpec}
  *
  */
 public class LambdaTestCase {

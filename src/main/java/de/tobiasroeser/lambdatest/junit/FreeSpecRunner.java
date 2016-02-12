@@ -13,8 +13,8 @@ import org.junit.runners.model.InitializationError;
 
 import de.tobiasroeser.lambdatest.Expect;
 import de.tobiasroeser.lambdatest.internal.AnsiColor;
+import de.tobiasroeser.lambdatest.internal.LambdaTestCase;
 import de.tobiasroeser.lambdatest.internal.AnsiColor.Color;
-import de.tobiasroeser.lambdatest.shared.LambdaTestCase;
 
 public class FreeSpecRunner extends ParentRunner<LambdaTestCase> {
 

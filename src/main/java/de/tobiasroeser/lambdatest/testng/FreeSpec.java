@@ -20,9 +20,9 @@ import de.tobiasroeser.lambdatest.Intercept;
 import de.tobiasroeser.lambdatest.LambdaTest;
 import de.tobiasroeser.lambdatest.RunnableWithException;
 import de.tobiasroeser.lambdatest.internal.AnsiColor;
+import de.tobiasroeser.lambdatest.internal.LambdaTestCase;
 import de.tobiasroeser.lambdatest.internal.AnsiColor.Color;
 import de.tobiasroeser.lambdatest.internal.Util;
-import de.tobiasroeser.lambdatest.shared.LambdaTestCase;
 
 /**
  * Inherit from this class to create a new TestNG test suite and use the
