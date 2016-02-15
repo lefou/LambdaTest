@@ -101,21 +101,21 @@ import de.tobiasroeser.lambdatest.testng.FreeSpec;
 class SimpleTest extends FreeSpec {
   public SimpleTest() {
 
-  test("1 + 1 = 2", () -> {
-    expectEquals(1 + 1, 2);
-  });
-
-  test("a pending test", () -> pending());
-
-  test("divide by zero", () -> {
-    int a = 2;
-    int b = 0;
-    intercept(ArithmeticException.class, () -> {
-      int c = a / b;
+    test("1 + 1 = 2", () -> {
+      expectEquals(1 + 1, 2);
     });
-  });
 
-}}
+    test("a pending test", () -> pending());
+
+    test("divide by zero", () -> {
+      int a = 2;
+      int b = 0;
+      intercept(ArithmeticException.class, () -> {
+        int c = a / b;
+      });
+    });
+  }
+}
 ----
 
 The methods `test`, `pending` and `intercept` are provided by `FreeSpec`
@@ -208,25 +208,25 @@ import de.tobiasroeser.lambdatest.junit.FreeSpec;
 class SimpleTest extends FreeSpec {
   public SimpleTest() {
 
-  test("1 + 1 = 2", new RunnableWithException() {
-    public void run() throws Exception {
-      expectEquals(1 + 1, 2);
-    }
-  });
+    test("1 + 1 = 2", new RunnableWithException() {
+      public void run() throws Exception {
+        expectEquals(1 + 1, 2);
+      }
+    });
 
-  test("divide by zero", new RunnableWithException() {
-    public void run() throws Exception {
-      int a = 2;
-      int b = 0;
-      intercept(ArithmeticException.class, new RunnableWithException() {
-        public void run() throws Exception {
-          int c = a / b;
-        }
-      });
-    }
-  });
-
-}}
+    test("divide by zero", new RunnableWithException() {
+      public void run() throws Exception {
+        int a = 2;
+        int b = 0;
+        intercept(ArithmeticException.class, new RunnableWithException() {
+          public void run() throws Exception {
+            int c = a / b;
+          }
+        });
+      }
+    });
+  }
+}
 ----
 
 
