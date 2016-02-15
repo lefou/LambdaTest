@@ -248,12 +248,15 @@ If you like LambdaTest, please star it on https://github.com/lefou/LambdaTest[Gi
 
 == Changelog
 
+=== {master}
+
+* Added `TempFile`, an utility class providing support to work with temporary files and directories which got automatically cleanup up after the test case.
+
 === LambdaTest 0.2.0 - 2016-02-12
 
 * Added JUnit support.
   You can now use `de.tobiasroeser.lambdatest.junit.FreeSpec` for JUnit based tests in addition to the already existing  `de.tobiasroeser.lambdatest.testng.FreeSpec` for TestNG based tests.
 * Introduced new `Assert` and `Expect` classes. Expect-based asserts also support deferred exceptions. FreeSpec already integrates the setup of Expect.
-
 
 === LambdaTest 0.1.0 - 2014-12-08
 
