@@ -1,7 +1,7 @@
 package de.tobiasroeser.lambdatest;
 
 /**
- * A Function with is permitted to throw exceptions.
+ * A Function which is permitted to throw exceptions.
  *
  */
 public interface ProcedureWithException<P> {

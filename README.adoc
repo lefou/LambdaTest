@@ -1,7 +1,7 @@
 = Lambda Test
 :toc:
 :toc-placement: preamble
-:lambdatestversion: 0.2.0
+:lambdatestversion: 0.2.1
 :testngversion: 6.8.8
 :junitversion: 4.11
 
@@ -35,6 +35,7 @@ Most important features are:
 * Opt-in to not fail fast when using `expectXXX`-methods (see more than the first assertion error)
 * Easy to mark pending tests
 * Nice colored output per test case
+* Contains useful tools to work with temporary files and directories
 
 
 == Download from Maven Central
@@ -165,6 +166,16 @@ In that case, you have to take care of setup and finalization yourself.
 
 _TBD_
 
+== Testing files and directories
+
+LambdaTest comes with a helper class `TempFile` with contains useful methods to work with temporary files.
+
+To create a temporary file with a given content and do something with it, you can use `TempFile.withTempFile` or it procedural version with does not return a value `TempFile.withTempFileP`. After the method completes, the temporary file will automatically deleted.
+
+To create and work with temporary files, you can use `TempFile.withTempDir` and TempFile.withTempDirP`. Those will be recursively deleted after completion.
+
+There are more useful methods in class `TempFile`, e.g. `readFile`, `writeToFile` and `deleteRecursive`. Please inspect the class for more information.
+
 == Working on Java7 or below
 
 Even though writing functional test makes most sence under Java 8,
@@ -234,12 +245,11 @@ class SimpleTest extends FreeSpec {
 
 This project is published under the http://www.apache.org/licenses/LICENSE-2.0.txt[Apache Licence Version 2.0].
 
-== Contribution
+== Contribution / Contact
 
-Your feedback is highly appreciated.
+Your feedback is highly appreciated. I also accept pull request.
 
 For questions please use the https://gitter.im/lefou/LambdaTest[Gitter chatroom].
-
 To report issues or send pull request, use https://github.com/lefou/LambdaTest[GitHub].
 
 You can also find me on https://twitter.com/TobiasRoeser[Twitter as @TobiasRoeser].
@@ -250,7 +260,9 @@ If you like LambdaTest, please star it on https://github.com/lefou/LambdaTest[Gi
 
 === {master}
 
-* Added `TempFile`, an utility class providing support to work with temporary files and directories which got automatically cleanup up after the test case.
+=== LambdaTest 0.2.1 - 2016-03-04
+
+* Added `TempFile`, an utility class providing support to work with temporary files and directories which will be automatically cleaned up after the test case.
 
 === LambdaTest 0.2.0 - 2016-02-12
 
