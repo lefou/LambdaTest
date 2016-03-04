@@ -92,9 +92,9 @@ With LambdaTest, you need to only know LambdaTests very simple and minimalistic 
 
 To avoid a dependency to both frameworks at the same time, you have to use inherit different base class, but besides that, everything else is the same.
 
-For JUnit you inherit +de.tobiasroeser.lambdatest.*junit*.FreeSpec+.
+For JUnit you inherit `de.tobiasroeser.lambdatest.`*`junit`*`.FreeSpec`.
 
-For TestNG you inherit +de.tobiasroeser.lambdatest.*testng*.FreeSpec+.
+For TestNG you inherit `de.tobiasroeser.lambdatest.`*`testng`*`.FreeSpec`.
 
 == Writing tests with Lambda Test
 
