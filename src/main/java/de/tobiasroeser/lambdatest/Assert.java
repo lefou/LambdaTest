@@ -103,24 +103,24 @@ public class Assert {
 		if (expected instanceof String && actual instanceof String) {
 			final char[] expChars = ((String) expected).toCharArray();
 			final char[] actChars = ((String) actual).toCharArray();
-			for (int i = 0; i < expChars.length; ++i) {
-				if (actChars.length > i) {
-					if (expChars[i] != actChars[i]) {
-						final String expectedWithMarker = ((String) expected).substring(0, i) + "[*]"
-								+ ((String) expected).substring(i);
-						final String actualWithMarker = ((String) actual).substring(0, i) + "[*]"
-								+ ((String) actual).substring(i);
-						fail(msg, "Strings differ at index {0} (see [*] marker). Expected \"{1}\" but was \"{2}\".", i,
-								expectedWithMarker,
-								actualWithMarker);
+			if (expChars.length > 0) {
+				for (int i = 0; i < expChars.length; ++i) {
+					if (actChars.length > i) {
+						if (expChars[i] != actChars[i]) {
+							final String expectedWithMarker = ((String) expected).substring(0, i) + "[*]"
+									+ ((String) expected).substring(i);
+							final String actualWithMarker = ((String) actual).substring(0, i) + "[*]"
+									+ ((String) actual).substring(i);
+							fail(msg, "Strings differ at index {0} (see [*] marker). Expected \"{1}\" but was \"{2}\".",
+									i, expectedWithMarker, actualWithMarker);
+						}
+					} else {
+						fail(msg, "Strings differ at index {0}. Actual is too short. Expected \"{1}\" but was \"{2}\".",
+								i, expected, actual);
 					}
 				}
-				else {
-					fail(msg, "Strings differ at index {0}. Actual is too short. Expected \"{1}\" but was \"{2}\".", i,
-							expected, actual);
-				}
 			}
-			if (expChars.length > actChars.length) {
+			if (expChars.length < actChars.length) {
 				fail(msg, "Strings differ at index {0}. Actual is too long. Expected \"{1}\" but was \"{2}\".",
 						expChars.length, expected, actual);
 			}
@@ -164,13 +164,11 @@ public class Assert {
 			itName = itName != null ? itName : "Iterables";
 			expIt = ((Iterable<?>) expected).iterator();
 			actIt = ((Iterable<?>) actual).iterator();
-		}
-		else if (expected instanceof Iterator<?> && actual instanceof Iterator<?>) {
+		} else if (expected instanceof Iterator<?> && actual instanceof Iterator<?>) {
 			itName = itName != null ? itName : "Iterators";
 			expIt = (Iterator<?>) expected;
 			actIt = (Iterator<?>) actual;
-		}
-		else if (expected instanceof Enumeration<?> && actual instanceof Enumeration<?>) {
+		} else if (expected instanceof Enumeration<?> && actual instanceof Enumeration<?>) {
 			itName = itName != null ? itName : "Enumerations";
 			expIt = new Iterator<Object>() {
 				@Override

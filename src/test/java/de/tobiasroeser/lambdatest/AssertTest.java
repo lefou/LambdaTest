@@ -43,6 +43,10 @@ public class AssertTest {
 				"\\QStrings differ at index 0 (see [*] marker). Expected \"[*]b\" but was \"[*]a\".\\E", () -> {
 					Assert.assertEquals("a", "b");
 				});
+		// This triggered a StackOverflowError in 0.2.1
+		intercept(AssertionError.class, () -> {
+			Assert.assertEquals("TEST", "");
+		});
 	}
 
 	@Test(dependsOnGroups = { "intercept" })
@@ -82,4 +86,5 @@ public class AssertTest {
 					Assert.assertEquals(new String[] { "a" }, new String[] { "b" });
 				});
 	}
+
 }
