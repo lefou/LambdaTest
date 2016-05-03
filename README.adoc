@@ -1,7 +1,7 @@
 = Lambda Test
 :toc:
 :toc-placement: preamble
-:lambdatestversion: 0.2.1
+:lambdatestversion: 0.2.2
 :testngversion: 6.8.8
 :junitversion: 4.11
 
@@ -267,7 +267,9 @@ If you like LambdaTest, please star it on https://github.com/lefou/LambdaTest[Gi
 
 == Changelog
 
-=== {master}
+=== LambdaTest 0.2.2 - 2016-05-03
+
+* Fixed Assert.assertEquals for Strings, especially when expected is empty or shorter than actual.
 
 === LambdaTest 0.2.1 - 2016-03-04
 
