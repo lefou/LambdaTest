@@ -53,7 +53,7 @@ public class Expect {
 			Assert.assertEquals(actual, expected, msg);
 		} catch (final AssertionError e) {
 			final ExpectContext context = threadContext.get();
-			if (context != null && context.getFailEarly()) {
+			if (context != null && !context.getFailEarly()) {
 				context.addAssertionError(e);
 			} else {
 				throw e;
@@ -70,7 +70,7 @@ public class Expect {
 			Assert.assertNotEquals(actual, expected, msg);
 		} catch (final AssertionError e) {
 			final ExpectContext context = threadContext.get();
-			if (context != null && context.getFailEarly()) {
+			if (context != null && !context.getFailEarly()) {
 				context.addAssertionError(e);
 			} else {
 				throw e;
@@ -87,7 +87,7 @@ public class Expect {
 			Assert.assertTrue(actual, msg);
 		} catch (final AssertionError e) {
 			final ExpectContext context = threadContext.get();
-			if (context != null && context.getFailEarly()) {
+			if (context != null && !context.getFailEarly()) {
 				context.addAssertionError(e);
 			} else {
 				throw e;
@@ -104,7 +104,7 @@ public class Expect {
 			Assert.assertFalse(actual, msg);
 		} catch (final AssertionError e) {
 			final ExpectContext context = threadContext.get();
-			if (context != null && context.getFailEarly()) {
+			if (context != null && !context.getFailEarly()) {
 				context.addAssertionError(e);
 			} else {
 				throw e;
@@ -128,7 +128,7 @@ public class Expect {
 			return Intercept.intercept(exceptionType, messageRegex, throwing);
 		} catch (final AssertionError e) {
 			final ExpectContext context = threadContext.get();
-			if (context != null && context.getFailEarly()) {
+			if (context != null && !context.getFailEarly()) {
 				context.addAssertionError(e);
 				// this throws in any case, but the compiler doesn't know
 				finish();

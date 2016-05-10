@@ -33,7 +33,7 @@ public class ExpectTest {
 	public void testPlainSetupFinishCycle() {
 		Expect.clear();
 		assertEquals(Expect.__TEST_threadContext(), null);
-		Expect.setup(true);
+		Expect.setup(false);
 		assertNotEquals(Expect.__TEST_threadContext(), null);
 		Expect.finish();
 		assertEquals(Expect.__TEST_threadContext(), null);
@@ -43,7 +43,7 @@ public class ExpectTest {
 	public void testOneSuccessfulAssert() {
 		Expect.clear();
 		assertEquals(Expect.__TEST_threadContext(), null);
-		Expect.setup(true);
+		Expect.setup(false);
 		assertNotEquals(Expect.__TEST_threadContext(), null);
 		Expect.expectEquals(1, 1, "ONE");
 		Expect.finish();
@@ -54,7 +54,7 @@ public class ExpectTest {
 	public void testOneFailingAssert() throws Exception {
 		Expect.clear();
 		assertEquals(Expect.__TEST_threadContext(), null);
-		Expect.setup(true);
+		Expect.setup(false);
 		assertNotEquals(Expect.__TEST_threadContext(), null);
 		Expect.expectEquals(1, 2, "ONE");
 		intercept(AssertionError.class, "ONE", () -> {
@@ -67,7 +67,7 @@ public class ExpectTest {
 	public void testTwoSuccessfulAssert() {
 		Expect.clear();
 		assertEquals(Expect.__TEST_threadContext(), null);
-		Expect.setup(true);
+		Expect.setup(false);
 		assertNotEquals(Expect.__TEST_threadContext(), null);
 		Expect.expectEquals(1, 1, "ONE");
 		Expect.expectEquals(2, 2, "TWO");
@@ -79,7 +79,7 @@ public class ExpectTest {
 	public void testTwoFailingAssert() throws Exception {
 		Expect.clear();
 		assertEquals(Expect.__TEST_threadContext(), null);
-		Expect.setup(true);
+		Expect.setup(false);
 		assertNotEquals(Expect.__TEST_threadContext(), null);
 		Expect.expectEquals(1, 2, "ONE");
 		Expect.expectEquals(2, 1, "TWO");
@@ -108,7 +108,7 @@ public class ExpectTest {
 	public void testExpectEqualsStringArrayFailEarly() throws Exception {
 		Expect.clear();
 		assertEquals(Expect.__TEST_threadContext(), null);
-		Expect.setup(false);
+		Expect.setup(true);
 		assertNotEquals(Expect.__TEST_threadContext(), null);
 
 		expectEquals(null, null);
@@ -154,7 +154,7 @@ public class ExpectTest {
 	public void testExpectEqualsStringArrayNotFailEarly() throws Exception {
 		Expect.clear();
 		assertEquals(Expect.__TEST_threadContext(), null);
-		Expect.setup(true);
+		Expect.setup(false);
 		assertNotEquals(Expect.__TEST_threadContext(), null);
 
 		expectEquals(null, null);
