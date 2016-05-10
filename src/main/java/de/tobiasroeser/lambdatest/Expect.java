@@ -5,6 +5,13 @@ import java.util.List;
 
 import de.tobiasroeser.lambdatest.internal.Util;
 
+/**
+ * Various assertion methods plus the ability to disable default fail-fast
+ * behavior to collect as much assertion errors as possible.
+ *
+ * All expect-methods of this class support fail-late behavior.
+ *
+ */
 public class Expect {
 
 	private static ThreadLocal<ExpectContext> threadContext = new ThreadLocal<ExpectContext>();
@@ -48,6 +55,16 @@ public class Expect {
 		threadContext.set(null);
 	}
 
+	/**
+	 * Check object equality.
+	 *
+	 * @param actual
+	 *            The actual object.
+	 * @param expected
+	 *            The expected object.
+	 * @param msg
+	 *            A message to output if the expectation failed.
+	 */
 	public static void expectEquals(final Object actual, final Object expected, final String msg) {
 		try {
 			Assert.assertEquals(actual, expected, msg);
@@ -61,6 +78,17 @@ public class Expect {
 		}
 	}
 
+	/**
+	 * Check object equality.
+	 *
+	 * In case the expectation failed, it tried to provide detailed information
+	 * about the differences.
+	 *
+	 * @param actual
+	 *            The actual object.
+	 * @param expected
+	 *            The expected object.
+	 */
 	public static void expectEquals(final Object actual, final Object expected) {
 		expectEquals(actual, expected, null);
 	}
@@ -78,6 +106,14 @@ public class Expect {
 		}
 	}
 
+	/**
+	 * Check for non-equal objects.
+	 *
+	 * @param actual
+	 *            The actual object.
+	 * @param expected
+	 *            The expected object.
+	 */
 	public static void expectNotEquals(final Object actual, final Object expected) {
 		expectNotEquals(actual, expected, null);
 	}
@@ -116,6 +152,16 @@ public class Expect {
 		expectFalse(actual, null);
 	}
 
+	/**
+	 * Check for non-null {@link String} and provided further checks on the
+	 * actual string in a fluent API.
+	 *
+	 * @see ExpectString
+	 *
+	 * @param actual
+	 * @return A {@link ExpectString} to express further expectations on the
+	 *         actual string.
+	 */
 	public static ExpectString expectString(final String actual) {
 		return new ExpectString(actual);
 	}
