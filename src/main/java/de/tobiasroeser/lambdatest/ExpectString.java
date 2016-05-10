@@ -1,5 +1,7 @@
 package de.tobiasroeser.lambdatest;
 
+import static de.tobiasroeser.lambdatest.Expect.expectEquals;
+import static de.tobiasroeser.lambdatest.Expect.expectNotEquals;
 import static de.tobiasroeser.lambdatest.Expect.expectTrue;
 
 import java.text.MessageFormat;
@@ -38,21 +40,22 @@ public class ExpectString {
 		return this;
 	}
 
-	public ExpectString equals(final String expected) {
-		return check(actual.equals(expected), "Actual is not equal to \"{0}\", actual: \"{1}\"", expected, actual);
+	public ExpectString isEqual(final String expected) {
+		expectEquals(actual, expected);
+		return this;
 	}
 
-	public ExpectString equalsNot(final String expected) {
-		return check(!actual.equals(expected), "Actual must not be equal to \"{0}\", actual: \"{1}\"", expected,
-				actual);
+	public ExpectString isNotEqual(final String expected) {
+		expectNotEquals(actual, expected);
+		return this;
 	}
 
-	public ExpectString equalsIgnoreCase(final String expected) {
+	public ExpectString isEqualIgnoreCase(final String expected) {
 		return check(actual.equalsIgnoreCase(expected), "Actual is not equal to \"{0}\" (ignore case), actual: \"{1}\"",
 				expected, actual);
 	}
 
-	public ExpectString equalsIgnoreCaseNot(final String expected) {
+	public ExpectString isNotEqualIgnoreCase(final String expected) {
 		return check(!actual.equalsIgnoreCase(expected),
 				"Actual must not be equal to \"{0}\" (ignore case), actual: \"{1}\"", expected,
 				actual);
@@ -126,6 +129,5 @@ public class ExpectString {
 				"Actual must not contain fragment \"{0}\" (ignore case), actual: \"{1}\"", fragment,
 				actual);
 	}
-
 
 }
