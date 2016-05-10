@@ -1,7 +1,7 @@
 = Lambda Test
 :toc:
 :toc-placement: preamble
-:lambdatestversion: 0.2.2
+:lambdatestversion: 0.2.3
 :testngversion: 6.8.8
 :junitversion: 4.11
 

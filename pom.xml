@@ -6,7 +6,7 @@
 
 	<groupId>de.tototec</groupId>
 	<artifactId>de.tobiasroeser.lambdatest</artifactId>
-	<version>0.2.3</version>
+	<version>0.2.4-SNAPSHOT</version>
 
 	<name>Poor Mans Lambda Test</name>
 	<description>Minimal Java8 Lambda enabled testing for TestNG</description>
