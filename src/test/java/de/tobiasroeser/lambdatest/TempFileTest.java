@@ -12,7 +12,7 @@ import org.testng.reporters.Files;
 
 public class TempFileTest {
 
-	@Test
+	@Test(groups = { "tempfile" })
 	public void test_withTempDir_creates_and_deletes_a_dir() throws Exception {
 		final File dir = TempFile.withTempDir(d -> {
 			assertTrue(d.exists());
@@ -23,7 +23,7 @@ public class TempFileTest {
 		assertFalse(dir.exists());
 	}
 
-	@Test
+	@Test(groups = { "tempfile" })
 	public void test_withTempDirP_creates_and_deletes_a_dir() throws Exception {
 		final File[] dir = new File[] { null };
 		TempFile.withTempDirP(d -> {
@@ -35,7 +35,7 @@ public class TempFileTest {
 		assertFalse(dir[0].exists());
 	}
 
-	@Test
+	@Test(groups = { "tempfile" })
 	public void test_withTempFile_creates_and_deletes_a_file() throws Exception {
 		final File file = TempFile.withTempFile("content\n1", f -> {
 			assertTrue(f.exists());
@@ -47,7 +47,7 @@ public class TempFileTest {
 		assertFalse(file.exists());
 	}
 
-	@Test
+	@Test(groups = { "tempfile" })
 	public void test_withTempFileP_creates_and_deletes_a_file() throws Exception {
 		final File[] file = new File[] { null };
 		TempFile.withTempFileP("content\n2", f -> {

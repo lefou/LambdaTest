@@ -17,6 +17,8 @@ import java.util.List;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import de.tobiasroeser.lambdatest.ProcedureWithException;
+import de.tobiasroeser.lambdatest.TempFile;
 import de.tobiasroeser.lambdatest.internal.Optional;
 import de.tobiasroeser.lambdatest.internal.Util;
 
@@ -64,7 +66,7 @@ public class RuntimeTest {
 	 * Need to test in separate process/JVM to avoid classes of the outer and
 	 * inner TestNG instances. Thank you global singletons. :(
 	 */
-	private JvmResult testInJvm(final String className) throws Exception {
+	private JvmResult testInJvm(final String className, final File testDir) throws Exception {
 		final ClassLoader cl = getClass().getClassLoader();
 		if (cl instanceof URLClassLoader) {
 			final URL[] origUrLs = ((URLClassLoader) cl).getURLs();
@@ -80,7 +82,7 @@ public class RuntimeTest {
 					"org.testng.TestNG",
 					"-testclass",
 					className);
-			pb.directory(new File("."));
+			pb.directory(testDir);
 			final Process p = pb.start();
 
 			final List<String> output = new LinkedList<>();
@@ -101,31 +103,41 @@ public class RuntimeTest {
 		throw new AssertionError("Could not run JVM");
 	}
 
-	@Test(groups = { "testng" })
+	private void testInJvm(final String className, final ProcedureWithException<JvmResult> f) throws Exception {
+		TempFile.withTempDirP(dir -> {
+			final JvmResult jvmResult = testInJvm(className, dir);
+			f.apply(jvmResult);
+		});
+	}
+
+	@Test(groups = { "testng" }, dependsOnGroups = { "tempfile" })
 	public void testSuccessInSubProcess() throws Exception {
-		final JvmResult result = testInJvm(SimpleSuccessTest.class.getName());
-		assertEquals(result.exitCode, 0);
-		final Optional<String> line = Util.find(result.output, l -> l.startsWith("Total tests run"));
-		assertTrue(line.isDefined());
-		assertEquals(line.get(), "Total tests run: 1, Failures: 0, Skips: 0");
+		testInJvm(SimpleSuccessTest.class.getName(), result -> {
+			assertEquals(result.exitCode, 0);
+			final Optional<String> line = Util.find(result.output, l -> l.startsWith("Total tests run"));
+			assertTrue(line.isDefined());
+			assertEquals(line.get(), "Total tests run: 1, Failures: 0, Skips: 0");
+		});
 	}
 
-	@Test(groups = { "testng" })
+	@Test(groups = { "testng" }, dependsOnGroups = { "tempfile" })
 	public void testFailureInSubProcess() throws Exception {
-		final JvmResult result = testInJvm(SimpleFailureTest.class.getName());
-		assertEquals(result.exitCode, 1);
-		final Optional<String> line = Util.find(result.output, l -> l.startsWith("Total tests run"));
-		assertTrue(line.isDefined());
-		assertEquals(line.get(), "Total tests run: 1, Failures: 1, Skips: 0");
+		testInJvm(SimpleFailureTest.class.getName(), result -> {
+			assertEquals(result.exitCode, 1);
+			final Optional<String> line = Util.find(result.output, l -> l.startsWith("Total tests run"));
+			assertTrue(line.isDefined());
+			assertEquals(line.get(), "Total tests run: 1, Failures: 1, Skips: 0");
+		});
 	}
 
-	@Test(groups = { "testng" })
+	@Test(groups = { "testng" }, dependsOnGroups = { "tempfile" })
 	public void testPendingInSubProcess() throws Exception {
-		final JvmResult result = testInJvm(SimplePendingTest.class.getName());
-		assertNotEquals(result.exitCode, 0);
-		final Optional<String> line = Util.find(result.output, l -> l.startsWith("Total tests run"));
-		assertTrue(line.isDefined());
-		assertEquals(line.get(), "Total tests run: 1, Failures: 0, Skips: 1");
+		testInJvm(SimplePendingTest.class.getName(), result -> {
+			assertNotEquals(result.exitCode, 0);
+			final Optional<String> line = Util.find(result.output, l -> l.startsWith("Total tests run"));
+			assertTrue(line.isDefined());
+			assertEquals(line.get(), "Total tests run: 1, Failures: 0, Skips: 1");
+		});
 	}
 
 }
