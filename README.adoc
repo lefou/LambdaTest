@@ -267,7 +267,7 @@ If you like LambdaTest, please star it on https://github.com/lefou/LambdaTest[Gi
 
 == Changelog
 
-=== LambdaTest {master}
+=== LambdaTest 0.2.3 - 2016-05-10
 
 * Fixed fail late logic for Expect
 * Added new class ExpectString and Expect.expectString for fluent string assertions.
