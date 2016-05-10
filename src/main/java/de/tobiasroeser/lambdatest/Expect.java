@@ -116,6 +116,10 @@ public class Expect {
 		expectFalse(actual, null);
 	}
 
+	public static ExpectString expectString(final String actual) {
+		return new ExpectString(actual);
+	}
+
 	public static <T extends Throwable> T intercept(final Class<T> exceptionType,
 			final RunnableWithException throwing) throws Exception {
 		return intercept(exceptionType, ".*", throwing);

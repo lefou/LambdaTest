@@ -1,0 +1,75 @@
+package de.tobiasroeser.lambdatest;
+
+import static de.tobiasroeser.lambdatest.Expect.expectTrue;
+
+import java.text.MessageFormat;
+import java.util.Arrays;
+
+import de.tobiasroeser.lambdatest.internal.Util;
+
+public class ExpectString {
+
+	private String actual;
+
+	public ExpectString(final String actual) {
+		check(actual != null, "Actual is not a String but null");
+		this.actual = actual;
+	}
+
+	private ExpectString check(final boolean cond, final String msg, final Object... args) {
+		if (!cond) {
+			String error;
+			if (args == null || args.length == 0) {
+				error = msg;
+			} else {
+				final Object[] niceArgs = new Object[args.length];
+				for (int i = 0; i < args.length; ++i) {
+					final Object arg = args[i];
+					if (arg != null && arg.getClass().isArray()) {
+						niceArgs[i] = Util.mkString(Arrays.asList((Object[]) arg), "[", ",", "]");
+					} else {
+						niceArgs[i] = arg;
+					}
+				}
+				error = MessageFormat.format(msg, niceArgs);
+			}
+			expectTrue(false, error);
+		}
+		return this;
+	}
+
+	public ExpectString startsWith(final String prefix) {
+		return check(actual.startsWith(prefix), "Actual does not start with \"{0}\", actual: \"{1}\"", prefix, actual);
+	}
+
+	public ExpectString endsWith(final String suffix) {
+		return check(actual.endsWith(suffix), "Actual does not end with \"{0}\", actual: \"{1}\"", suffix, actual);
+	}
+
+	public ExpectString matches(final String regex) {
+		return check(actual.matches(regex), "Actual does not match regular expression \"{0}\", actual: \"{1}\"", regex,
+				actual);
+	}
+
+	public ExpectString hasLength(final int length) {
+		return check(actual.length() == length, "Actual has not a length of {0}, actual: {1}", length, actual.length());
+	}
+
+	public ExpectString isLongerThan(final int length) {
+		return check(actual.length() > length, "Actual ist not longer than {0}, actual: {1}", length, actual.length());
+	}
+
+	public ExpectString isShorterThan(final int length) {
+		return check(actual.length() < length, "Actual ist not shorter than {0}, actual: {1}", length, actual.length());
+	}
+
+	public ExpectString isTrimmed() {
+		return check(actual.equals(actual.trim()), "Actual ist not trimmed, actual: {0}", actual.length());
+	}
+
+	public ExpectString contains(final String fragment) {
+		return check(actual.contains(fragment), "Actual does not contain fragment \"{0}\", actual: \"{1}\"", fragment,
+				actual);
+	}
+
+}
