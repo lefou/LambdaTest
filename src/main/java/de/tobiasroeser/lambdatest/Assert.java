@@ -11,15 +11,6 @@ import java.util.Set;
 
 import de.tobiasroeser.lambdatest.internal.Util;
 
-/**
- * Idea for context (held in a threadlocal)
- * <ul>
- * <li>collect some test context (e.g. the source code) and when errors occur,
- * also output the failing code line
- * <li>continue with wrong expectations, e.g. collect more than one assertion
- * error/exception
- * </ul>
- */
 public class Assert {
 
 	private static void fail(final String msgOrNull, final String fallBackMsg, final Object... args) {

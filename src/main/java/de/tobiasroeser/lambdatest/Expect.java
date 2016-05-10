@@ -5,15 +5,6 @@ import java.util.List;
 
 import de.tobiasroeser.lambdatest.internal.Util;
 
-/**
- * Idea for context (held in a threadlocal)
- * <ul>
- * <li>collect some test context (e.g. the source code) and when errors occur,
- * also output the failing code line
- * <li>continue with wrong expectations, e.g. collect more than one assertion
- * error/exception
- * </ul>
- */
 public class Expect {
 
 	private static ThreadLocal<ExpectContext> threadContext = new ThreadLocal<ExpectContext>();
