@@ -45,6 +45,8 @@ import de.tobiasroeser.lambdatest.internal.Util;
  */
 public class FreeSpec implements LambdaTest {
 
+	private static final String PENDING_DEFAULT_MSG = "Pending";
+
 	private final List<LambdaTestCase> testCases = new LinkedList<>();
 	private volatile boolean testNeverRun = true;
 	private boolean runInParallel = false;
@@ -96,7 +98,17 @@ public class FreeSpec implements LambdaTest {
 	 */
 	@Override
 	public void pending() {
-		throw new SkipException("Pending");
+		throw new SkipException(PENDING_DEFAULT_MSG);
+	}
+
+	/**
+	 * Marks the test as pending and uses the given <code>reason</code> as
+	 * message. Instructions after <code>pending()</code> will not be executed
+	 * and TestNG marks the test as skipped.
+	 */
+	@Override
+	public void pending(final String reason) {
+		throw new SkipException("Pending: " + reason);
 	}
 
 	/**
@@ -176,7 +188,8 @@ public class FreeSpec implements LambdaTest {
 			if (uncatchedTestError != null && delayedTestError != null) {
 				throw new AssertionError(
 						"An error occured (see root cause) after some expectations failed. Failed Expectations:\n"
-								+ delayedTestError.getMessage(), uncatchedTestError);
+								+ delayedTestError.getMessage(),
+						uncatchedTestError);
 			} else if (uncatchedTestError != null) {
 				// if this was a SkipException, we still detect it, else some
 				// other errors occurred before
@@ -186,7 +199,11 @@ public class FreeSpec implements LambdaTest {
 			}
 			out.println(ansi.fg(Color.GREEN) + "-- SUCCESS " + testName + ansi.reset());
 		} catch (final SkipException e) {
-			out.println(ansi.fg(Color.YELLOW) + "-- SKIPPED " + testName + " (pending)" + ansi.reset());
+			if (PENDING_DEFAULT_MSG.equals(e.getMessage())) {
+				out.println(ansi.fg(Color.YELLOW) + "-- SKIPPED " + testName + " (pending)" + ansi.reset());
+			} else {
+				out.println(ansi.fg(Color.YELLOW) + "-- SKIPPED " + testName + ": " + e.getMessage() + ansi.reset());
+			}
 			throw e;
 		} catch (final Throwable e) {
 			try {

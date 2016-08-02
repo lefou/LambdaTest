@@ -101,7 +101,11 @@ public class FreeSpecRunner extends ParentRunner<LambdaTestCase> {
 			}
 			out.println(ansi.fg(Color.GREEN) + "-- SUCCESS " + testName + ansi.reset());
 		} catch (final AssumptionViolatedException e) {
-			out.println(ansi.fg(Color.YELLOW) + "-- SKIPPED " + testName + " (pending)" + ansi.reset());
+			if (FreeSpec.PENDING_DEFAULT_MSG.equals(e.getMessage())) {
+				out.println(ansi.fg(Color.YELLOW) + "-- SKIPPED " + testName + " (pending)" + ansi.reset());
+			} else {
+				out.println(ansi.fg(Color.YELLOW) + "-- SKIPPED " + testName + ": " + e.getMessage() + ansi.reset());
+			}
 			runNotifier.fireTestAssumptionFailed(new Failure(description, e));
 		} catch (final Throwable e) {
 			try {

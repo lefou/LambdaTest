@@ -34,6 +34,15 @@ public class RuntimeTest {
 		}
 	}
 
+	public static class SimplePendingWithReasonTest extends FreeSpec {
+		public SimplePendingWithReasonTest() {
+			test("should be pending with reason", () -> {
+				pending("With Reason");
+				Assert.fail("should not be reached");
+			});
+		}
+	}
+
 	@Test(groups = { "junit" })
 	public void testSuccess() {
 		final Result result = JUnitCore.runClasses(SimpleSuccessTest.class);
@@ -53,6 +62,14 @@ public class RuntimeTest {
 	@Test(groups = { "junit" })
 	public void testPending() {
 		final Result result = JUnitCore.runClasses(SimplePendingTest.class);
+		assertEquals(result.getRunCount(), 1);
+		assertEquals(result.getFailureCount(), 0);
+		assertEquals(result.getIgnoreCount(), 0);
+	}
+
+	@Test(groups = { "junit" })
+	public void testPendingWithReason() {
+		final Result result = JUnitCore.runClasses(SimplePendingWithReasonTest.class);
 		assertEquals(result.getRunCount(), 1);
 		assertEquals(result.getFailureCount(), 0);
 		assertEquals(result.getIgnoreCount(), 0);

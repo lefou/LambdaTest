@@ -38,6 +38,8 @@ import de.tobiasroeser.lambdatest.internal.LambdaTestCase;
 @RunWith(FreeSpecRunner.class)
 public class FreeSpec implements LambdaTest {
 
+	static final String PENDING_DEFAULT_MSG = "Pending";
+
 	private final List<LambdaTestCase> testCases = new LinkedList<>();
 	private boolean expectFailFast;
 
@@ -75,11 +77,20 @@ public class FreeSpec implements LambdaTest {
 
 	/**
 	 * Marks the test as pending. Instructions after <code>pending()</code> will
-	 * not be executed and TestNG marks the test as skipped.
+	 * not be executed.
 	 */
 	@Override
 	public void pending() {
-		throw new AssumptionViolatedException("Pending");
+		throw new AssumptionViolatedException(PENDING_DEFAULT_MSG);
+	}
+
+	/**
+	 * Marks the test as pending and uses the given <code>reason</code> as
+	 * message. Instructions after <code>pending()</code> will not be executed.
+	 */
+	@Override
+	public void pending(final String reason) {
+		throw new AssumptionViolatedException("Pending: " + reason);
 	}
 
 	/**
@@ -122,7 +133,7 @@ public class FreeSpec implements LambdaTest {
 	@Override
 	public <T extends Throwable> T intercept(final Class<T> exceptionType,
 			final String messageRegex, final RunnableWithException throwing)
-					throws Exception {
+			throws Exception {
 		return Intercept.intercept(exceptionType, messageRegex, throwing);
 	}
 

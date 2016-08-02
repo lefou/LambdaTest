@@ -11,6 +11,12 @@ public interface LambdaTest {
 	void pending();
 
 	/**
+	 * Marks the test as pending and uses the given <code>reason</code> as
+	 * message. Instructions after <code>pending()</code> will not be executed.
+	 */
+	void pending(String reason);
+
+	/**
 	 * Intercept exceptions of type <code>exceptionType</code> and fail if no
 	 * such exception or an exception with an incompatible type was thrown.
 	 *
