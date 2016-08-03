@@ -144,7 +144,7 @@ public class RuntimeTest {
 	@Test(groups = { "testng" }, dependsOnGroups = { "tempfile" })
 	public void testPendingInSubProcess() throws Exception {
 		testInJvm(SimplePendingTest.class.getName(), result -> {
-			assertNotEquals(result.exitCode, 0);
+			assertEquals(result.exitCode, 0);
 			final Optional<String> line = Util.find(result.output, l -> l.startsWith("Total tests run"));
 			assertTrue(line.isDefined());
 			assertEquals(line.get(), "Total tests run: 1, Failures: 0, Skips: 1");
@@ -154,7 +154,7 @@ public class RuntimeTest {
 	@Test(groups = { "testng" }, dependsOnGroups = { "tempfile" })
 	public void testPendingWithReasonInSubProcess() throws Exception {
 		testInJvm(SimplePendingWithReasonTest.class.getName(), result -> {
-			assertNotEquals(result.exitCode, 0);
+			assertEquals(result.exitCode, 0);
 			final Optional<String> line = Util.find(result.output, l -> l.startsWith("Total tests run"));
 			assertTrue(line.isDefined());
 			assertEquals(line.get(), "Total tests run: 1, Failures: 0, Skips: 1");
