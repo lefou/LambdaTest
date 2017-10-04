@@ -36,7 +36,7 @@ import de.tobiasroeser.lambdatest.internal.Util;
  * {@link FreeSpec#intercept(Class, String, RunnableWithException)} to intercept
  * and assert expected exceptions.</li>
  * <li>{@link FreeSpec#pending()} to mark a test case as pending. All code
- * before it's usage including assert will be executed, but code after it will
+ * before it's usage including asserts will be executed, but code after it will
  * be skipped. Thus you can mark a test also as work-in-progress.</li>
  * </ul>
  *
