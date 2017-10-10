@@ -9,4 +9,4 @@ before_script:
 - mvn -N io.takari:maven:wrapper -Dmaven=3.5.0
 
 script:
-- ./mvnw test source:jar javadoc:jar install
+- ./mvnw clean package source:jar javadoc:jar install
