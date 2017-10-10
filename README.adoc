@@ -14,8 +14,6 @@ Minimal Java8 Lambda enabled testing for JUnit and TestNG.
 The latest released version is LambdaTest {lambdatestversion}.
 
 
-_Please note, that this page might contain information about not yet released features._
-
 == Motivation
 
 When constrained to work in a Java-only toolchain, I really miss my http://scalatest.org[ScalaTest].
@@ -266,6 +264,10 @@ You can also find me on https://twitter.com/TobiasRoeser[Twitter as @TobiasRoese
 If you like LambdaTest, please star it on https://github.com/lefou/LambdaTest[GitHub]. This will help me to set my priorities. Thanks!
 
 == Changelog
+
+=== LambdaTest 0.2.5 - _NOT_RELEASED_
+
+* Fixed assert message of `Intercept.intercept(Class<T>, String, RunnableWithException)`
 
 === LambdaTest 0.2.4 - 2016-08-03
 

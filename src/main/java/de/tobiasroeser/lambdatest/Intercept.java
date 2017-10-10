@@ -5,8 +5,8 @@ import java.util.regex.Pattern;
 public class Intercept {
 
 	/**
-	 * Intercept exceptions of type <code>exceptionType</code> and fail if no
-	 * such exception or an exception with an incompatible type was thrown.
+	 * Intercept exceptions of type <code>exceptionType</code> and fail if no such
+	 * exception or an exception with an incompatible type was thrown.
 	 *
 	 * @param exceptionType
 	 *            The exception type to intercept.
@@ -14,8 +14,8 @@ public class Intercept {
 	 *            The execution block which is expected to throw the exception.
 	 * @return The intercepted exception.
 	 * @throws Exception
-	 *             If no exception was thrown or an exception with an
-	 *             incompatible type was thrown.
+	 *             If no exception was thrown or an exception with an incompatible
+	 *             type was thrown.
 	 */
 	public static <T extends Throwable> T intercept(final Class<T> exceptionType,
 			final RunnableWithException throwing) throws Exception {
@@ -23,22 +23,24 @@ public class Intercept {
 	}
 
 	/**
-	 * Intercept exceptions of type <code>exceptionType</code> and fail if no
-	 * such exception or an exception with an incompatible type was thrown or it
-	 * the message does not match a given pattern.
+	 * Intercept exceptions of type <code>exceptionType</code> and fail if no such
+	 * exception or an exception with an incompatible type was thrown or it the
+	 * message does not match a given pattern.
 	 *
 	 * @param exceptionType
 	 *            The exception type to intercept.
 	 * @param messageRegex
-	 *            A regular expression pattern to match the expected message.
-	 *            See {@link Pattern} for details.
+	 *            A regular expression pattern to match the expected message. See
+	 *            {@link Pattern} for details. If you just want to pass the exact
+	 *            text message, you should surround your message string with "\\Q"
+	 *            and "\\E".
 	 * @param throwing
 	 *            The execution block which is expected to throw the exception.
 	 * @return The intercepted exception.
 	 * @throws Exception
-	 *             If no exception was thrown or an exception with an
-	 *             incompatible type was thrown or if the message of the
-	 *             exception did not match the expected pattern.
+	 *             If no exception was thrown or an exception with an incompatible
+	 *             type was thrown or if the message of the exception did not match
+	 *             the expected pattern.
 	 */
 	public static <T extends Throwable> T intercept(final Class<T> exceptionType,
 			final String messageRegex, final RunnableWithException throwing)
@@ -68,11 +70,12 @@ public class Intercept {
 				} else {
 					throw new AssertionError(
 							"Exception was thrown with the wrong message: Expected: '" + messageRegex
-									+ "' but got '" + msg + "'.", e);
+									+ "' but got '" + msg + "'.",
+							e);
 				}
 			}
-			throw new AssertionError("Thrown exception of type [" + exceptionType.getName()
-					+ "] does not match expected type [" + e.getClass().getName() + "]", e);
+			throw new AssertionError("Thrown exception of type [" + e.getClass().getName()
+					+ "] does not match expected type [" + exceptionType.getName() + "]", e);
 		}
 		throw new AssertionError("Expected exception of type [" + exceptionType.getName() + "] was not thrown");
 	}

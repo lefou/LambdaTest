@@ -57,8 +57,8 @@ public class InterceptTest {
 			assertTrue(e instanceof AssertionError, "Expected different exception type");
 			assertEquals(
 					e.getMessage().trim(),
-					"Thrown exception of type [de.tobiasroeser.lambdatest.InterceptTest$InterceptTestSubException]"
-							+ " does not match expected type [de.tobiasroeser.lambdatest.InterceptTest$InterceptTestException]");
+					"Thrown exception of type [de.tobiasroeser.lambdatest.InterceptTest$InterceptTestException]"
+							+ " does not match expected type [de.tobiasroeser.lambdatest.InterceptTest$InterceptTestSubException]");
 		}
 	}
 
@@ -99,8 +99,8 @@ public class InterceptTest {
 			assertTrue(e instanceof AssertionError, "Expected different exception type");
 			assertEquals(
 					e.getMessage().trim(),
-					"Thrown exception of type [de.tobiasroeser.lambdatest.InterceptTest$InterceptTestSubException]"
-							+ " does not match expected type [de.tobiasroeser.lambdatest.InterceptTest$InterceptTestException]");
+					"Thrown exception of type [de.tobiasroeser.lambdatest.InterceptTest$InterceptTestException]"
+							+ " does not match expected type [de.tobiasroeser.lambdatest.InterceptTest$InterceptTestSubException]");
 		}
 	}
 
