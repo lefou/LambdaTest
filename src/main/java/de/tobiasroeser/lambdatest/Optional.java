@@ -1,4 +1,4 @@
-package de.tobiasroeser.lambdatest.internal;
+package de.tobiasroeser.lambdatest;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -51,7 +51,15 @@ public class Optional<T> implements Iterable<T>, Serializable {
 		}
 	}
 
-	public T getOrElse(final F0<T> f) {
+	public T getOrElse(final T t) {
+		if (isDefined()) {
+			return optional;
+		} else {
+			return t;
+		}
+	}
+
+	public T getOrElseF(final F0<T> f) {
 		if (isDefined()) {
 			return optional;
 		} else {

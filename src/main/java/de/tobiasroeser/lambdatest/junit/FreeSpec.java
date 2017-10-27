@@ -13,8 +13,10 @@ import org.testng.TestException;
 
 import de.tobiasroeser.lambdatest.Intercept;
 import de.tobiasroeser.lambdatest.LambdaTest;
+import de.tobiasroeser.lambdatest.Reporter;
 import de.tobiasroeser.lambdatest.RunnableWithException;
-import de.tobiasroeser.lambdatest.internal.LambdaTestCase;
+import de.tobiasroeser.lambdatest.internal.DefaultReporter;
+import de.tobiasroeser.lambdatest.internal.DefaultTestCase;
 
 /**
  * Inherit from this class to create a new JUnit test suite and use the
@@ -40,17 +42,34 @@ public class FreeSpec implements LambdaTest {
 
 	static final String PENDING_DEFAULT_MSG = "Pending";
 
-	private final List<LambdaTestCase> testCases = new LinkedList<>();
+	private final List<DefaultTestCase> testCases = new LinkedList<>();
+	private final String suiteName;
 	private boolean expectFailFast;
+
+	private Reporter reporter = new DefaultReporter();
+
+	public FreeSpec() {
+		suiteName = getClass().getName();
+	}
 
 	@Override
 	public void setRunInParallel(final boolean runInParallel) {
-		System.out.println("RunInParallel not supported under JUnit.");
+		reporter.suiteWarning(suiteName, "RunInParallel not supported under JUnit.");
 	}
 
 	@Override
 	public void setExpectFailFast(final boolean failFast) {
 		this.expectFailFast = failFast;
+	}
+
+	@Override
+	public Reporter getReporter() {
+		return reporter;
+	}
+
+	@Override
+	public void setReporter(Reporter reporter) {
+		this.reporter = reporter;
 	}
 
 	/**
@@ -67,17 +86,16 @@ public class FreeSpec implements LambdaTest {
 	 *            recognized by TestNG.
 	 */
 	public void test(final String name, final RunnableWithException testCase) {
-		final String testName = getClass().getSimpleName() + ": " + name;
-
-		if (find(testCases, tc -> testName.equals(tc.getName())).isDefined()) {
-			System.out.println("Test with non-unique name added: " + testName);
+		String suiteName = getClass().getName();
+		if (find(testCases, tc -> name.equals(tc.getName())).isDefined()) {
+			System.out.println("Test with non-unique name added: " + name);
 		}
-		this.testCases.add(new LambdaTestCase(testName, testCase));
+		this.testCases.add(new DefaultTestCase(name, suiteName, testCase));
 	}
 
 	/**
-	 * Marks the test as pending. Instructions after <code>pending()</code> will
-	 * not be executed.
+	 * Marks the test as pending. Instructions after <code>pending()</code> will not
+	 * be executed.
 	 */
 	@Override
 	public void pending() {
@@ -85,17 +103,17 @@ public class FreeSpec implements LambdaTest {
 	}
 
 	/**
-	 * Marks the test as pending and uses the given <code>reason</code> as
-	 * message. Instructions after <code>pending()</code> will not be executed.
+	 * Marks the test as pending and uses the given <code>reason</code> as message.
+	 * Instructions after <code>pending()</code> will not be executed.
 	 */
 	@Override
 	public void pending(final String reason) {
-		throw new AssumptionViolatedException("Pending: " + reason);
+		throw new AssumptionViolatedException(reason);
 	}
 
 	/**
-	 * Intercept exceptions of type <code>exceptionType</code> and fail if no
-	 * such exception or an exception with an incompatible type was thrown.
+	 * Intercept exceptions of type <code>exceptionType</code> and fail if no such
+	 * exception or an exception with an incompatible type was thrown.
 	 *
 	 * @param exceptionType
 	 *            The exception type to intercept.
@@ -103,8 +121,8 @@ public class FreeSpec implements LambdaTest {
 	 *            The execution block which is expected to throw the exception.
 	 * @return The intercepted exception.
 	 * @throws Exception
-	 *             If no exception was thrown or an exception with an
-	 *             incompatible type was thrown.
+	 *             If no exception was thrown or an exception with an incompatible
+	 *             type was thrown.
 	 */
 	@Override
 	public <T extends Throwable> T intercept(final Class<T> exceptionType,
@@ -113,22 +131,22 @@ public class FreeSpec implements LambdaTest {
 	}
 
 	/**
-	 * Intercept exceptions of type <code>exceptionType</code> and fail if no
-	 * such exception or an exception with an incompatible type was thrown or it
-	 * the message does not match a given pattern.
+	 * Intercept exceptions of type <code>exceptionType</code> and fail if no such
+	 * exception or an exception with an incompatible type was thrown or it the
+	 * message does not match a given pattern.
 	 *
 	 * @param exceptionType
 	 *            The exception type to intercept.
 	 * @param messageRegex
-	 *            A regular expression pattern to match the expected message.
-	 *            See {@link Pattern} for details.
+	 *            A regular expression pattern to match the expected message. See
+	 *            {@link Pattern} for details.
 	 * @param throwing
 	 *            The execution block which is expected to throw the exception.
 	 * @return The intercepted exception.
 	 * @throws Exception
-	 *             If no exception was thrown or an exception with an
-	 *             incompatible type was thrown or if the message of the
-	 *             exception did not match the expected pattern.
+	 *             If no exception was thrown or an exception with an incompatible
+	 *             type was thrown or if the message of the exception did not match
+	 *             the expected pattern.
 	 */
 	@Override
 	public <T extends Throwable> T intercept(final Class<T> exceptionType,
@@ -137,7 +155,7 @@ public class FreeSpec implements LambdaTest {
 		return Intercept.intercept(exceptionType, messageRegex, throwing);
 	}
 
-	protected List<LambdaTestCase> getTestCases() {
+	protected List<DefaultTestCase> getTestCases() {
 		return testCases;
 	}
 

@@ -17,9 +17,9 @@ import java.util.List;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import de.tobiasroeser.lambdatest.Optional;
 import de.tobiasroeser.lambdatest.ProcedureWithException;
 import de.tobiasroeser.lambdatest.TempFile;
-import de.tobiasroeser.lambdatest.internal.Optional;
 import de.tobiasroeser.lambdatest.internal.Util;
 
 public class RuntimeTest {

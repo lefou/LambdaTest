@@ -1,4 +1,4 @@
-package de.tobiasroeser.lambdatest.internal;
+package de.tobiasroeser.lambdatest;
 
 public interface F1<P, R> {
 	public R apply(P param);

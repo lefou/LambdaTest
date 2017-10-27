@@ -1,7 +1,7 @@
 import org.sonatype.maven.polyglot.scala.model._
 import scala.collection.immutable.Seq
 
-val lambdatest = "de.tototec" % "de.tobiasroeser.lambdatest" % "0.2.4"
+val lambdatest = "de.tototec" % "de.tobiasroeser.lambdatest" % "0.3.0-SNAPSHOT"
 val testng = "org.testng" % "testng" % "6.9.10"
 val junit = "junit" % "junit" % "4.11"
 

@@ -265,9 +265,13 @@ If you like LambdaTest, please star it on https://github.com/lefou/LambdaTest[Gi
 
 == Changelog
 
-=== LambdaTest 0.2.5 - _NOT_RELEASED_
+=== LambdaTest NEXT
 
 * Fixed assert message of `Intercept.intercept(Class<T>, String, RunnableWithException)`
+* Introduced `Reporter` interface and `DefaultReporter` class
+* Reformatted output of tests (handled now by `Reporter`)
+* Added sections to FreeSpec (TestNG)
+
 
 === LambdaTest 0.2.4 - 2016-08-03
 

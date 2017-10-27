@@ -6,6 +6,9 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.tobiasroeser.lambdatest.F1;
+import de.tobiasroeser.lambdatest.Optional;
+
 public class Util {
 
 	public static <T> Optional<T> find(final Iterable<T> source,

@@ -58,4 +58,8 @@ public interface LambdaTest {
 
 	void setExpectFailFast(boolean failFast);
 
+	void setReporter(Reporter reporter);
+	
+	Reporter getReporter();
+	
 }

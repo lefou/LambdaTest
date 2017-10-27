@@ -1,9 +1,9 @@
 package de.tobiasroeser.lambdatest.internal;
 
-import java.util.Collections;
-import java.util.List;
-
+import de.tobiasroeser.lambdatest.LambdaTestCase;
+import de.tobiasroeser.lambdatest.Optional;
 import de.tobiasroeser.lambdatest.RunnableWithException;
+import de.tobiasroeser.lambdatest.Section;
 
 /**
  * A single test case, meant to be internally used by
@@ -11,20 +11,29 @@ import de.tobiasroeser.lambdatest.RunnableWithException;
  * {@link de.tobiasroeser.lambdatest.testng.FreeSpec}
  *
  */
-public class LambdaTestCase {
+public class DefaultTestCase implements LambdaTestCase {
 
-	private final List<String> sections;
+	private final Section section;
 	private final String name;
 	private final RunnableWithException test;
+	private final String suiteName;
 
-	public LambdaTestCase(final List<String> sections, final String name, final RunnableWithException test) {
-		this.sections = Collections.unmodifiableList(sections);
+	public DefaultTestCase(
+			final Section section,
+			final String name,
+			final String suiteName,
+			final RunnableWithException test) {
+		this.section = section;
 		this.name = name;
+		this.suiteName = suiteName;
 		this.test = test;
 	}
 
-	public LambdaTestCase(final String name, final RunnableWithException test) {
-		this(Collections.emptyList(), name, test);
+	public DefaultTestCase(
+			final String name,
+			final String suiteName,
+			final RunnableWithException test) {
+		this(null, name, suiteName, test);
 	}
 
 	/**
@@ -37,8 +46,8 @@ public class LambdaTestCase {
 		return getName();
 	}
 
-	public List<String> getSections() {
-		return sections;
+	public Optional<Section> getSection() {
+		return Optional.lift(section);
 	}
 
 	public String getName() {
@@ -47,6 +56,10 @@ public class LambdaTestCase {
 
 	public RunnableWithException getTest() {
 		return test;
+	}
+
+	public String getSuiteName() {
+		return suiteName;
 	}
 
 }
