@@ -1,4 +1,4 @@
-package de.tobiasroeser.lambdatest.internal;
+package de.tobiasroeser.lambdatest.generic;
 
 import java.io.PrintStream;
 import java.util.LinkedHashMap;
@@ -9,6 +9,7 @@ import de.tobiasroeser.lambdatest.LambdaTestCase;
 import de.tobiasroeser.lambdatest.Optional;
 import de.tobiasroeser.lambdatest.Reporter;
 import de.tobiasroeser.lambdatest.Section;
+import de.tobiasroeser.lambdatest.internal.AnsiColor;
 import de.tobiasroeser.lambdatest.internal.AnsiColor.Color;
 
 public class DefaultReporter implements Reporter {

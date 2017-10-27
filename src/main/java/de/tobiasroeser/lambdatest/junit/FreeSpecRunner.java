@@ -12,7 +12,7 @@ import org.junit.runners.model.InitializationError;
 
 import de.tobiasroeser.lambdatest.Expect;
 import de.tobiasroeser.lambdatest.Reporter;
-import de.tobiasroeser.lambdatest.internal.DefaultTestCase;
+import de.tobiasroeser.lambdatest.generic.DefaultTestCase;
 
 public class FreeSpecRunner extends ParentRunner<DefaultTestCase> {
 
@@ -20,8 +20,6 @@ public class FreeSpecRunner extends ParentRunner<DefaultTestCase> {
 	private final Class<?> freeSpecClass;
 	private final boolean expectFailFast;
 	private final FreeSpec freeSpec;
-
-	private String suiteName;
 
 	private volatile boolean testNeverRun = true;
 
@@ -32,7 +30,6 @@ public class FreeSpecRunner extends ParentRunner<DefaultTestCase> {
 					"FreeSpecRunner only supports test classes of type " + FreeSpec.class.getName());
 		}
 		this.freeSpecClass = freeSpecClass;
-		this.suiteName = freeSpecClass.getName();
 
 		try {
 			freeSpec = (FreeSpec) freeSpecClass.newInstance();
@@ -63,7 +60,7 @@ public class FreeSpecRunner extends ParentRunner<DefaultTestCase> {
 		if (testNeverRun) {
 			synchronized (this) {
 				if (testNeverRun) {
-					reporter().suiteStart(suiteName, testCases);
+					reporter().suiteStart(freeSpec.getSuiteName(), testCases);
 					testNeverRun = false;
 				}
 			}

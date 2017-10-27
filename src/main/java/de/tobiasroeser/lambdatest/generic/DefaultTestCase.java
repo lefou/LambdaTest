@@ -1,4 +1,4 @@
-package de.tobiasroeser.lambdatest.internal;
+package de.tobiasroeser.lambdatest.generic;
 
 import de.tobiasroeser.lambdatest.LambdaTestCase;
 import de.tobiasroeser.lambdatest.Optional;

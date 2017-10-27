@@ -1,12 +1,7 @@
 package de.tobiasroeser.lambdatest.testng;
 
-import static de.tobiasroeser.lambdatest.internal.Util.find;
-
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.regex.Pattern;
 
 import org.testng.Assert;
 import org.testng.SkipException;
@@ -14,14 +9,11 @@ import org.testng.TestException;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import de.tobiasroeser.lambdatest.Section;
 import de.tobiasroeser.lambdatest.Expect;
-import de.tobiasroeser.lambdatest.Intercept;
 import de.tobiasroeser.lambdatest.LambdaTest;
-import de.tobiasroeser.lambdatest.Reporter;
 import de.tobiasroeser.lambdatest.RunnableWithException;
-import de.tobiasroeser.lambdatest.internal.DefaultReporter;
-import de.tobiasroeser.lambdatest.internal.DefaultTestCase;
+import de.tobiasroeser.lambdatest.generic.DefaultTestCase;
+import de.tobiasroeser.lambdatest.generic.FreeSpecBase;
 import de.tobiasroeser.lambdatest.internal.Util;
 
 /**
@@ -43,45 +35,28 @@ import de.tobiasroeser.lambdatest.internal.Util;
  * TODO: example
  *
  */
-public class FreeSpec implements LambdaTest {
+public class FreeSpec extends FreeSpecBase implements LambdaTest {
 
 	private static final String PENDING_DEFAULT_MSG = "Pending";
 
-	private final List<DefaultTestCase> testCases = new LinkedList<>();
 	private volatile boolean testNeverRun = true;
-	private boolean runInParallel = false;
-	private boolean expectFailFast;
-	private Reporter reporter = new DefaultReporter();
-
-	private String suiteName = getClass().getName();
-	private static final ThreadLocal<Section> sectionHolder = new ThreadLocal<Section>();
 
 	@Override
 	public void setRunInParallel(final boolean runInParallel) {
 		if (!testNeverRun) {
-			reporter.suiteWarning(suiteName, "Tests already started. Cannot change settings.");
+			getReporter().suiteWarning(getSuiteName(), "Tests already started. Cannot change settings.");
 			return;
 		}
-		this.runInParallel = runInParallel;
+		super.setRunInParallel(runInParallel);
 	}
 
 	@Override
 	public void setExpectFailFast(final boolean failFast) {
 		if (!testNeverRun) {
-			System.out.println("Tests already started. Cannot change settings.");
+			getReporter().suiteWarning(getSuiteName(), "Tests already started. Cannot change settings.");
 			return;
 		}
-		this.expectFailFast = failFast;
-	}
-
-	@Override
-	public Reporter getReporter() {
-		return reporter;
-	}
-
-	@Override
-	public void setReporter(Reporter reporter) {
-		this.reporter = reporter;
+		super.setExpectFailFast(failFast);
 	}
 
 	/**
@@ -98,10 +73,7 @@ public class FreeSpec implements LambdaTest {
 	 *            recognized by TestNG.
 	 */
 	public void test(final String name, final RunnableWithException testCase) {
-		if (find(testCases, tc -> name.equals(tc.getName())).isDefined()) {
-			reporter.suiteWarning(suiteName, "Test with non-unique name added: " + name);
-		}
-		this.testCases.add(new DefaultTestCase(sectionHolder.get(), name, suiteName, testCase));
+		super.test(name, testCase);
 	}
 
 	/**
@@ -123,66 +95,22 @@ public class FreeSpec implements LambdaTest {
 		throw new SkipException(reason);
 	}
 
-	/**
-	 * Intercept exceptions of type <code>exceptionType</code> and fail if no such
-	 * exception or an exception with an incompatible type was thrown.
-	 *
-	 * @param exceptionType
-	 *            The exception type to intercept.
-	 * @param throwing
-	 *            The execution block which is expected to throw the exception.
-	 * @return The intercepted exception.
-	 * @throws Exception
-	 *             If no exception was thrown or an exception with an incompatible
-	 *             type was thrown.
-	 */
-	@Override
-	public <T extends Throwable> T intercept(final Class<T> exceptionType,
-			final RunnableWithException throwing) throws Exception {
-		return Intercept.intercept(exceptionType, throwing);
-	}
-
-	/**
-	 * Intercept exceptions of type <code>exceptionType</code> and fail if no such
-	 * exception or an exception with an incompatible type was thrown or it the
-	 * message does not match a given pattern.
-	 *
-	 * @param exceptionType
-	 *            The exception type to intercept.
-	 * @param messageRegex
-	 *            A regular expression pattern to match the expected message. See
-	 *            {@link Pattern} for details.
-	 * @param throwing
-	 *            The execution block which is expected to throw the exception.
-	 * @return The intercepted exception.
-	 * @throws Exception
-	 *             If no exception was thrown or an exception with an incompatible
-	 *             type was thrown or if the message of the exception did not match
-	 *             the expected pattern.
-	 */
-	@Override
-	public <T extends Throwable> T intercept(final Class<T> exceptionType,
-			final String messageRegex, final RunnableWithException throwing)
-			throws Exception {
-		return Intercept.intercept(exceptionType, messageRegex, throwing);
-	}
-
 	private void runTestCase(final DefaultTestCase testCase) throws Throwable {
 		if (testNeverRun) {
 			synchronized (this) {
 				if (testNeverRun) {
-					reporter.suiteStart(suiteName, testCases);
+					getReporter().suiteStart(getSuiteName(), getTestCases());
 					testNeverRun = false;
 				}
 			}
 		}
 
 		try {
-			Expect.setup(expectFailFast);
+			Expect.setup(getExpectFailFast());
 			Throwable uncatchedTestError = null;
 			Throwable delayedTestError = null;
 			try {
-				reporter.testStart(testCase);
+				getReporter().testStart(testCase);
 				testCase.getTest().run();
 			} catch (final Throwable t) {
 				uncatchedTestError = t;
@@ -204,20 +132,20 @@ public class FreeSpec implements LambdaTest {
 			} else if (delayedTestError != null) {
 				throw delayedTestError;
 			}
-			reporter.testSucceeded(testCase);
+			getReporter().testSucceeded(testCase);
 		} catch (final SkipException e) {
-			reporter.testSkipped(testCase, e.getMessage());
+			getReporter().testSkipped(testCase, e.getMessage());
 			throw e;
 		} catch (final Throwable e) {
-			reporter.testFailed(testCase, e);
+			getReporter().testFailed(testCase, e);
 			throw e;
 		}
 	}
 
 	@DataProvider(name = "freeSpecTestCases", parallel = false)
 	public Iterator<Object[]> freeSpecTestCases() {
-		if (!runInParallel) {
-			return Util.map(testCases, (tc) -> new Object[] { tc }).iterator();
+		if (!getRunInParallel()) {
+			return Util.map(getTestCases(), (tc) -> new Object[] { tc }).iterator();
 		} else {
 			return Collections.<Object[]> emptyList().iterator();
 		}
@@ -230,8 +158,8 @@ public class FreeSpec implements LambdaTest {
 
 	@DataProvider(name = "freeSpecParallelTestCases", parallel = true)
 	public Iterator<Object[]> freeSpecParallelTestCases() {
-		if (runInParallel) {
-			return Util.map(testCases, (tc) -> new Object[] { tc }).iterator();
+		if (getRunInParallel()) {
+			return Util.map(getTestCases(), (tc) -> new Object[] { tc }).iterator();
 		} else {
 			return Collections.<Object[]> emptyList().iterator();
 		}
@@ -240,17 +168,6 @@ public class FreeSpec implements LambdaTest {
 	@Test(dataProvider = "freeSpecParallelTestCases")
 	public void runFreeSpecParallelTestCases(final DefaultTestCase testCase) throws Throwable {
 		runTestCase(testCase);
-	}
-
-	public void section(String section, Runnable code) {
-		Section parent = sectionHolder.get();
-		sectionHolder.set(new Section(section, parent));
-		code.run();
-		if (parent == null) {
-			sectionHolder.remove();
-		} else {
-			sectionHolder.set(parent);
-		}
 	}
 
 }

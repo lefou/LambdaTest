@@ -1,4 +1,4 @@
-package de.tobiasroeser.lambdatest.internal;
+package de.tobiasroeser.lambdatest.generic;
 
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
@@ -6,6 +6,7 @@ import org.testng.annotations.Test;
 
 import de.tobiasroeser.lambdatest.Optional;
 import de.tobiasroeser.lambdatest.Section;
+import de.tobiasroeser.lambdatest.generic.DefaultReporter;
 
 public class DefaultReporterTest {
 
