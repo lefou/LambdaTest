@@ -10,15 +10,51 @@ object Plugins {
   val retrolambda = "net.orfjackal.retrolambda" % "retrolambda-maven-plugin" % "1.8.0"
   val jar = "org.apache.maven.plugins" % "maven-jar-plugin" % "2.5"
   val bundle = "org.apache.felix" % "maven-bundle-plugin" % "3.3.0"
+  val bnd = "biz.aQute.bnd" % "bnd-maven-plugin" % "3.5.0"
 }
+
+def bndExecution(id: String, classesDir: String) = Execution(
+  id = id,
+  goals = Seq("bnd-process"),
+  configuration = Config(
+    classesDir = classesDir,
+    manifestPath = classesDir + "/META-INF/MANIFEST.MF",
+    bnd = s"""
+      |Bundle-Description: $${project.description}
+      |Export-Package: ${
+      Seq(
+        namespace,
+        namespace + ".generic",
+        namespace + ".junit",
+        namespace + ".testng"
+
+      ).mkString(",")
+    }
+      |Import-Package: org.testng;version="6.8";resolution:=optional,org.junit.*;resolution:=optional,*;resolution:=optional
+      |""".stripMargin
+  )
+)
+
+def jarExecution(id: String, classifier: String, classesDir: String) = Execution(
+  id = id,
+  phase = "package",
+  goals = Seq("jar"),
+  configuration = Config(
+    classifier = classifier,
+    classesDirectory = classesDir,
+    archive = Config(
+      manifestFile = classesDir + "/META-INF/MANIFEST.MF"
+    )
+  )
+)
 
 Model(
   lambdatest,
-  name = "Poor Mans Lambda Test",
-  description = "Minimal Java8 Lambda enabled testing for TestNG",
+  name = "LambdaTest",
+  description = "Lambda-enabled functional testing on top of JUnit and TestNG",
   url = "https://github.com/lefou/LambdaTest",
   prerequisites = Prerequisites(
-    maven = "3.1"
+    maven = "3.3.1"
   ),
   developers = Seq(
     Developer(
@@ -69,6 +105,7 @@ Model(
         )
       ),
       Plugin(
+        gav = Plugins.bundle,
         executions = Seq(
           Execution(
             goals = Seq("baseline"),
@@ -79,25 +116,39 @@ Model(
         )
       ),
       Plugin(
+        gav = Plugins.bnd,
+        executions = Seq(
+          bndExecution(
+            id = "bnd-process-java8",
+            classesDir = "${project.build.outputDirectory}"
+          ),
+          bndExecution(
+            id = "bnd-process-java7",
+            classesDir = "${project.build.directory}/java7-classes"
+          ),
+          bndExecution(
+            id = "bnd-process-java6",
+            classesDir = "${project.build.directory}/java6-classes"
+          )
+        )
+      ),
+      Plugin(
         Plugins.jar,
         executions = Seq(
-          Execution(
-            id = "jar-java7",
-            phase = "package",
-            goals = Seq("jar"),
-            configuration = Config(
-              classifier = "java7",
-              classesDirectory = "${project.build.directory}/java7-classes"
-            )
+          jarExecution(
+            id = "default-jar",
+            classifier = "",
+            classesDir = "${project.build.outputDirectory}"
           ),
-          Execution(
+          jarExecution(
+            id = "jar-java7",
+            classifier = "java7",
+            classesDir = "${project.build.directory}/java7-classes"
+          ),
+          jarExecution(
             id = "jar-java6",
-            phase = "package",
-            goals = Seq("jar"),
-            configuration = Config(
-              classifier = "java6",
-              classesDirectory = "${project.build.directory}/java6-classes"
-            )
+            classifier = "java6",
+            classesDir = "${project.build.directory}/java6-classes"
           )
         )
       )

@@ -2,6 +2,7 @@
 :toc:
 :toc-placement: preamble
 :lambdatestversion: 0.2.4
+:documentationversion: 0.3.0-SNAPSHOT
 :testngversion: 6.9.10
 :junitversion: 4.11
 
@@ -9,9 +10,9 @@ image:https://travis-ci.org/lefou/LambdaTest.svg?branch=master["Build Status", l
 image:https://www.codacy.com/project/badge/b05b1dc99f98423eb05862de7fcf3662["Codacy Badge", link="https://www.codacy.com/public/lepetitfou_3463/LambdaTest"]
 image:https://badges.gitter.im/lefou/LambdaTest.svg["Chat on Gitter", link="https://gitter.im/lefou/LambdaTest"]
 
-Minimal Java8 Lambda enabled testing for JUnit and TestNG.
+Lambda-enabled functional testing on top of JUnit and TestNG.
 
-The latest released version is LambdaTest {lambdatestversion}.
+Documentation for LambdaTest {documentationversion}.
 
 
 == Motivation
