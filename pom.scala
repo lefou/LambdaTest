@@ -69,6 +69,16 @@ Model(
         )
       ),
       Plugin(
+        executions = Seq(
+          Execution(
+            goals = Seq("baseline"),
+            configuration = Config(
+              failOnError = "false"
+            )
+          )
+        )
+      ),
+      Plugin(
         Plugins.jar,
         executions = Seq(
           Execution(
