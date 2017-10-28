@@ -1,12 +1,16 @@
 import org.sonatype.maven.polyglot.scala.model._
 import scala.collection.immutable.Seq
 
-val lambdatest = "de.tototec" % "de.tobiasroeser.lambdatest" % "0.3.0-SNAPSHOT"
+val namespace = "de.tobiasroeser.lambdatest"
+val lambdatest = "de.tototec" % namespace % "0.3.0-SNAPSHOT"
 val testng = "org.testng" % "testng" % "6.9.10"
 val junit = "junit" % "junit" % "4.11"
 
-val retrolambdaPlugin = "net.orfjackal.retrolambda" % "retrolambda-maven-plugin" % "1.8.0"
-val jarPlugin = "org.apache.maven.plugins" % "maven-jar-plugin" % "2.5"
+object Plugins {
+  val retrolambda = "net.orfjackal.retrolambda" % "retrolambda-maven-plugin" % "1.8.0"
+  val jar = "org.apache.maven.plugins" % "maven-jar-plugin" % "2.5"
+  val bundle = "org.apache.felix" % "maven-bundle-plugin" % "3.3.0"
+}
 
 Model(
   lambdatest,
@@ -44,7 +48,7 @@ Model(
   build = Build(
     plugins = Seq(
       Plugin(
-        retrolambdaPlugin,
+        Plugins.retrolambda,
         executions = Seq(
           Execution(
             id = "process-java7-classes",
@@ -65,7 +69,7 @@ Model(
         )
       ),
       Plugin(
-        jarPlugin,
+        Plugins.jar,
         executions = Seq(
           Execution(
             id = "jar-java7",
