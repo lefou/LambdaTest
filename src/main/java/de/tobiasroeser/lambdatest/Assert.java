@@ -244,4 +244,24 @@ public class Assert {
 	public static void assertFalse(final boolean actual) {
 		assertFalse(actual, null);
 	}
+
+	public static void assertNull(Object actual, final String msg) {
+		if (actual != null) {
+			fail(msg, "Actual [{0}] should be null", actual);
+		}
+	}
+
+	public static void assertNull(Object actual) {
+		assertNull(actual, null);
+	}
+
+	public static void assertNotNull(Object actual, final String msg) {
+		if (actual == null) {
+			fail(msg, "Actual should be not null");
+		}
+	}
+
+	public static void assertNotNull(Object actual) {
+		assertNotNull(actual, null);
+	}
 }

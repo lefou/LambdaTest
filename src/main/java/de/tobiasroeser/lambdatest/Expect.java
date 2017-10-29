@@ -55,6 +55,30 @@ public class Expect {
 		threadContext.set(null);
 	}
 
+	public static void expectNull(final Object actual, String msg) {
+		try {
+			Assert.assertNull(actual, msg);
+		} catch (AssertionError e) {
+			handleAssertionError(e);
+		}
+	}
+
+	public static void expectNull(final Object actual) {
+		expectNull(actual, null);
+	}
+
+	public static void expectNotNull(final Object actual, String msg) {
+		try {
+			Assert.assertNull(actual, msg);
+		} catch (AssertionError e) {
+			handleAssertionError(e);
+		}
+	}
+
+	public static void expectNotNull(final Object actual) {
+		expectNotNull(actual, null);
+	}
+
 	/**
 	 * Check object equality.
 	 *
@@ -69,12 +93,7 @@ public class Expect {
 		try {
 			Assert.assertEquals(actual, expected, msg);
 		} catch (final AssertionError e) {
-			final ExpectContext context = threadContext.get();
-			if (context != null && !context.getFailEarly()) {
-				context.addAssertionError(e);
-			} else {
-				throw e;
-			}
+			handleAssertionError(e);
 		}
 	}
 
@@ -97,12 +116,7 @@ public class Expect {
 		try {
 			Assert.assertNotEquals(actual, expected, msg);
 		} catch (final AssertionError e) {
-			final ExpectContext context = threadContext.get();
-			if (context != null && !context.getFailEarly()) {
-				context.addAssertionError(e);
-			} else {
-				throw e;
-			}
+			handleAssertionError(e);
 		}
 	}
 
@@ -122,12 +136,7 @@ public class Expect {
 		try {
 			Assert.assertTrue(actual, msg);
 		} catch (final AssertionError e) {
-			final ExpectContext context = threadContext.get();
-			if (context != null && !context.getFailEarly()) {
-				context.addAssertionError(e);
-			} else {
-				throw e;
-			}
+			handleAssertionError(e);
 		}
 	}
 
@@ -139,12 +148,7 @@ public class Expect {
 		try {
 			Assert.assertFalse(actual, msg);
 		} catch (final AssertionError e) {
-			final ExpectContext context = threadContext.get();
-			if (context != null && !context.getFailEarly()) {
-				context.addAssertionError(e);
-			} else {
-				throw e;
-			}
+			handleAssertionError(e);
 		}
 	}
 
@@ -153,14 +157,14 @@ public class Expect {
 	}
 
 	/**
-	 * Check for non-null {@link String} and provided further checks on the
-	 * actual string in a fluent API.
+	 * Check for non-null {@link String} and provided further checks on the actual
+	 * string in a fluent API.
 	 *
 	 * @see ExpectString
 	 *
 	 * @param actual
-	 * @return A {@link ExpectString} to express further expectations on the
-	 *         actual string.
+	 * @return A {@link ExpectString} to express further expectations on the actual
+	 *         string.
 	 */
 	public static ExpectString expectString(final String actual) {
 		return new ExpectString(actual);
@@ -194,6 +198,15 @@ public class Expect {
 			return context.getErrors();
 		} else {
 			return Collections.emptyList();
+		}
+	}
+
+	private static void handleAssertionError(AssertionError e) {
+		final ExpectContext context = threadContext.get();
+		if (context != null && !context.getFailEarly()) {
+			context.addAssertionError(e);
+		} else {
+			throw e;
 		}
 	}
 

@@ -87,4 +87,28 @@ public class AssertTest {
 				});
 	}
 
+	@Test(dependsOnGroups = { "intercept" })
+	public void testAssertNull() throws Exception {
+		Assert.assertNull(null);
+		Assert.assertNull(null, "null should be ok");
+		intercept(AssertionError.class, "\\QActual [Some] should be null\\E", () -> {
+			Assert.assertNull("Some");
+		});
+		intercept(AssertionError.class, "\\QSome should be not ok\\E", () -> {
+			Assert.assertNull("Some", "Some should be not ok");
+		});
+	}
+
+	@Test(dependsOnGroups = { "intercept" })
+	public void testAssertNotNull() throws Exception {
+		Assert.assertNotNull("Some");
+		Assert.assertNotNull("Some", "[Some] should be ok");
+		intercept(AssertionError.class, "\\QActual should be not null\\E", () -> {
+			Assert.assertNotNull(null);
+		});
+		intercept(AssertionError.class, "\\Qnull should be not ok\\E", () -> {
+			Assert.assertNotNull(null, "null should be not ok");
+		});
+	}
+
 }
