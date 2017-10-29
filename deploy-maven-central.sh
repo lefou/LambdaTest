@@ -1,8 +1,8 @@
 #!/bin/sh
 
 if [ ! -f mvn-settings.xml ]; then
-	echo "Creating mvn-settings.xml"
-	cat > mvn-settings.xml <<EOF
+	echo "Creating mvn-deploy-settings.xml"
+	cat > mvn-deploy-settings.xml <<EOF
 <settings>
   <servers>
     <server>
@@ -16,7 +16,7 @@ EOF
 
 fi
 
-echo "Please edit mvn-settings.xml with propper connection details. Press Enter"
+echo "Please review / edit mvn-deploy-settings.xml with propper connection details. Press Enter"
 read
 
 #echo "Preparing Repository"
@@ -26,4 +26,11 @@ read
 echo "Signing and uploading. Press Enter"
 read
 
-mvn -s ./mvn-settings.xml clean package source:jar javadoc:jar gpg:sign deploy:deploy -DaltDeploymentRepository=ossrh::default::https://oss.sonatype.org/service/local/staging/deploy/maven2/
+REPO=https://oss.sonatype.org/service/local/staging/deploy/maven2/
+
+mvn\
+ -s ./mvn-deploy-settings.xml\
+ clean package source:jar javadoc:jar gpg:sign deploy:deploy\
+ -DaltDeploymentRepository=ossrh::default::${REPO}
+
+echo "Don't forget to delete sensitive information from mvn-deploy-settings.xml"

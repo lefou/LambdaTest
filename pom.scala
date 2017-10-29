@@ -3,14 +3,20 @@ import scala.collection.immutable.Seq
 
 val namespace = "de.tobiasroeser.lambdatest"
 val lambdatest = "de.tototec" % namespace % "0.3.0-SNAPSHOT"
-val testng = "org.testng" % "testng" % "6.9.10"
-val junit = "junit" % "junit" % "4.11"
+
+object Deps {
+  val testng = "org.testng" % "testng" % "6.9.10"
+  val junit = "junit" % "junit" % "4.11"
+  val slf4j = "org.slf4j" % "slf4j-api" % "1.7.25"
+}
 
 object Plugins {
-  val retrolambda = "net.orfjackal.retrolambda" % "retrolambda-maven-plugin" % "1.8.0"
-  val jar = "org.apache.maven.plugins" % "maven-jar-plugin" % "2.5"
-  val bundle = "org.apache.felix" % "maven-bundle-plugin" % "3.3.0"
   val bnd = "biz.aQute.bnd" % "bnd-maven-plugin" % "3.5.0"
+  val bundle = "org.apache.felix" % "maven-bundle-plugin" % "3.3.0"
+  val clean = "org.apache.maven.plugins" % "maven-clean-plugin" % "3.0.0"
+  val jar = "org.apache.maven.plugins" % "maven-jar-plugin" % "2.5"
+  val retrolambda = "net.orfjackal.retrolambda" % "retrolambda-maven-plugin" % "1.8.0"
+  val translate = "io.takari.polyglot" % "polyglot-translate-plugin" % "0.2.1"
 }
 
 def bndExecution(id: String, classesDir: String) = Execution(
@@ -30,7 +36,7 @@ def bndExecution(id: String, classesDir: String) = Execution(
 
       ).mkString(",")
     }
-      |Import-Package: org.testng;version="6.8";resolution:=optional,org.junit.*;resolution:=optional,*;resolution:=optional
+      |Import-Package: org.testng.*;version="6.8";resolution:=optional,org.junit.*;resolution:=optional,*;resolution:=optional
       |""".stripMargin
   )
 )
@@ -44,6 +50,43 @@ def jarExecution(id: String, classifier: String, classesDir: String) = Execution
     classesDirectory = classesDir,
     archive = Config(
       manifestFile = classesDir + "/META-INF/MANIFEST.MF"
+    )
+  )
+)
+
+val genPomXmlProfile = Profile(
+  id = "gen-pom-xml",
+  build = BuildBase(
+    plugins = Seq(
+      // Generate pom.xml from pom.scala
+      Plugin(
+        gav = Plugins.translate,
+        executions = Seq(
+          Execution(
+            id = "pom-scala-to-pom-xml",
+            phase = "initialize",
+            goals = Seq("translate-project"),
+            configuration = Config(
+              input = "pom.scala",
+              output = "pom.xml"
+            )
+          )
+        )
+      ),
+      // Clean generated pom.xml
+      Plugin(
+        gav = Plugins.clean,
+        configuration = Config(
+          filesets = Config(
+            fileset = Config(
+              directory = "${basedir}",
+              includes = Config(
+                include = "pom.xml"
+              )
+            )
+          )
+        )
+      )
     )
   )
 )
@@ -73,8 +116,9 @@ Model(
     url = "https://github.com/lefou/LambdaTest"
   ),
   dependencies = Seq(
-    testng % "provided",
-    junit % "provided"
+    Deps.testng % "provided",
+    Deps.junit % "provided",
+    Deps.slf4j % "provided"
   ),
   properties = Map(
     "project.build.sourceEncoding" -> "UTF-8",
@@ -153,6 +197,9 @@ Model(
         )
       )
     )
+  ),
+  profiles = Seq(
+    genPomXmlProfile
   ),
   modelVersion = "4.0.0"
 )

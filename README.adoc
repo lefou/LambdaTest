@@ -249,6 +249,34 @@ class SimpleTest extends FreeSpec {
 ----
 
 
+== Build LambdaTest from Source
+
+=== Building with Maven
+
+LambdaTest is build with https://maven.apache.org[Apache Maven 3.3.1] and the https://github.com/takari/polyglot-maven#overview[polyglot-scala extension]. Maven 3.5 is recommended. 
+
+.Build LambdaTest from source
+----
+mvn clean install
+----
+
+The built JARs file can be found in the `target` directory.
+
+=== Create `pom.xml` for interoperability, e.g. IDEs
+
+To generate the `pom.xml` use the `gen-pom-xml` profile.
+
+.Creating `pom.xml` files
+----
+mvn -Pgen-pom-xml initialize
+----
+
+.Deleting generated `pom.xml` files
+----
+mvn -Pgen-pom-xml clean
+----
+
+
 == Licence
 
 This project is published under the http://www.apache.org/licenses/LICENSE-2.0.txt[Apache Licence Version 2.0].
