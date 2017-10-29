@@ -272,6 +272,7 @@ If you like LambdaTest, please star it on https://github.com/lefou/LambdaTest[Gi
 * Introduced `Reporter` interface and `DefaultReporter` class
 * Reformatted output of tests (handled now by `Reporter`)
 * Added sections to FreeSpec (TestNG)
+* Released JAR files are now proper OSGi bundles
 
 
 === LambdaTest 0.2.4 - 2016-08-03
