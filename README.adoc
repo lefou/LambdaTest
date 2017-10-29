@@ -301,6 +301,8 @@ If you like LambdaTest, please star it on https://github.com/lefou/LambdaTest[Gi
 * Reformatted output of tests (handled now by `Reporter`)
 * Added sections to FreeSpec (TestNG)
 * Released JAR files are now proper OSGi bundles
+* Added `Assert.assertNull` and `Assert.assertNotNull`
+* Added `Expect.expectNull` and `Expect.expectNotNull`
 
 
 === LambdaTest 0.2.4 - 2016-08-03

@@ -55,6 +55,16 @@ public class Expect {
 		threadContext.set(null);
 	}
 
+	/**
+	 * Expect that the given actual value is null.
+	 * 
+	 * @param actual
+	 *            The actual value to check.
+	 * @param msg
+	 *            The message to print in case of a failed expectation.
+	 * 
+	 * @since 0.3.0
+	 */
 	public static void expectNull(final Object actual, String msg) {
 		try {
 			Assert.assertNull(actual, msg);
@@ -63,10 +73,28 @@ public class Expect {
 		}
 	}
 
+	/**
+	 * Expect that the given actual value is null.
+	 * 
+	 * @param actual
+	 *            The actual value to check.
+	 * 
+	 * @since 0.3.0
+	 */
 	public static void expectNull(final Object actual) {
 		expectNull(actual, null);
 	}
 
+	/**
+	 * Expect that the given actual value is not null.
+	 * 
+	 * @param actual
+	 *            The actual value to check.
+	 * @param msg
+	 *            The message to print in case of a failed expectation.
+	 * 
+	 * @since 0.3.0
+	 */
 	public static void expectNotNull(final Object actual, String msg) {
 		try {
 			Assert.assertNull(actual, msg);
@@ -75,6 +103,14 @@ public class Expect {
 		}
 	}
 
+	/**
+	 * Expect that the given actual value is not null.
+	 * 
+	 * @param actual
+	 *            The actual value to check.
+	 * 
+	 * @since 0.3.0
+	 */
 	public static void expectNotNull(final Object actual) {
 		expectNotNull(actual, null);
 	}

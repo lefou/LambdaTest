@@ -245,22 +245,58 @@ public class Assert {
 		assertFalse(actual, null);
 	}
 
+	/**
+	 * Assert that the given actual value is null.
+	 * 
+	 * @param actual
+	 *            The actual value to check.
+	 * @param msg
+	 *            The message to print in case of a failed assertion.
+	 * 
+	 * @since 0.3.0
+	 */
 	public static void assertNull(Object actual, final String msg) {
 		if (actual != null) {
 			fail(msg, "Actual [{0}] should be null", actual);
 		}
 	}
 
+	/**
+	 * Assert that the given actual value is null.
+	 * 
+	 * @param actual
+	 *            The actual value to check.
+	 * 
+	 * @since 0.3.0
+	 */
 	public static void assertNull(Object actual) {
 		assertNull(actual, null);
 	}
 
+	/**
+	 * Assert that the given actual value is not null.
+	 * 
+	 * @param actual
+	 *            The actual value to check.
+	 * @param msg
+	 *            The message to print in case of a failed assertion.
+	 * 
+	 * @since 0.3.0
+	 */
 	public static void assertNotNull(Object actual, final String msg) {
 		if (actual == null) {
 			fail(msg, "Actual should be not null");
 		}
 	}
 
+	/**
+	 * Assert that the given actual value is not null.
+	 * 
+	 * @param actual
+	 *            The actual value to check.
+	 * 
+	 * @since 0.3.0
+	 */
 	public static void assertNotNull(Object actual) {
 		assertNotNull(actual, null);
 	}
