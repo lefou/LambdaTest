@@ -35,7 +35,7 @@ Most important features are:
 * Nicely colored output per test case
 * Easy to write data-centric tests (e.g. generate as much test cases as you need programmatically, e.g. in a loop)
 * Easy to intercept exceptions with `intercept`
-* Useful assertion message and difference highlighting in `assertXXX` and `expectXXX`-methods
+* Useful assertion message and difference highlighting in `expectXXX`-methods
 * Opt-in to not fail fast when using `expectXXX`-methods (see more than the first assertion error)
 * Easy to mark pending tests
 * Contains useful tools to work with temporary files and directories
@@ -91,13 +91,14 @@ http://sbuild.org[SBuild] users can use the following dependencies:
 
 == Choose your favorite Unit-Test Runner: JUnit or TestNG
 
-With {lambdatest}, you need to only know LambdaTests very simple and minimalistic API but can use it to write test for Junit and TestNG.
+With {lambdatest}, you need to only know LambdaTests very simple and minimalistic API but can use it to write test for JUnit and TestNG.
 
-To avoid a dependency to both frameworks at the same time, you have to use inherit different base class, but besides that, everything else is the same.
+To avoid a dependency to both frameworks at the same time, your test class  inherits a different base class, but besides that, everything else is the same.
 
 For JUnit you inherit `de.tobiasroeser.lambdatest.`*`junit`*`.FreeSpec`.
 
 For TestNG you inherit `de.tobiasroeser.lambdatest.`*`testng`*`.FreeSpec`.
+
 
 == Writing tests with Lambda Test
 
@@ -174,7 +175,7 @@ You should write your test cases so that they don't need to be executed in order
 By default `expectXXX`-methdos fail fast, which means the first failing assertion will end the whole test.
 This is also the behaviour you will get with most other test frameworks.
 
-You can disable fail-fast behaviour for assertion/expectations with `FreeSpec.setExpectFailFast(false)`.
+But you can disable fail-fast behaviour for assertions/expectations with `FreeSpec.setExpectFailFast(false)`.
 Then, the first failing `expectXXX`-error will not abort the test but the test is optimistically continued.
 Further failing assertion errors are collected and the test fails at the end, reporting all collected errors.
 
