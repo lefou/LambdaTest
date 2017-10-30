@@ -5,9 +5,10 @@
 :documentationversion: 0.3.0-SNAPSHOT
 :testngversion: 6.9.10
 :junitversion: 4.11
+:lambdatest: LambdaTest
 
 image:https://travis-ci.org/lefou/LambdaTest.svg?branch=master["Build Status", link="https://travis-ci.org/lefou/LambdaTest"]
-image:https://www.codacy.com/project/badge/b05b1dc99f98423eb05862de7fcf3662["Codacy Badge", link="https://www.codacy.com/public/lepetitfou_3463/LambdaTest"]
+image:https://api.codacy.com/project/badge/Grade/e886bd7ca9784ecfb00fe8afb59b8909["Codacy code quality", link="https://www.codacy.com/app/lefou/LambdaTest?utm_source=github.com&utm_medium=referral&utm_content=lefou/LambdaTest&utm_campaign=Badge_Grade"]
 image:https://badges.gitter.im/lefou/LambdaTest.svg["Chat on Gitter", link="https://gitter.im/lefou/LambdaTest"]
 
 Lambda-enabled functional testing on top of JUnit and TestNG.
@@ -20,8 +21,10 @@ Documentation for LambdaTest {documentationversion}.
 When constrained to work in a Java-only toolchain, I really miss my http://scalatest.org[ScalaTest].
 I tried some lambda enabled test frameworks, but until now, did not find a suitable solution without compromizing the integration benefits.
 
-Thus I decided to hack a really small and generic base class that basically allows me write tests easier.
-Since then it evolved a bit but basically, it provides Lambda-enabled test and nice assert/expect constructs on top of an existing unit test framework (JUnit or TestNG).
+Thus I decided to write a small and generic test library that allows writing of functional test without reinventing the wheel.
+LambdaTest works on top of JUnit and TestNG, all you need is to add it to the test classpath.
+No further adaptions to your existing test setup are needed.
+You will immediately gain the joy of Lambda-enabled functional testing, better assertion messages and nicely colored output.
 
 == Features
 
@@ -29,17 +32,18 @@ Most important features are:
 
 * Write test via API (No longer required to have each test in a separate annotated method)
 * Meaningful names for tests
+* Nicely colored output per test case
 * Easy to write data-centric tests (e.g. generate as much test cases as you need programmatically, e.g. in a loop)
-* Easy to intercept exceptions
+* Easy to intercept exceptions with `intercept`
+* Useful assertion message and difference highlighting in `assertXXX` and `expectXXX`-methods
 * Opt-in to not fail fast when using `expectXXX`-methods (see more than the first assertion error)
 * Easy to mark pending tests
-* Nice colored output per test case
 * Contains useful tools to work with temporary files and directories
 
 
 == Download from Maven Central
 
-LambdaTest is available from http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22de.tototec%22%20AND%20a%3A%22de.tobiasroeser.lambdatest%22[Maven central repository].
+{lambdatest} is available from http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22de.tototec%22%20AND%20a%3A%22de.tobiasroeser.lambdatest%22[Maven central repository].
 
 Maven users can use the following dependency declaration:
 
@@ -85,9 +89,9 @@ http://sbuild.org[SBuild] users can use the following dependencies:
   "mvn:org.testng:testng:{testngversion}"
 ----
 
-== Choose your favorite Unit Test Runner: JUnit or TestNG
+== Choose your favorite Unit-Test Runner: JUnit or TestNG
 
-With LambdaTest, you need to only know LambdaTests very simple and minimalistic API but can use it to write test for Junit and TestNG.
+With {lambdatest}, you need to only know LambdaTests very simple and minimalistic API but can use it to write test for Junit and TestNG.
 
 To avoid a dependency to both frameworks at the same time, you have to use inherit different base class, but besides that, everything else is the same.
 
@@ -123,6 +127,10 @@ class SimpleTest extends FreeSpec {
         int c = a / b;
       });
     });
+
+    test("demo of a fail", () -> {
+      "yes".equals("yes and no");
+    });
   }
 }
 ----
@@ -138,45 +146,56 @@ _(Actually it is also nicely coloured)_
   Command line suite
 
 Running 3 tests in org.example.SimpleTest:
--- SUCCESS SimpleTest: 1 + 1 = 2
--- SKIPPED SimpleTest: a pending test (pending)
--- SUCCESS SimpleTest: divide by zero
+- 1 + 1 = 2
+- a pending test (pending)
+- divide by zero
+- demo of a fail FAILED
+java.lang.AssertionError: Strings differ at index 3. Actual is too long. Expected "yes" but was "yes and no".
+...
 
 ===============================================
 Command line suite
 Total tests run: 3, Failures: 0, Skips: 1
 ===============================================
-
 ----
 
+[NOTE]
+--
+You can run the above test directly in the {lambdatest} project directory with: +
+----
+mvn test -Dtest=SimpleTest
+----
+--
+
+
 You should write your test cases so that they don't need to be executed in order.
-LambdaTest is able to run tests in parallel, if you enable it explicitly with `FreeSpec.setRunInParallel(true)`.
+{lambdatest} is able to run tests in parallel, if you enable it explicitly with `FreeSpec.setRunInParallel(true)`.
 
 You can disable fail fast behaviour for assertion/expectations with `FreeSpec.setExpectFailFast(false)`.
 Then, the first failing assertion error will not abort the test but the test is optimistically continued. Further failing assertion errors are collected and reported at the end of the test.
 
-== Writing assertions with `Expect`
+== Writing assertions with `Assert` and `Expect`
 
-As an alternative to the assertion methods provides by other unit testing framework, you can instead use `Expect` and it's `expectXXX`-methods.
+{lambdatest} provides a set of assertions to check for your expectations.
+You can use these as an alternative to the assertion methods provides by other unit testing framework to gain the following advantages:
 
-Why should you, you ask? Here are some reasons:
+* Nice output of differences between expected and actual values. Especially for string and varous collection types
+* `expectXXX`-methods provide a feature to collect multiple assertions (non-fail-fast behaviour), such that you can collect as much errors as possible in one test run, instead of giving up at the first error.
 
-* Nice output of differences of various collections
-* optional non-fail-fast behaviour to collect as much assertion errors as possible in one test run
+It provides:
 
+* `assertXXX`-methods via `de.tobiasroeser.lamdatest.Assert` to check and compare actual values
+* `expectXXX`-mehtods via de.tobiasroeser.lambdatest.Expect` - same as `assertXXX`, but can be configured to more advanced use, e.g. non-fail-fast error reporting
+* `intercept`-methods via `de.tobiasroeser.lambdatest.Intercept` to intercept expected exceptions
 
-_TBD_
+INFO:
+--
+If you want to use the non-fail-fast behaviour of the `Expect` class  outside of `FreeSpec`, you have to take care of setup and finalization by yourself.
+--
 
-=== Using `Expect` without `FreeSpec`
+== Testing files and directories with `TempFile`
 
-You can also use the `Expect` class outside of the `FreeSpec` test suites.
-In that case, you have to take care of setup and finalization yourself.
-
-_TBD_
-
-== Testing files and directories
-
-LambdaTest comes with a helper class `TempFile` with contains useful methods to work with temporary files.
+{lambdatest} comes with a helper class `de.tobiasroeser.lambdatest.TempFile` with contains useful methods to work with temporary files.
 
 To create a temporary file with a given content and do something with it, you can use `TempFile.withTempFile` or it procedural version with does not return a value `TempFile.withTempFileP`. After the method completes, the temporary file will automatically deleted.
 
@@ -189,7 +208,8 @@ There are more useful methods in class `TempFile`, e.g. `readFile`, `writeToFile
 Even though writing functional test makes most sence under Java 8,
 there are enough reasons to also use them on older Java versions which do not provide nice closures.
 
-LambdaTest does not use any Java 8 API! Therefore, there is nothing that stops you. You can download precompiled binaries of LambdaTest for older Java Runtimes down to Java 6.
+{lambdatest} does not use any Java 8 API!
+Therefore, there is nothing that stops you. You can download pre-compiled binaries of LambdaTest for older Java Runtimes down to Java 6.
 To use the non-Java8 version with Maven, use a classifier ("java7", or "java6") to download the version you want.
 The compatibility packages are produced with the great https://github.com/orfjackal/retrolambda[retrolambda project].
 
@@ -249,11 +269,11 @@ class SimpleTest extends FreeSpec {
 ----
 
 
-== Build LambdaTest from Source
+== Build {lambdatest} from Source
 
 === Building with Maven
 
-LambdaTest is build with https://maven.apache.org[Apache Maven 3.3.1] and the https://github.com/takari/polyglot-maven#overview[polyglot-scala extension]. Maven 3.5 is recommended. 
+{lambdatest} is build with https://maven.apache.org[Apache Maven 3.3.1] and the https://github.com/takari/polyglot-maven#overview[polyglot-scala extension]. Maven 3.5 is recommended.
 
 .Build LambdaTest from source
 ----
@@ -290,7 +310,7 @@ To report issues or send pull request, use https://github.com/lefou/LambdaTest[G
 
 You can also find me on https://twitter.com/TobiasRoeser[Twitter as @TobiasRoeser].
 
-If you like LambdaTest, please star it on https://github.com/lefou/LambdaTest[GitHub]. This will help me to set my priorities. Thanks!
+If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[GitHub]. This will help me to set my priorities. Thanks!
 
 == Changelog
 
