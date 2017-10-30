@@ -23,6 +23,7 @@ class SimpleTest extends FreeSpec {
 		});
 
 		test("demo of a fail", () -> {
+			pending("Disabled, as it would fail the project.");
 			expectEquals("yes and no", "yes");
 		});
 	}
