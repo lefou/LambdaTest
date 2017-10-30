@@ -1,8 +1,8 @@
 = Lambda Test
 :toc:
 :toc-placement: preamble
-:lambdatestversion: 0.2.4
-:documentationversion: 0.3.0-SNAPSHOT
+:lambdatestversion: 0.3.0
+:documentationversion: 0.3.0
 :testngversion: 6.11
 :junitversion: 4.12
 :lambdatest: LambdaTest
@@ -318,7 +318,7 @@ If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[
 
 == Changelog
 
-=== LambdaTest NEXT
+=== LambdaTest 0.3.0 - 2017-10-30
 
 * Introduced `Reporter` interface and `DefaultReporter` class
 * Introduced generic base class `FreeSpecBase` to hold test framework unspecific logic
