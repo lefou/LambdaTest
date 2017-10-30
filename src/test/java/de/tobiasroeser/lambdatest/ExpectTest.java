@@ -17,7 +17,7 @@ public class ExpectTest {
 	public void testBaseSuccess() {
 		Expect.clear();
 		assertEquals(Expect.__TEST_threadContext(), null);
-		Expect.expectEquals(1, 1, "ONE");
+		expectEquals(1, 1, "ONE");
 	}
 
 	@Test(dependsOnGroups = { "intercept" })
@@ -25,7 +25,7 @@ public class ExpectTest {
 		Expect.clear();
 		assertEquals(Expect.__TEST_threadContext(), null);
 		intercept(AssertionError.class, "ONE", () -> {
-			Expect.expectEquals(1, 2, "ONE");
+			expectEquals(1, 2, "ONE");
 		});
 	}
 
@@ -45,7 +45,7 @@ public class ExpectTest {
 		assertEquals(Expect.__TEST_threadContext(), null);
 		Expect.setup(false);
 		assertNotEquals(Expect.__TEST_threadContext(), null);
-		Expect.expectEquals(1, 1, "ONE");
+		expectEquals(1, 1, "ONE");
 		Expect.finish();
 		assertEquals(Expect.__TEST_threadContext(), null);
 	}
@@ -56,7 +56,7 @@ public class ExpectTest {
 		assertEquals(Expect.__TEST_threadContext(), null);
 		Expect.setup(false);
 		assertNotEquals(Expect.__TEST_threadContext(), null);
-		Expect.expectEquals(1, 2, "ONE");
+		expectEquals(1, 2, "ONE");
 		intercept(AssertionError.class, "ONE", () -> {
 			Expect.finish();
 		});
@@ -69,8 +69,8 @@ public class ExpectTest {
 		assertEquals(Expect.__TEST_threadContext(), null);
 		Expect.setup(false);
 		assertNotEquals(Expect.__TEST_threadContext(), null);
-		Expect.expectEquals(1, 1, "ONE");
-		Expect.expectEquals(2, 2, "TWO");
+		expectEquals(1, 1, "ONE");
+		expectEquals(2, 2, "TWO");
 		Expect.finish();
 		assertEquals(Expect.__TEST_threadContext(), null);
 	}
@@ -81,8 +81,8 @@ public class ExpectTest {
 		assertEquals(Expect.__TEST_threadContext(), null);
 		Expect.setup(false);
 		assertNotEquals(Expect.__TEST_threadContext(), null);
-		Expect.expectEquals(1, 2, "ONE");
-		Expect.expectEquals(2, 1, "TWO");
+		expectEquals(1, 2, "ONE");
+		expectEquals(2, 1, "TWO");
 		intercept(AssertionError.class, () -> {
 			Expect.finish();
 		});
@@ -93,13 +93,13 @@ public class ExpectTest {
 	public void testTwoBoolean() throws Exception {
 		Expect.clear();
 		assertEquals(Expect.__TEST_threadContext(), null);
-		Expect.expectEquals(true, true);
-		Expect.expectEquals(false, false);
+		expectEquals(true, true);
+		expectEquals(false, false);
 		intercept(AssertionError.class, () -> {
-			Expect.expectEquals(false, true);
+			expectEquals(false, true);
 		});
 		intercept(AssertionError.class, () -> {
-			Expect.expectEquals(true, false);
+			expectEquals(true, false);
 		});
 		assertEquals(Expect.__TEST_threadContext(), null);
 	}

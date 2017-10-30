@@ -1,7 +1,6 @@
 package de.tobiasroeser.lambdatest.testng;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertTrue;
 
 import java.io.BufferedReader;
