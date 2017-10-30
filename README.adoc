@@ -171,31 +171,63 @@ mvn test -Dtest=SimpleTest
 You should write your test cases so that they don't need to be executed in order.
 {lambdatest} is able to run tests in parallel, if you enable it explicitly with `FreeSpec.setRunInParallel(true)`.
 
-By default `assertXXX`-methdos fail fast, which means the first failing assertion will end the whole test.
+By default `expectXXX`-methdos fail fast, which means the first failing assertion will end the whole test.
 This is also the behaviour you will get with most other test frameworks.
 
-With {lambdatest} you can disable fail-fast behaviour for assertion/expectations with `FreeSpec.setExpectFailFast(false)`.
+You can disable fail-fast behaviour for assertion/expectations with `FreeSpec.setExpectFailFast(false)`.
 Then, the first failing `expectXXX`-error will not abort the test but the test is optimistically continued.
 Further failing assertion errors are collected and the test fails at the end, reporting all collected errors.
 
-== Writing assertions with `Assert` and `Expect`
+== Writing assertions with `Expect`
 
-{lambdatest} provides a set of assertions to check for your expectations.
+{lambdatest} provides many methods in the class `de.tobiasroeser.lambdatest.Expect` to write assertion.
 You can use these as an alternative to the assertion methods provides by other unit testing framework to gain the following advantages:
 
-* Nice output of differences between expected and actual values. Especially for string and varous collection types
+* Nice output of differences between expected and actual values. Especially for string and various collection types
 * `expectXXX`-methods provide a feature to collect multiple assertions (non-fail-fast behaviour), such that you can collect as much errors as possible in one test run, instead of giving up at the first error.
 
-It provides:
+.Selected static methods of `Expect`
+* `expectNull` - Assert that a given value is null
+* `expectNotNull` - Assert that a given value is not null
+* `expectEquals` - Assert equality of two given objects or values.
+* `expectNotEquals` - Assert non-equality of two given objects or values.
+* `expectTrue` - Assert a value evaluates to `true`
+* `expectFalse` - Assert a value evaluates to `false`
+* `expectString` - Assert that a given string is non-null and return an instance of `ExpectString` with provides furter checks on the actual string in a fluent API
+* `intercept` - Assert that a code block throws an Exception of the given type and optional with an message matching a given regular expression. Returns the throw exeption for further analysis
 
-* `assertXXX`-methods via `de.tobiasroeser.lamdatest.Assert` to check and compare actual values
-* `expectXXX`-mehtods via de.tobiasroeser.lambdatest.Expect` - same as `assertXXX`, but can be configured to more advanced use, e.g. non-fail-fast error reporting
-* `intercept`-methods via `de.tobiasroeser.lambdatest.Intercept` to intercept expected exceptions
+There are more method in `Expect` with setup and control it non-fail-fast handling via ThreadLocals. Those are only needed, if you want to use these behaviour outside of `FreeSpec`.
 
-INFO:
+[NOTE]
 --
 If you want to use the non-fail-fast behaviour of the `Expect` class  outside of `FreeSpec`, you have to take care of setup and finalization by yourself.
 --
+
+== Fluent String analysis with `ExpectString`
+
+To inspect and assert string, use the class `ExpectString`, which is also returned, if you use `Expect.expectString`.
+
+.Mehtods of `ExpectString`
+* `isEqual`
+* `isNotEqual`
+* `isEqualIgnoreCase`
+* `isNotEqualIgnoreCase`
+* `startsWith`
+* `StartsWithNot`
+* `endsWith`
+* `endsNotWith`
+* `matches`
+* `matchesNot`
+* `hasLength`
+* `hasLengthNot`
+* `isLongerThan`
+* `isShorterThan`
+* `isTrimmed`
+* `contains`
+* `containsNot`
+* `containsIgnoreCase`
+* `containsIgnoreCaseNot`
+
 
 == Testing files and directories with `TempFile`
 
