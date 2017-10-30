@@ -2,7 +2,7 @@ import org.sonatype.maven.polyglot.scala.model._
 import scala.collection.immutable.Seq
 
 val namespace = "de.tobiasroeser.lambdatest"
-val lambdatest = "de.tototec" % namespace % "0.3.0"
+val lambdatest = "de.tototec" % namespace % "0.3.1-SNAPSHOT"
 
 object Deps {
   val testng = "org.testng" % "testng" % "6.11"
