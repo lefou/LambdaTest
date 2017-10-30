@@ -5,8 +5,8 @@ val namespace = "de.tobiasroeser.lambdatest"
 val lambdatest = "de.tototec" % namespace % "0.3.0-SNAPSHOT"
 
 object Deps {
-  val testng = "org.testng" % "testng" % "6.9.10"
-  val junit = "junit" % "junit" % "4.11"
+  val testng = "org.testng" % "testng" % "6.11"
+  val junit = "junit" % "junit" % "4.12"
   val slf4j = "org.slf4j" % "slf4j-api" % "1.7.25"
 }
 
@@ -27,6 +27,8 @@ def bndExecution(id: String, classesDir: String) = Execution(
     manifestPath = classesDir + "/META-INF/MANIFEST.MF",
     bnd = s"""
       |Bundle-Description: $${project.description}
+      |Bundle-URL: $${project.url}
+      |Implementation-Version: $${project.version}
       |Export-Package: ${
       Seq(
         namespace,

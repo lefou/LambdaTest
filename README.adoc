@@ -3,8 +3,8 @@
 :toc-placement: preamble
 :lambdatestversion: 0.2.4
 :documentationversion: 0.3.0-SNAPSHOT
-:testngversion: 6.9.10
-:junitversion: 4.11
+:testngversion: 6.11
+:junitversion: 4.12
 :lambdatest: LambdaTest
 
 image:https://travis-ci.org/lefou/LambdaTest.svg?branch=master["Build Status", link="https://travis-ci.org/lefou/LambdaTest"]
@@ -320,14 +320,15 @@ If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[
 
 === LambdaTest NEXT
 
-* Fixed assert message of `Intercept.intercept(Class<T>, String, RunnableWithException)`
 * Introduced `Reporter` interface and `DefaultReporter` class
+* Introduced generic base class `FreeSpecBase` to hold test framework unspecific logic
+* Added `FreeSpec.section` to allow more structured tests
 * Reformatted output of tests (handled now by `Reporter`)
-* Added sections to FreeSpec (TestNG)
-* Released JAR files are now proper OSGi bundles
 * Added `Assert.assertNull` and `Assert.assertNotNull`
 * Added `Expect.expectNull` and `Expect.expectNotNull`
-
+* Generate proper OSGi manifests for all JARs/bundles
+* Fixed assert message of `Intercept.intercept(Class<T>, String, RunnableWithException)`
+* Documentation improvements
 
 === LambdaTest 0.2.4 - 2016-08-03
 
