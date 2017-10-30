@@ -5,8 +5,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class Optional<T> implements Iterable<T>, Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	@SuppressWarnings("rawtypes")
+	private static final Optional<?> NONE = new Optional();
 
 	public static <S> Optional<S> some(final S some) {
 		return new Optional<S>(some);
@@ -19,11 +25,6 @@ public class Optional<T> implements Iterable<T>, Serializable {
 			return new Optional<S>(someOrNull);
 		}
 	}
-
-	private static final long serialVersionUID = 1L;
-
-	@SuppressWarnings("rawtypes")
-	private static final Optional<?> NONE = new Optional();
 
 	private final boolean isNone;
 	private final T optional;
@@ -47,7 +48,7 @@ public class Optional<T> implements Iterable<T>, Serializable {
 		if (isDefined()) {
 			return optional;
 		} else {
-			throw new NullPointerException("Optional value not defined.");
+			throw new NoSuchElementException("Optional value not defined.");
 		}
 	}
 
