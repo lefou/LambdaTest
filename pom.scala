@@ -128,6 +128,15 @@ Model(
     "maven.compiler.target" -> "1.8"
   ),
   build = Build(
+    resources = Seq(
+      Resource(
+        directory = "src/main/resources"
+      ),
+      Resource(
+        directory = ".",
+        includes = Seq("LICENSE.txt", "README.adoc")
+      )
+    ),
     plugins = Seq(
       Plugin(
         Plugins.retrolambda,
