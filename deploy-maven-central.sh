@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ ! -f mvn-settings.xml ]; then
+if [ ! -f mvn-deploy-settings.xml ]; then
 	echo "Creating mvn-deploy-settings.xml"
 	cat > mvn-deploy-settings.xml <<EOF
 <settings>
