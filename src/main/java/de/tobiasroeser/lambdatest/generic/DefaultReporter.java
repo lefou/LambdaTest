@@ -18,14 +18,16 @@ public class DefaultReporter implements Reporter {
 
 	private final AnsiColor ansi = new AnsiColor();
 	private final PrintStream out;
+	private final boolean showStacktrace;
 	private Map<String, Section> lastSuiteSection = new LinkedHashMap<>();
 
 	public DefaultReporter() {
-		this(System.out);
+		this(System.out, true);
 	}
 
-	public DefaultReporter(PrintStream printStream) {
+	public DefaultReporter(PrintStream printStream, boolean showStacktrace) {
 		out = printStream;
+		this.showStacktrace = showStacktrace;
 	}
 
 	@Override
@@ -100,13 +102,21 @@ public class DefaultReporter implements Reporter {
 		try {
 			out.println(indent(test) + ansi.fg(Color.RED) + "- " + test.getName() + " FAILED");
 			// System.out.println(e.getMessage());
-			error.printStackTrace(out);
+			if (showStacktrace) {
+				error.printStackTrace(out);
+			} else {
+				out.println(error.getClass().getName() + ": " + error.getMessage());
+			}
 			Throwable oldCause = error;
 			Throwable cause = error.getCause();
 			// unpack exception stack
 			while (cause != null && cause != oldCause) {
 				out.print("Caused by: ");
-				cause.printStackTrace(out);
+				if (showStacktrace) {
+					cause.printStackTrace(out);
+				} else {
+					out.println(error.getClass().getName() + ": " + error.getMessage());
+				}
 				oldCause = cause;
 				cause = cause.getCause();
 			}

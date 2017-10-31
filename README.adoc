@@ -2,7 +2,7 @@
 :toc:
 :toc-placement: preamble
 :lambdatestversion: 0.3.0
-:documentationversion: 0.3.0
+:documentationversion: 0.3.1-SNAPSHOT
 :testngversion: 6.11
 :junitversion: 4.12
 :lambdatest: LambdaTest
@@ -350,6 +350,10 @@ You can also find me on https://twitter.com/TobiasRoeser[Twitter as @TobiasRoese
 If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[GitHub]. This will help me to set my priorities. Thanks!
 
 == Changelog
+
+=== LambdaTest NEXT
+
+* `DefaultReporter` can now hide the stacktrace
 
 === LambdaTest 0.3.0 - 2017-10-30
 

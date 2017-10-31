@@ -1,12 +1,15 @@
 package de.tobiasroeser.lambdatest.demo;
 
 import static de.tobiasroeser.lambdatest.Expect.*;
+
+import de.tobiasroeser.lambdatest.generic.DefaultReporter;
 //You can also use JUnit based tests with 
 //import de.tobiasroeser.lambdatest.junit.FreeSpec; 
 import de.tobiasroeser.lambdatest.testng.FreeSpec;
 
 public class SimpleTest extends FreeSpec {
 	public SimpleTest() {
+		setReporter(new DefaultReporter(System.out, false));
 
 		test("1 + 1 = 2", () -> {
 			expectEquals(1 + 1, 2);
