@@ -22,13 +22,22 @@ public class SimpleTest extends FreeSpec {
 			});
 		});
 
-		test("String test", () -> {
-			expectString("A string")
-					.contains("string")
-					.containsIgnoreCase("String")
-					.startsWith("A")
-					.endsWith("ng")
-					.hasLength(8);
+		section("A String should", () -> {
+			String aString = "A string";
+
+			test("match certain criteria", () -> {
+				expectString(aString)
+						.contains("string")
+						.containsIgnoreCase("String")
+						.startsWith("A")
+						.endsWith("ng")
+						.hasLength(8);
+			});
+
+			test("be not longer than 2", () -> {
+				expectString(aString).isLongerThan(2);
+			});
+
 		});
 
 		test("demo of a fail", () -> {

@@ -129,14 +129,22 @@ class SimpleTest extends FreeSpec {
       });
     });
 
-    test("String test", () ->
-      expectString("A string")
-        .contains("string")
-        .containsIgnoreCase("String")
-        .startsWith("A")
-        .endsWith("ng")
-        .hasLength(8);
-		});
+    section("A String should", () -> {
+      final String aString = "A string";
+
+      test("match certain criteria", () -> {
+        expectString(aString)
+          .contains("string")
+          .containsIgnoreCase("String")
+          .startsWith("A")
+          .endsWith("ng")
+          .hasLength(8);
+      });
+
+      test("be not longer than 2", () -> {
+        expectString(aString).isLongerThan(2);
+      });
+    });
 
     test("demo of a fail", () -> {
       "yes".equals("yes and no");
@@ -149,26 +157,8 @@ The methods `test`, `pending` and `intercept` are provided by `FreeSpec`
 whereas the usual `expectXXX` methods are provided by `Expect`.
 
 The output of this test suite above would look like this:
-_(Actually it is also nicely coloured)_
 
-----
-[TestNG] Running:
-  Command line suite
-
-Running 3 tests in org.example.SimpleTest:
-- 1 + 1 = 2
-- a pending test (pending)
-- divide by zero
-- String test
-- demo of a fail FAILED
-java.lang.AssertionError: Strings differ at index 3. Actual is too long. Expected "yes" but was "yes and no".
-...
-
-===============================================
-Command line suite
-Total tests run: 3, Failures: 0, Skips: 1
-===============================================
-----
+image:Screenshot_SimpleTest.jpg[]
 
 [NOTE]
 --
