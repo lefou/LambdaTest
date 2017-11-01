@@ -84,7 +84,7 @@ public class InterceptTest {
 		} catch (final Throwable e) {
 			assertTrue(e instanceof AssertionError, "Expected different exception type");
 			assertEquals(e.getMessage().trim(),
-					"Exception was thrown with the wrong message: Expected: 'Msg' but got 'msg'.");
+					"Exception was thrown with the wrong message: Expected regex: 'Msg' does not match 'msg'.");
 		}
 	}
 

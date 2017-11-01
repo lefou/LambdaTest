@@ -69,8 +69,8 @@ public class Intercept {
 					return t;
 				} else {
 					throw new AssertionError(
-							"Exception was thrown with the wrong message: Expected: '" + messageRegex
-									+ "' but got '" + msg + "'.",
+							"Exception was thrown with the wrong message: Expected regex: '" + messageRegex
+									+ "' does not match '" + msg + "'.",
 							e);
 				}
 			}
