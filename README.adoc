@@ -162,7 +162,8 @@ image:Screenshot_SimpleTest.jpg[]
 
 [NOTE]
 --
-You can run the above test directly in the {lambdatest} project directory with: +
+You can run the above test directly in the {lambdatest} project directory with:
+
 ----
 mvn test -Dtest=SimpleTest
 ----
