@@ -13,6 +13,9 @@ import de.tobiasroeser.lambdatest.internal.Util;
 
 public class Assert {
 
+	private static final List<Class<?>> LONG_TYPES = Arrays.asList(Byte.class, Short.class, Integer.class, Long.class);
+	private static final List<Class<?>> DOUBLE_TYPES = Arrays.asList(Float.class, Double.class);
+
 	private static void fail(final String msgOrNull, final String fallBackMsg, final Object... args) {
 		final String msg;
 		if (msgOrNull != null) {
@@ -53,9 +56,12 @@ public class Assert {
 
 		// from here on, actual and expected are not null
 
-		if (expected.getClass().isArray()) {
-			if (!actual.getClass().isArray()) {
-				fail(msg, "Expected an array, but got a {0}", actual.getClass().getName());
+		final Class<? extends Object> actualClass = actual.getClass();
+		final Class<? extends Object> expectedClass = expected.getClass();
+
+		if (expectedClass.isArray()) {
+			if (!actualClass.isArray()) {
+				fail(msg, "Expected an array, but got a {0}", actualClass.getName());
 			}
 
 			final int expectedLength = Array.getLength(expected);
@@ -80,8 +86,8 @@ public class Assert {
 		}
 
 		// expected in not an array but actual is
-		if (actual.getClass().isArray()) {
-			fail(msg, "Got an array, but did not expected one. Expected a {0}", expected.getClass().getName());
+		if (actualClass.isArray()) {
+			fail(msg, "Got an array, but did not expected one. Expected a {0}", expectedClass.getName());
 		}
 
 		// now check for equality, and if not introspect further
@@ -116,9 +122,30 @@ public class Assert {
 						expChars.length, expected, actual);
 			}
 		}
-		if (Boolean.class.isAssignableFrom(expected.getClass()) && Boolean.class.isAssignableFrom(actual.getClass())) {
+		// Handle true and false values without any further toString examination
+		if (Boolean.class.isAssignableFrom(expectedClass) && Boolean.class.isAssignableFrom(actualClass)) {
 			fail(msg, "Actual {0} is not equal to {1}", actual, expected);
 		}
+		// if (actual instanceof Long && expected instanceof Integer) {
+		// if (Long.valueOf(((Integer) expected).longValue()).equals(actual)) {
+		// fail(msg, "Actual {0} of type Long has not the expected type of Integer, but
+		// their values are equal.",
+		// actual);
+		// } else {
+		// fail(msg, "Actual {0} of type Long is not equal to {1} of type Integer.",
+		// actual, expected);
+		// }
+		// }
+		// if (actual instanceof Byte && expected instanceof Integer) {
+		// if (Integer.valueOf(((Byte) actual).intValue()).equals(expected)) {
+		// fail(msg, "Actual {0} of type Byte has not the expected type of Integer, but
+		// their values are equal.",
+		// actual);
+		// } else {
+		// fail(msg, "Actual {0} of type Byte is not equal to {1} of type Integer.",
+		// actual, expected);
+		// }
+		// }
 
 		// we try to analyze some kind of collections and iterators
 
@@ -201,15 +228,44 @@ public class Assert {
 			}
 		}
 
-		// also try to make a toString() output comparison
-		try {
-			assertEquals(actual.toString(), expected.toString());
-		} catch (final AssertionError e) {
-			fail(msg, "Actual {0} is not equal to {1}. Also their toString() differ: {2}", actual, expected,
-					e.getMessage());
+		// compare the types
+		if (!actualClass.equals(expectedClass)) {
+			if (LONG_TYPES.contains(actualClass) && LONG_TYPES.contains(expectedClass)) {
+				if (((Number) actual).longValue() == ((Number) expected).longValue()) {
+					fail(msg,
+							"Actual {0} of type {1} is not equal to {2} of type {3}, but their long values are equal.",
+							actual.toString(), actualClass.getName(),
+							expected.toString(), expectedClass.getName());
+				}
+			}
+
+			if (DOUBLE_TYPES.contains(actualClass) && DOUBLE_TYPES.contains(expectedClass)) {
+				if (((Number) actual).doubleValue() == ((Number) expected).doubleValue()) {
+					fail(msg,
+							"Actual {0} of type {1} is not equal to {2} of type {3}, but their double values are equal.",
+							actual.toString(), actualClass.getName(),
+							expected.toString(), expectedClass.getName());
+				}
+			}
+
+			fail(msg, "Actual {0} of type {1} is not equal to {2} of type {3}.",
+					actual.toString(), actualClass.getName(),
+					expected.toString(), expectedClass.getName());
 		}
 
-		fail(msg, "Actual {0} is not equal to {1}", actual, expected);
+		// also try to make a toString() output comparison,
+		// but only if these are not simple numbers
+		if (!LONG_TYPES.contains(expectedClass) && !LONG_TYPES.contains(actualClass)) {
+			try {
+				assertEquals(actual.toString(), expected.toString());
+			} catch (final AssertionError e) {
+				fail(msg, "Actual {0} is not equal to {1}. Also their toString() differ: {2}",
+						actual.toString(), expected.toString(),
+						e.getMessage());
+			}
+		}
+
+		fail(msg, "Actual {0} is not equal to {1}.", actual, expected);
 	}
 
 	public static void assertNotEquals(final Object actual, final Object expected) {

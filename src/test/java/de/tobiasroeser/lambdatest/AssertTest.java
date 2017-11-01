@@ -29,6 +29,69 @@ public class AssertTest {
 	}
 
 	@Test(dependsOnGroups = { "intercept" })
+	public void testAssertEqualsLong() throws Exception {
+		// standard cases
+		Assert.assertEquals(0L, 0L);
+		Assert.assertEquals(Long.valueOf(0L), 0L);
+		Assert.assertEquals(0L, Long.valueOf(0L));
+		intercept(AssertionError.class, "\\QActual 0 is not equal to 1.\\E", () -> {
+			Assert.assertEquals(0L, 1L);
+		});
+		intercept(AssertionError.class, "\\QActual 0 is not equal to 1.\\E", () -> {
+			Assert.assertEquals(Long.valueOf(0L), 1L);
+		});
+		intercept(AssertionError.class, "\\QActual 0 is not equal to 1.\\E", () -> {
+			Assert.assertEquals(0L, Long.valueOf(1L));
+		});
+	}
+
+	@Test(dependsOnGroups = { "intercept" })
+	public void testAssertEqualsInteger() throws Exception {
+		// standard cases
+		Assert.assertEquals(0, 0);
+		Assert.assertEquals(Integer.valueOf(0), 0);
+		Assert.assertEquals(0, Integer.valueOf(0));
+		intercept(AssertionError.class, "\\QActual 0 is not equal to 1.\\E", () -> {
+			Assert.assertEquals(0, 1);
+		});
+		intercept(AssertionError.class, "\\QActual 0 is not equal to 1.\\E", () -> {
+			Assert.assertEquals(Integer.valueOf(0), 1);
+		});
+		intercept(AssertionError.class, "\\QActual 0 is not equal to 1.\\E", () -> {
+			Assert.assertEquals(0, Integer.valueOf(1));
+		});
+	}
+
+	@Test(dependsOnGroups = { "intercept" })
+	public void testAssertEqualsDiffTypes() throws Exception {
+		intercept(AssertionError.class,
+				"\\QActual 0 of type java.lang.Integer is not equal to 0 of type java.lang.Long, but their long values are equal.\\E",
+				() -> {
+					Assert.assertEquals(0, 0L);
+				});
+		intercept(AssertionError.class,
+				"\\QActual 0 of type java.lang.Long is not equal to 0 of type java.lang.Integer, but their long values are equal.\\E",
+				() -> {
+					Assert.assertEquals(0L, 0);
+				});
+		intercept(AssertionError.class,
+				"\\QActual " + Float.valueOf(1F)
+						+ " of type java.lang.Float is not equal to " + Double.valueOf(1D)
+						+ " of type java.lang.Double, but their double values are equal.\\E",
+				() -> {
+					Assert.assertEquals(1F, 1D);
+				});
+		intercept(AssertionError.class,
+				"\\QActual " + Double.valueOf(1D)
+						+ " of type java.lang.Double is not equal to " + Float.valueOf(1F)
+						+ " of type java.lang.Float, but their double values are equal.\\E",
+				() -> {
+					Assert.assertEquals(1D, 1F);
+				});
+
+	}
+
+	@Test(dependsOnGroups = { "intercept" })
 	public void testAssertEqualsString() throws Exception {
 		Assert.assertEquals(null, null);
 		Assert.assertEquals("a", "a");
