@@ -230,22 +230,18 @@ public class Assert {
 
 		// compare the types
 		if (!actualClass.equals(expectedClass)) {
-			if (LONG_TYPES.contains(actualClass) && LONG_TYPES.contains(expectedClass)) {
-				if (((Number) actual).longValue() == ((Number) expected).longValue()) {
-					fail(msg,
-							"Actual {0} of type {1} is not equal to {2} of type {3}, but their long values are equal.",
-							actual.toString(), actualClass.getName(),
-							expected.toString(), expectedClass.getName());
-				}
+			if (LONG_TYPES.contains(actualClass) && LONG_TYPES.contains(expectedClass)
+					&& ((Number) actual).longValue() == ((Number) expected).longValue()) {
+				fail(msg, "Actual {0} of type {1} is not equal to {2} of type {3}, but their long values are equal.",
+						actual.toString(), actualClass.getName(),
+						expected.toString(), expectedClass.getName());
 			}
 
-			if (DOUBLE_TYPES.contains(actualClass) && DOUBLE_TYPES.contains(expectedClass)) {
-				if (((Number) actual).doubleValue() == ((Number) expected).doubleValue()) {
-					fail(msg,
-							"Actual {0} of type {1} is not equal to {2} of type {3}, but their double values are equal.",
-							actual.toString(), actualClass.getName(),
-							expected.toString(), expectedClass.getName());
-				}
+			if (DOUBLE_TYPES.contains(actualClass) && DOUBLE_TYPES.contains(expectedClass)
+					&& ((Number) actual).doubleValue() == ((Number) expected).doubleValue()) {
+				fail(msg, "Actual {0} of type {1} is not equal to {2} of type {3}, but their double values are equal.",
+						actual.toString(), actualClass.getName(),
+						expected.toString(), expectedClass.getName());
 			}
 
 			fail(msg, "Actual {0} of type {1} is not equal to {2} of type {3}.",
