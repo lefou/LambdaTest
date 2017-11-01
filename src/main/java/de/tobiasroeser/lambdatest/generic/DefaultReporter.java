@@ -22,9 +22,13 @@ public class DefaultReporter implements Reporter {
 	private Map<String, Section> lastSuiteSection = new LinkedHashMap<>();
 
 	public DefaultReporter() {
-		this(System.out, true);
+		this(System.out);
 	}
 
+	public DefaultReporter(PrintStream printStream) {
+		this(printStream, true);
+	}
+	
 	public DefaultReporter(PrintStream printStream, boolean showStacktrace) {
 		out = printStream;
 		this.showStacktrace = showStacktrace;
