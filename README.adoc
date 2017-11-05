@@ -173,7 +173,7 @@ mvn test -Dtest=SimpleTest
 You should write your test cases so that they don't need to be executed in order.
 {lambdatest} is able to run tests in parallel, if you enable it explicitly with `FreeSpec.setRunInParallel(true)`.
 
-By default `expectXXX`-methdos fail fast, which means the first failing assertion will end the whole test.
+By default `expectXXX`-methods fail fast, which means the first failing assertion will end the whole test.
 This is also the behaviour you will get with most other test frameworks.
 
 But you can disable fail-fast behaviour for assertions/expectations with `FreeSpec.setExpectFailFast(false)`.
