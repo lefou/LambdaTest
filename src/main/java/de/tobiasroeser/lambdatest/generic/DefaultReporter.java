@@ -104,7 +104,7 @@ public class DefaultReporter implements Reporter {
 	public void testFailed(LambdaTestCase test, Throwable error) {
 		reportSectionOnce(test);
 		try {
-			out.println(indent(test) + ansi.fg(Color.RED) + "- " + test.getName() + " FAILED");
+			out.println(indent(test) + ansi.fg(Color.RED) + "- " + test.getName() + " *** FAILED ***");
 			// System.out.println(e.getMessage());
 			if (showStacktrace) {
 				error.printStackTrace(out);
