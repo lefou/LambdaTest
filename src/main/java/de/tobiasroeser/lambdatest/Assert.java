@@ -126,26 +126,6 @@ public class Assert {
 		if (Boolean.class.isAssignableFrom(expectedClass) && Boolean.class.isAssignableFrom(actualClass)) {
 			fail(msg, "Actual {0} is not equal to {1}", actual, expected);
 		}
-		// if (actual instanceof Long && expected instanceof Integer) {
-		// if (Long.valueOf(((Integer) expected).longValue()).equals(actual)) {
-		// fail(msg, "Actual {0} of type Long has not the expected type of Integer, but
-		// their values are equal.",
-		// actual);
-		// } else {
-		// fail(msg, "Actual {0} of type Long is not equal to {1} of type Integer.",
-		// actual, expected);
-		// }
-		// }
-		// if (actual instanceof Byte && expected instanceof Integer) {
-		// if (Integer.valueOf(((Byte) actual).intValue()).equals(expected)) {
-		// fail(msg, "Actual {0} of type Byte has not the expected type of Integer, but
-		// their values are equal.",
-		// actual);
-		// } else {
-		// fail(msg, "Actual {0} of type Byte is not equal to {1} of type Integer.",
-		// actual, expected);
-		// }
-		// }
 
 		// we try to analyze some kind of collections and iterators
 
