@@ -148,13 +148,21 @@ public class Assert {
 		if (expected instanceof Set<?> && actual instanceof Set<?>) {
 			// we know they are not equal but have same size, so it is enough to
 			// find the diff candidates
-			final List<?> missingInActual = Util
-					.filter((Iterable<?>) expected, exp -> !((Set<?>) actual).contains(exp));
-			final List<?> spareInActual = Util.filter((Iterable<?>) actual, act -> !((Set<?>) expected).contains(act));
+			final List<?> missingInActual = Util.filter((Iterable<?>) expected,
+					exp -> !((Set<?>) actual).contains(exp));
+			final List<?> spareInActual = Util.filter((Iterable<?>) actual,
+					act -> !((Set<?>) expected).contains(act));
+			if (missingInActual.size() == ((Set<?>) expected).size()) {
+				fail(msg, "Sets are not equal. All elements differ. Expected {0} but was {1}",
+						expected, actual);
+			}
 			fail(msg,
-					"Sets are not equal. Expected {0} but was {1}. Expected elements missing in actual set: {2}. Unexpected elements in actual set: {3}",
-					expected, actual,
+					"Sets are not equal. Expected {0} but was {1}. {2} expected elements missing in actual set: {3}. {4} unexpected elements in actual set: {5}",
+					expected,
+					actual,
+					missingInActual.size(),
 					Util.mkString(missingInActual, "[", ",", "]"),
+					spareInActual.size(),
 					Util.mkString(spareInActual, "[", ",", "]"));
 		}
 
