@@ -196,7 +196,7 @@ You can use these as an alternative to the assertion methods provides by other u
 * `expectTrue` - Assert a value evaluates to `true`
 * `expectFalse` - Assert a value evaluates to `false`
 * `expectString` - Assert that a given string is non-null and return an instance of `ExpectString` with provides furter checks on the actual string in a fluent API
-* `intercept` - Assert that a code block throws an Exception of the given type and optional with an message matching a given regular expression. Returns the throw exeption for further analysis
+* `intercept` - Assert that a code block throws an Exception of the given type and optional with an message matching a given regular expression. Returns the thrown exception for further analysis
 
 There are more method in `Expect` with setup and control it non-fail-fast handling via ThreadLocals. Those are only needed, if you want to use these behaviour outside of `FreeSpec`.
 
@@ -209,7 +209,7 @@ If you want to use the non-fail-fast behaviour of the `Expect` class  outside of
 
 To inspect and assert string, use the class `ExpectString`, which is also returned, if you use `Expect.expectString`.
 
-.Mehtods of `ExpectString`
+.Methods of `ExpectString`
 * `isEqual`
 * `isNotEqual`
 * `isEqualIgnoreCase`
