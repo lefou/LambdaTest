@@ -97,7 +97,7 @@ public class Expect {
 	 */
 	public static void expectNotNull(final Object actual, String msg) {
 		try {
-			Assert.assertNull(actual, msg);
+			Assert.assertNotNull(actual, msg);
 		} catch (AssertionError e) {
 			handleAssertionError(e);
 		}
