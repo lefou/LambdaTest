@@ -1,6 +1,7 @@
 package de.tobiasroeser.lambdatest;
 
 import static de.tobiasroeser.lambdatest.Expect.expectEquals;
+import static de.tobiasroeser.lambdatest.Expect.expectNotNull;
 import static de.tobiasroeser.lambdatest.Intercept.intercept;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
@@ -172,6 +173,20 @@ public class ExpectTest {
 			Expect.finish();
 		});
 		assertEquals(Expect.__TEST_threadContext(), null);
+	}
+
+	@Test
+	public void testExpectNotNull() {
+		Expect.clear();
+		Expect.setup(true);
+		Expect.expectNotNull(new Object());
+	}
+
+	@Test(expectedExceptions = AssertionError.class)
+	public void testExpectNotNullFail() {
+		Expect.clear();
+		Expect.setup(true);
+		Expect.expectNotNull(null);
 	}
 
 }
