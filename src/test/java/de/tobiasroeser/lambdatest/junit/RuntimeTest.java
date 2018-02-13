@@ -7,6 +7,8 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.testng.annotations.Test;
 
+import de.tobiasroeser.lambdatest.generic.DefaultReporter;
+
 public class RuntimeTest {
 
 	public static class SimpleSuccessTest extends FreeSpec {
@@ -19,6 +21,8 @@ public class RuntimeTest {
 
 	public static class SimpleFailureTest extends FreeSpec {
 		public SimpleFailureTest() {
+			// We don't want the stacktrace to fool us in the test suite
+			setReporter(new DefaultReporter(System.out, false));
 			test("should fail", () -> {
 				Assert.assertTrue(false);
 			});
