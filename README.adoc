@@ -356,6 +356,8 @@ If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[
 
 * `DefaultReporter` can now hide the stacktrace
 * Improved `expectEquals` message for number and arguments of different types
+* Fixed inverted `expectNotNull` behaviour
+* Extended test suite
 
 === LambdaTest 0.3.0 - 2017-10-30
 
