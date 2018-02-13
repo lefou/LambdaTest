@@ -1,8 +1,8 @@
 = Lambda Test
 :toc:
 :toc-placement: preamble
-:lambdatestversion: 0.3.0
-:documentationversion: 0.3.1-SNAPSHOT
+:lambdatestversion: 0.3.1
+:documentationversion: 0.3.1
 :testngversion: 6.11
 :junitversion: 4.12
 :lambdatest: LambdaTest
@@ -352,7 +352,7 @@ If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[
 
 == Changelog
 
-=== LambdaTest NEXT
+=== LambdaTest 0.3.1 - 2018-02-13
 
 * `DefaultReporter` can now hide the stacktrace
 * Improved `expectEquals` message for number and arguments of different types
