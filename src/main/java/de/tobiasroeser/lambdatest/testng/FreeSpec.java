@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 
 import de.tobiasroeser.lambdatest.Expect;
 import de.tobiasroeser.lambdatest.LambdaTest;
+import de.tobiasroeser.lambdatest.Reporter;
 import de.tobiasroeser.lambdatest.RunnableWithException;
 import de.tobiasroeser.lambdatest.generic.DefaultTestCase;
 import de.tobiasroeser.lambdatest.generic.FreeSpecBase;
@@ -36,8 +37,6 @@ import de.tobiasroeser.lambdatest.internal.Util;
  *
  */
 public class FreeSpec extends FreeSpecBase implements LambdaTest {
-
-	private static final String PENDING_DEFAULT_MSG = "Pending";
 
 	private volatile boolean testNeverRun = true;
 
@@ -82,7 +81,7 @@ public class FreeSpec extends FreeSpecBase implements LambdaTest {
 	 */
 	@Override
 	public void pending() {
-		throw new SkipException(PENDING_DEFAULT_MSG);
+		throw new SkipException(Reporter.PENDING_DEFAULT_MSG);
 	}
 
 	/**

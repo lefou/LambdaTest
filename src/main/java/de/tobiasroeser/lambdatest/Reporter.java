@@ -4,6 +4,8 @@ import java.util.List;
 
 public interface Reporter {
 
+	String PENDING_DEFAULT_MSG = "Pending";
+
 	void testStart(LambdaTestCase test);
 
 	void testSkipped(LambdaTestCase test, String message);

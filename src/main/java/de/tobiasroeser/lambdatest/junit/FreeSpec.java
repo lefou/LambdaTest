@@ -4,6 +4,7 @@ import org.junit.internal.AssumptionViolatedException;
 import org.junit.runner.RunWith;
 
 import de.tobiasroeser.lambdatest.LambdaTest;
+import de.tobiasroeser.lambdatest.Reporter;
 import de.tobiasroeser.lambdatest.RunnableWithException;
 import de.tobiasroeser.lambdatest.generic.FreeSpecBase;
 
@@ -29,8 +30,6 @@ import de.tobiasroeser.lambdatest.generic.FreeSpecBase;
 @RunWith(FreeSpecRunner.class)
 public class FreeSpec extends FreeSpecBase implements LambdaTest {
 
-	static final String PENDING_DEFAULT_MSG = "Pending";
-
 	private final String suiteName;
 
 	public FreeSpec() {
@@ -48,7 +47,7 @@ public class FreeSpec extends FreeSpecBase implements LambdaTest {
 	 */
 	@Override
 	public void pending() {
-		throw new AssumptionViolatedException(PENDING_DEFAULT_MSG);
+		throw new AssumptionViolatedException(Reporter.PENDING_DEFAULT_MSG);
 	}
 
 	/**

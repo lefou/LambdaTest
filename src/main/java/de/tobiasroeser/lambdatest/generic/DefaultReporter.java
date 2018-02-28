@@ -14,8 +14,6 @@ import de.tobiasroeser.lambdatest.internal.AnsiColor.Color;
 
 public class DefaultReporter implements Reporter {
 
-	private static final String PENDING_DEFAULT_MSG = "Pending";
-
 	private final AnsiColor ansi = new AnsiColor();
 	private final PrintStream out;
 	private final boolean showStacktrace;
@@ -25,30 +23,30 @@ public class DefaultReporter implements Reporter {
 		this(System.out);
 	}
 
-	public DefaultReporter(PrintStream printStream) {
+	public DefaultReporter(final PrintStream printStream) {
 		this(printStream, true);
 	}
 	
-	public DefaultReporter(PrintStream printStream, boolean showStacktrace) {
+	public DefaultReporter(final PrintStream printStream, final boolean showStacktrace) {
 		out = printStream;
 		this.showStacktrace = showStacktrace;
 	}
 
 	@Override
-	public void testStart(LambdaTestCase test) {
+	public void testStart(final LambdaTestCase test) {
 		// we ignore the start for now
 	}
 
-	private String indent(LambdaTestCase test) {
+	private String indent(final LambdaTestCase test) {
 		return indent(test.getSection().orNull());
 	}
 
-	private String indent(Section sectionOrNull) {
+	private String indent(final Section sectionOrNull) {
 		if (sectionOrNull == null) {
 			return "";
 		} else {
-			StringBuilder sb = new StringBuilder();
-			int size = sectionOrNull.getLevel();
+			final StringBuilder sb = new StringBuilder();
+			final int size = sectionOrNull.getLevel();
 			for (int i = 0; i < size; ++i) {
 				sb.append("  ");
 			}
@@ -56,7 +54,7 @@ public class DefaultReporter implements Reporter {
 		}
 	}
 
-	protected Optional<Section> findSameOrInParent(Section s1, Section s2) {
+	protected Optional<Section> findSameOrInParent(final Section s1, final Section s2) {
 		Optional<Section> found = Optional.none();
 		if (s1 != null) {
 			found = s1.findInParents(s2);
@@ -67,7 +65,7 @@ public class DefaultReporter implements Reporter {
 		return found;
 	}
 
-	protected void reportSectionUntilParent(String suiteName, Section section, Section parent) {
+	protected void reportSectionUntilParent(final String suiteName, final Section section, final Section parent) {
 		if (section == null || section.equals(parent))
 			return;
 		else {
@@ -76,22 +74,22 @@ public class DefaultReporter implements Reporter {
 		}
 	}
 
-	private void reportSectionOnce(LambdaTestCase test) {
+	private void reportSectionOnce(final LambdaTestCase test) {
 		final String suiteName = test.getSuiteName();
 
-		Section lastSection = lastSuiteSection.get(suiteName);
+		final Section lastSection = lastSuiteSection.get(suiteName);
 		lastSuiteSection.put(suiteName, test.getSection().orNull());
 
 		if (test.getSection().isDefined() && (lastSection == null || !lastSection.equals(test.getSection().orNull()))) {
-			Optional<Section> sameParent = findSameOrInParent(test.getSection().get(), lastSection);
+			final Optional<Section> sameParent = findSameOrInParent(test.getSection().get(), lastSection);
 			reportSectionUntilParent(test.getSuiteName(), test.getSection().orNull(), sameParent.orNull());
 		}
 	}
 
 	@Override
-	public void testSkipped(LambdaTestCase test, String message) {
+	public void testSkipped(final LambdaTestCase test, final String message) {
 		reportSectionOnce(test);
-		String testName = test.getName();
+		final String testName = test.getName();
 		if (PENDING_DEFAULT_MSG.equals(message)) {
 			out.println(indent(test) + ansi.fg(Color.YELLOW) + "- " + testName + " (pending)" + ansi.reset());
 		} else {
@@ -101,7 +99,7 @@ public class DefaultReporter implements Reporter {
 	}
 
 	@Override
-	public void testFailed(LambdaTestCase test, Throwable error) {
+	public void testFailed(final LambdaTestCase test, final Throwable error) {
 		reportSectionOnce(test);
 		try {
 			out.println(indent(test) + ansi.fg(Color.RED) + "- " + test.getName() + " *** FAILED ***");
@@ -130,7 +128,7 @@ public class DefaultReporter implements Reporter {
 	}
 
 	@Override
-	public void testSucceeded(LambdaTestCase test) {
+	public void testSucceeded(final LambdaTestCase test) {
 		reportSectionOnce(test);
 		out.println(indent(test) + ansi.fg(Color.GREEN) + "- " + test.getName() + ansi.reset());
 	}
@@ -143,7 +141,7 @@ public class DefaultReporter implements Reporter {
 	}
 
 	@Override
-	public void suiteWarning(String suiteName, String warning) {
+	public void suiteWarning(final String suiteName, final String warning) {
 		out.println(suiteName + ": " + warning);
 	}
 

@@ -17,7 +17,7 @@ public abstract class FreeSpecBase implements LambdaTest {
 
 	private static final ThreadLocal<Section> sectionHolder = new ThreadLocal<Section>();
 
-	private Reporter reporter = new DefaultReporter();
+	private Reporter reporter = new LoggingWrappingReporter(new DefaultReporter());
 	private final List<DefaultTestCase> testCases = new LinkedList<>();
 	private String suiteName = getClass().getName();
 	private boolean expectFailFast;
@@ -51,7 +51,7 @@ public abstract class FreeSpecBase implements LambdaTest {
 	}
 
 	@Override
-	public void setReporter(Reporter reporter) {
+	public void setReporter(final Reporter reporter) {
 		this.reporter = reporter;
 	}
 
@@ -63,8 +63,8 @@ public abstract class FreeSpecBase implements LambdaTest {
 	 * @param testCase
 	 *            The test case. It should return when it is successful, else it
 	 *            should throw an exception. Depending on the underlying test
-	 *            framework/runner, there are different exceptions types, which are
-	 *            recognized and handled. See in the concrete implementation
+	 *            framework/runner, there are different exceptions types, which
+	 *            are recognized and handled. See in the concrete implementation
 	 *            documentation for more details.
 	 */
 	public void test(final String name, final RunnableWithException testCase) {
@@ -79,8 +79,8 @@ public abstract class FreeSpecBase implements LambdaTest {
 	}
 
 	/**
-	 * Intercept exceptions of type <code>exceptionType</code> and fail if no such
-	 * exception or an exception with an incompatible type was thrown.
+	 * Intercept exceptions of type <code>exceptionType</code> and fail if no
+	 * such exception or an exception with an incompatible type was thrown.
 	 *
 	 * @param exceptionType
 	 *            The exception type to intercept.
@@ -88,8 +88,8 @@ public abstract class FreeSpecBase implements LambdaTest {
 	 *            The execution block which is expected to throw the exception.
 	 * @return The intercepted exception.
 	 * @throws Exception
-	 *             If no exception was thrown or an exception with an incompatible
-	 *             type was thrown.
+	 *             If no exception was thrown or an exception with an
+	 *             incompatible type was thrown.
 	 */
 	@Override
 	public <T extends Throwable> T intercept(final Class<T> exceptionType,
@@ -98,22 +98,22 @@ public abstract class FreeSpecBase implements LambdaTest {
 	}
 
 	/**
-	 * Intercept exceptions of type <code>exceptionType</code> and fail if no such
-	 * exception or an exception with an incompatible type was thrown or it the
-	 * message does not match a given pattern.
+	 * Intercept exceptions of type <code>exceptionType</code> and fail if no
+	 * such exception or an exception with an incompatible type was thrown or it
+	 * the message does not match a given pattern.
 	 *
 	 * @param exceptionType
 	 *            The exception type to intercept.
 	 * @param messageRegex
-	 *            A regular expression pattern to match the expected message. See
-	 *            {@link Pattern} for details.
+	 *            A regular expression pattern to match the expected message.
+	 *            See {@link Pattern} for details.
 	 * @param throwing
 	 *            The execution block which is expected to throw the exception.
 	 * @return The intercepted exception.
 	 * @throws Exception
-	 *             If no exception was thrown or an exception with an incompatible
-	 *             type was thrown or if the message of the exception did not match
-	 *             the expected pattern.
+	 *             If no exception was thrown or an exception with an
+	 *             incompatible type was thrown or if the message of the
+	 *             exception did not match the expected pattern.
 	 */
 	@Override
 	public <T extends Throwable> T intercept(final Class<T> exceptionType,
@@ -122,8 +122,8 @@ public abstract class FreeSpecBase implements LambdaTest {
 		return Intercept.intercept(exceptionType, messageRegex, throwing);
 	}
 
-	public void section(String section, Runnable code) {
-		Section parent = sectionHolder.get();
+	public void section(final String section, final Runnable code) {
+		final Section parent = sectionHolder.get();
 		sectionHolder.set(new Section(section, parent));
 		code.run();
 		if (parent == null) {

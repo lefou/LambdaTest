@@ -2,12 +2,13 @@ import org.sonatype.maven.polyglot.scala.model._
 import scala.collection.immutable.Seq
 
 val namespace = "de.tobiasroeser.lambdatest"
-val lambdatest = "de.tototec" % namespace % "0.3.2-SNAPSHOT"
+val lambdatest = "de.tototec" % namespace % "0.4.0-SNAPSHOT"
 
 object Deps {
   val testng = "org.testng" % "testng" % "6.11"
   val junit = "junit" % "junit" % "4.12"
   val slf4j = "org.slf4j" % "slf4j-api" % "1.7.25"
+  val logbackClassic = "ch.qos.logback" % "logback-classic" % "1.2.3"
 }
 
 object Plugins {
@@ -38,7 +39,13 @@ def bndExecution(id: String, classesDir: String) = Execution(
 
       ).mkString(",")
     }
-      |Import-Package: org.testng.*;version="6.8";resolution:=optional,org.junit.*;resolution:=optional,*;resolution:=optional
+      |Import-Package: ${
+      Seq(
+        """org.testng.*;version="6.8;resolution:=optional""",
+        """org.junit.*;resolution:=optional""",
+        """*;resolution:=optional"""
+      ).mkString(",")
+    }
       |""".stripMargin
   )
 )
@@ -120,7 +127,8 @@ Model(
   dependencies = Seq(
     Deps.testng % "provided",
     Deps.junit % "provided",
-    Deps.slf4j % "provided"
+    Deps.slf4j % "provided",
+    Deps.logbackClassic % "test"
   ),
   properties = Map(
     "project.build.sourceEncoding" -> "UTF-8",
