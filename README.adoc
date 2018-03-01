@@ -352,6 +352,14 @@ If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[
 
 == Changelog
 
+=== {master}
+
+* Detect logging framework (slf4j or java.util.logging) and log test progress
+* Added `internal.Logger` and `internal.LoggerFactory` to wrap either an
+  Slf4j-Logger or a JUL-Logger, both supporting Slf4j parameter placeholders.
+* Added new `LoggingWrappingReporter` which logs and delegates all methods to an
+  underlying Reporter.
+
 === LambdaTest 0.3.1 - 2018-02-13
 
 * `DefaultReporter` can now hide the stacktrace
