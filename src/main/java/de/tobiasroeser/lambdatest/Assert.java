@@ -6,9 +6,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import de.tobiasroeser.lambdatest.internal.LoggerFactory;
 import de.tobiasroeser.lambdatest.internal.Util;
 
 public class Assert {
@@ -16,25 +18,67 @@ public class Assert {
 	private static final List<Class<?>> LONG_TYPES = Arrays.asList(Byte.class, Short.class, Integer.class, Long.class);
 	private static final List<Class<?>> DOUBLE_TYPES = Arrays.asList(Float.class, Double.class);
 
-	private static void fail(final String msgOrNull, final String fallBackMsg, final Object... args) {
-		final String msg;
-		if (msgOrNull != null) {
-			msg = msgOrNull;
-		} else if (args == null || args.length == 0) {
-			msg = fallBackMsg;
+	private static void fail(final String userGivenMessageOrNull, final String msg, final Object... args) {
+		final String formatted;
+		if (args == null || args.length == 0) {
+			formatted = msg;
 		} else {
 			final Object[] niceArgs = new Object[args.length];
 			for (int i = 0; i < args.length; ++i) {
 				final Object arg = args[i];
-				if (arg != null && arg.getClass().isArray()) {
-					niceArgs[i] = Util.mkString(Arrays.asList((Object[]) arg), "[", ",", "]");
+				final Class<? extends Object> argClass = arg.getClass();
+				if (arg != null && argClass.isArray()) {
+					List<Object> argObjects = new LinkedList<Object>();
+					if (argClass.equals(boolean[].class)) {
+						for (final boolean b : (boolean[]) arg) {
+							argObjects.add(Boolean.valueOf(b).toString());
+						}
+					} else if (argClass.equals(byte[].class)) {
+						for (final byte b : (byte[]) arg) {
+							argObjects.add(Byte.valueOf(b).toString());
+						}
+					} else if (argClass.equals(short[].class)) {
+						for (final short b : (short[]) arg) {
+							argObjects.add(Short.valueOf(b).toString());
+						}
+					} else if (argClass.equals(int[].class)) {
+						for (final int b : (int[]) arg) {
+							argObjects.add(Integer.valueOf(b).toString());
+						}
+					} else if (argClass.equals(long[].class)) {
+						for (final long b : (long[]) arg) {
+							argObjects.add(Long.valueOf(b).toString());
+						}
+					} else if (argClass.equals(float[].class)) {
+						for (final float b : (float[]) arg) {
+							argObjects.add(Float.valueOf(b).toString());
+						}
+					} else if (argClass.equals(double[].class)) {
+						for (final double b : (double[]) arg) {
+							argObjects.add(Double.valueOf(b).toString());
+						}
+					} else if (argClass.equals(char[].class)) {
+						for (final char b : (char[]) arg) {
+							argObjects.add(Character.valueOf(b).toString());
+						}
+					} else {
+						argObjects = Arrays.asList((Object[]) arg);
+					}
+					niceArgs[i] = Util.mkString(argObjects, "[", ",", "]");
 				} else {
 					niceArgs[i] = arg;
 				}
 			}
-			msg = MessageFormat.format(fallBackMsg, niceArgs);
+			formatted = MessageFormat.format(msg, niceArgs);
 		}
-		throw new AssertionError(msg);
+		final String finalMsg;
+		if (userGivenMessageOrNull == null) {
+			finalMsg = formatted;
+		} else {
+			finalMsg = userGivenMessageOrNull + " -- Details: " + formatted;
+		}
+		LoggerFactory.getLogger(Assert.class).error("Assertion failed: {}", finalMsg);
+		throw new AssertionError(finalMsg);
 	}
 
 	// TODO: add asserts for all primitive parameter types
@@ -295,7 +339,7 @@ public class Assert {
 	 * 
 	 * @since 0.3.0
 	 */
-	public static void assertNull(Object actual, final String msg) {
+	public static void assertNull(final Object actual, final String msg) {
 		if (actual != null) {
 			fail(msg, "Actual [{0}] should be null", actual);
 		}
@@ -309,7 +353,7 @@ public class Assert {
 	 * 
 	 * @since 0.3.0
 	 */
-	public static void assertNull(Object actual) {
+	public static void assertNull(final Object actual) {
 		assertNull(actual, null);
 	}
 
@@ -323,7 +367,7 @@ public class Assert {
 	 * 
 	 * @since 0.3.0
 	 */
-	public static void assertNotNull(Object actual, final String msg) {
+	public static void assertNotNull(final Object actual, final String msg) {
 		if (actual == null) {
 			fail(msg, "Actual should be not null");
 		}
@@ -337,7 +381,7 @@ public class Assert {
 	 * 
 	 * @since 0.3.0
 	 */
-	public static void assertNotNull(Object actual) {
+	public static void assertNotNull(final Object actual) {
 		assertNotNull(actual, null);
 	}
 }

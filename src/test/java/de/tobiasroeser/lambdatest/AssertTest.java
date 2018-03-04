@@ -151,13 +151,167 @@ public class AssertTest {
 	}
 
 	@Test(dependsOnGroups = { "intercept" })
+	public void testAssertEqualsPrimitiveBooleanArray() throws Exception {
+		Assert.assertEquals(null, null);
+		Assert.assertEquals(new boolean[] {}, new boolean[] {});
+		Assert.assertEquals(new boolean[] {}, new Boolean[] {});
+		Assert.assertEquals(new Boolean[] {}, new boolean[] {});
+		Assert.assertEquals(new Boolean[] {}, new Boolean[] {});
+
+		final boolean[] a = new boolean[3];
+		final boolean[] b = new boolean[3];
+		final boolean[] c = new boolean[4];
+		final boolean[] d = new boolean[3];
+		d[2] = true;
+
+		runAssertEqualsPrimitiveCharArray(a, b, c, d);
+	}
+
+	@Test(dependsOnGroups = { "intercept" })
+	public void testAssertEqualsPrimitiveByteArray() throws Exception {
+		Assert.assertEquals(null, null);
+		Assert.assertEquals(new byte[] {}, new byte[] {});
+		Assert.assertEquals(new byte[] {}, new Byte[] {});
+		Assert.assertEquals(new Byte[] {}, new byte[] {});
+		Assert.assertEquals(new Byte[] {}, new Byte[] {});
+
+		final byte[] a = new byte[3];
+		final byte[] b = new byte[3];
+		final byte[] c = new byte[4];
+		final byte[] d = new byte[3];
+		d[2] = 1;
+
+		runAssertEqualsPrimitiveCharArray(a, b, c, d);
+	}
+
+	@Test(dependsOnGroups = { "intercept" })
+	public void testAssertEqualsPrimitiveShortArray() throws Exception {
+		Assert.assertEquals(null, null);
+		Assert.assertEquals(new short[] {}, new short[] {});
+		Assert.assertEquals(new short[] {}, new Short[] {});
+		Assert.assertEquals(new Short[] {}, new short[] {});
+		Assert.assertEquals(new Short[] {}, new Short[] {});
+
+		final short[] a = new short[3];
+		final short[] b = new short[3];
+		final short[] c = new short[4];
+		final short[] d = new short[3];
+		d[2] = 1;
+
+		runAssertEqualsPrimitiveCharArray(a, b, c, d);
+	}
+
+	@Test(dependsOnGroups = { "intercept" })
+	public void testAssertEqualsPrimitiveIntArray() throws Exception {
+		Assert.assertEquals(null, null);
+		Assert.assertEquals(new int[] {}, new int[] {});
+		Assert.assertEquals(new int[] {}, new Integer[] {});
+		Assert.assertEquals(new Integer[] {}, new int[] {});
+		Assert.assertEquals(new Integer[] {}, new Integer[] {});
+
+		final int[] a = new int[3];
+		final int[] b = new int[3];
+		final int[] c = new int[4];
+		final int[] d = new int[3];
+		d[2] = 1;
+
+		runAssertEqualsPrimitiveCharArray(a, b, c, d);
+	}
+
+	@Test(dependsOnGroups = { "intercept" })
+	public void testAssertEqualsPrimitiveLongArray() throws Exception {
+		Assert.assertEquals(null, null);
+		Assert.assertEquals(new long[] {}, new long[] {});
+		Assert.assertEquals(new long[] {}, new Long[] {});
+		Assert.assertEquals(new Long[] {}, new long[] {});
+		Assert.assertEquals(new Long[] {}, new Long[] {});
+
+		final long[] a = new long[3];
+		final long[] b = new long[3];
+		final long[] c = new long[4];
+		final long[] d = new long[3];
+		d[2] = 1;
+
+		runAssertEqualsPrimitiveCharArray(a, b, c, d);
+	}
+
+	@Test(dependsOnGroups = { "intercept" })
+	public void testAssertEqualsPrimitiveFloatArray() throws Exception {
+		Assert.assertEquals(null, null);
+		Assert.assertEquals(new float[] {}, new float[] {});
+		Assert.assertEquals(new float[] {}, new Float[] {});
+		Assert.assertEquals(new Float[] {}, new float[] {});
+		Assert.assertEquals(new Float[] {}, new Float[] {});
+
+		final float[] a = new float[3];
+		final float[] b = new float[3];
+		final float[] c = new float[4];
+		final float[] d = new float[3];
+		d[2] = 1f;
+
+		runAssertEqualsPrimitiveCharArray(a, b, c, d);
+	}
+
+	@Test(dependsOnGroups = { "intercept" })
+	public void testAssertEqualsPrimitiveDoubleArray() throws Exception {
+		Assert.assertEquals(null, null);
+		Assert.assertEquals(new double[] {}, new double[] {});
+		Assert.assertEquals(new double[] {}, new Double[] {});
+		Assert.assertEquals(new Double[] {}, new double[] {});
+		Assert.assertEquals(new Double[] {}, new Double[] {});
+
+		final double[] a = new double[3];
+		final double[] b = new double[3];
+		final double[] c = new double[4];
+		final double[] d = new double[3];
+		d[2] = 1d;
+
+		runAssertEqualsPrimitiveCharArray(a, b, c, d);
+	}
+
+	@Test(dependsOnGroups = { "intercept" })
+	public void testAssertEqualsPrimitiveCharArray() throws Exception {
+		Assert.assertEquals(null, null);
+		Assert.assertEquals(new char[] {}, new char[] {});
+		Assert.assertEquals(new char[] {}, new Character[] {});
+		Assert.assertEquals(new Character[] {}, new char[] {});
+		Assert.assertEquals(new Character[] {}, new Character[] {});
+
+		final char[] a = new char[3];
+		final char[] b = new char[3];
+		final char[] c = new char[4];
+		final char[] d = new char[3];
+		d[2] = 'X';
+
+		runAssertEqualsPrimitiveCharArray(a, b, c, d);
+	}
+
+	private void runAssertEqualsPrimitiveCharArray(final Object a, final Object b, final Object c, final Object d)
+			throws Exception {
+		Assert.assertEquals(a, b);
+		Assert.assertEquals(b, a);
+		intercept(AssertionError.class, () -> {
+			Assert.assertEquals(a, c);
+		});
+		intercept(AssertionError.class, () -> {
+			Assert.assertEquals(c, a);
+		});
+		intercept(AssertionError.class, () -> {
+			Assert.assertEquals(a, d);
+		});
+		intercept(AssertionError.class, () -> {
+			Assert.assertEquals(d, a);
+		});
+	}
+
+	@Test(dependsOnGroups = { "intercept" })
 	public void testAssertNull() throws Exception {
 		Assert.assertNull(null);
 		Assert.assertNull(null, "null should be ok");
 		intercept(AssertionError.class, "\\QActual [Some] should be null\\E", () -> {
 			Assert.assertNull("Some");
 		});
-		intercept(AssertionError.class, "\\QSome should be not ok\\E", () -> {
+		intercept(AssertionError.class, "\\QSome should be not ok -- Details: Actual [Some] should be null\\E", () -> {
 			Assert.assertNull("Some", "Some should be not ok");
 		});
 	}
@@ -169,7 +323,7 @@ public class AssertTest {
 		intercept(AssertionError.class, "\\QActual should be not null\\E", () -> {
 			Assert.assertNotNull(null);
 		});
-		intercept(AssertionError.class, "\\Qnull should be not ok\\E", () -> {
+		intercept(AssertionError.class, "\\Qnull should be not ok -- Details: Actual should be not null\\E", () -> {
 			Assert.assertNotNull(null, "null should be not ok");
 		});
 	}

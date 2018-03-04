@@ -359,6 +359,9 @@ If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[
   Slf4j-Logger or a JUL-Logger, both supporting Slf4j parameter placeholders.
 * Added new `LoggingWrappingReporter` which logs and delegates all methods to an
   underlying Reporter.
+* Changed handling of the "optional" msg-paramter in `Assert.assertXXX` and `Expect.expectXXX` methods.
+  If given, the msg-parameter does no longer replace the generic assertion message, instead both messages are shown, first the given message, then the generic message.
+* Better handle arrays with primitive types. Is some situations, a failing assert could throw a `ClassCastExcpetion`.
 
 === LambdaTest 0.3.1 - 2018-02-13
 
