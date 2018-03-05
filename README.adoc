@@ -1,8 +1,8 @@
 = Lambda Test
 :toc:
 :toc-placement: preamble
-:lambdatestversion: 0.3.1
-:documentationversion: 0.4.0-SNAPSHOT
+:lambdatestversion: 0.4.0
+:documentationversion: 0.4.0
 :testngversion: 6.11
 :junitversion: 4.12
 :lambdatest: LambdaTest
@@ -357,11 +357,16 @@ If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[
 * Detect logging framework (slf4j or java.util.logging) and log test progress
 * Added `internal.Logger` and `internal.LoggerFactory` to wrap either an
   Slf4j-Logger or a JUL-Logger, both supporting Slf4j parameter placeholders.
-* Added new `LoggingWrappingReporter` which logs and delegates all methods to an
-  underlying Reporter.
-* Changed handling of the "optional" msg-paramter in `Assert.assertXXX` and `Expect.expectXXX` methods.
-  If given, the msg-parameter does no longer replace the generic assertion message, instead both messages are shown, first the given message, then the generic message.
-* Better handle arrays with primitive types. Is some situations, a failing assert could throw a `ClassCastExcpetion`.
+* Added new `LoggingWrappingReporter` which logs to an logging frameorg and 
+  delegates all methods to an underlying Reporter.
+* Changed handling of the "optional" msg-paramter in `Assert.assertXXX` and
+  `Expect.expectXXX` methods.
+  If given, the msg-parameter does no longer replace the generic assertion
+  message, instead both messages are shown, first the given message, then the
+  generic message.
+* Better handle arrays with primitive types.
+* Fixed issue, where a failing assert could throw a `ClassCastExcpetion` for
+  primitive type arrays.
 
 === LambdaTest 0.3.1 - 2018-02-13
 
