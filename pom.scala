@@ -17,6 +17,7 @@ object Plugins {
   val clean = "org.apache.maven.plugins" % "maven-clean-plugin" % "3.0.0"
   val jar = "org.apache.maven.plugins" % "maven-jar-plugin" % "2.5"
   val retrolambda = "net.orfjackal.retrolambda" % "retrolambda-maven-plugin" % "1.8.0"
+  val reproducibleBuild = "io.github.zlika" % "reproducible-build-maven-plugin" % "0.6-SNAPSHOT"
   val translate = "io.takari.polyglot" % "polyglot-translate-plugin" % "0.2.1"
 }
 
@@ -212,6 +213,14 @@ Model(
             id = "jar-java6",
             classifier = "java6",
             classesDir = "${project.build.directory}/java6-classes"
+          )
+        )
+      ),
+      Plugin(
+        Plugins.reproducibleBuild,
+        executions = Seq(
+          Execution(
+            goals = Seq("strip-jar")
           )
         )
       )
