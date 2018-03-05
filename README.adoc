@@ -352,12 +352,12 @@ If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[
 
 == Changelog
 
-=== {master}
+=== LambdaTest 0.4.0 - 2018-03-05
 
 * Detect logging framework (slf4j or java.util.logging) and log test progress
 * Added `internal.Logger` and `internal.LoggerFactory` to wrap either an
   Slf4j-Logger or a JUL-Logger, both supporting Slf4j parameter placeholders.
-* Added new `LoggingWrappingReporter` which logs to an logging frameorg and 
+* Added new `LoggingWrappingReporter` which logs to an logging frameorg and
   delegates all methods to an underlying Reporter.
 * Changed handling of the "optional" msg-paramter in `Assert.assertXXX` and
   `Expect.expectXXX` methods.
