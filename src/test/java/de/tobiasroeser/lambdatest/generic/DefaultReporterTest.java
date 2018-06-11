@@ -12,15 +12,15 @@ public class DefaultReporterTest {
 
 	@DataProvider
 	public Object[][] dataFindSameOrInParent() {
-		Section s1 = new Section("s1", null);
-		Section s1a = new Section("s1a", s1);
-		Section s1a1 = new Section("s1a1", s1a);
-		Section s1a2 = new Section("s1a2", s1a);
-		Section s1b = new Section("s1b", s1);
-		Section s1b1 = new Section("s1b1", s1b);
-		Section s2 = new Section("s2", null);
-		Section s2a = new Section("s2a", s2);
-		Section s2a1 = new Section("s2a1", s2a);
+		final Section s1 = new Section("s1", null);
+		final Section s1a = new Section("s1a", s1);
+		final Section s1a1 = new Section("s1a1", s1a);
+		final Section s1a2 = new Section("s1a2", s1a);
+		final Section s1b = new Section("s1b", s1);
+		final Section s1b1 = new Section("s1b1", s1b);
+		final Section s2 = new Section("s2", null);
+		final Section s2a = new Section("s2a", s2);
+		final Section s2a1 = new Section("s2a1", s2a);
 
 		return new Object[][] {
 				new Object[] { null, null, null },
@@ -37,8 +37,8 @@ public class DefaultReporterTest {
 	}
 
 	@Test(dataProvider = "dataFindSameOrInParent")
-	public void testFindSameOrInParent(Section s1, Section s2, Section expected) {
-		DefaultReporter reporter = new DefaultReporter();
+	public void testFindSameOrInParent(final Section s1, final Section s2, final Section expected) {
+		final DefaultReporter reporter = new DefaultReporter();
 		Assert.assertEquals(reporter.findSameOrInParent(s1, s2), Optional.lift(expected));
 		Assert.assertEquals(reporter.findSameOrInParent(s2, s1), Optional.lift(expected));
 	}
