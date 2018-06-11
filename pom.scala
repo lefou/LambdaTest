@@ -18,7 +18,7 @@ object Plugins {
   val jar = "org.apache.maven.plugins" % "maven-jar-plugin" % "2.5"
   val retrolambda = "net.orfjackal.retrolambda" % "retrolambda-maven-plugin" % "1.8.0"
   val reproducibleBuild = "io.github.zlika" % "reproducible-build-maven-plugin" % "0.5.1"
-  val translate = "io.takari.polyglot" % "polyglot-translate-plugin" % "0.2.1"
+  val translate = "io.takari.polyglot" % "polyglot-translate-plugin" % "0.3.0"
 }
 
 def bndExecution(id: String, classesDir: String) = Execution(
