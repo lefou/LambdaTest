@@ -1,8 +1,8 @@
 = Lambda Test
 :toc:
 :toc-placement: preamble
-:lambdatestversion: 0.4.0
-:documentationversion: 0.5.0-SNAPSHOT
+:lambdatestversion: 0.5.0
+:documentationversion: 0.5.0
 :testngversion: 6.11
 :junitversion: 4.12
 :lambdatest: LambdaTest
@@ -19,12 +19,12 @@ Documentation for LambdaTest {documentationversion}.
 == Motivation
 
 When constrained to work in a Java-only toolchain, I really miss my http://scalatest.org[ScalaTest].
-I tried some lambda enabled test frameworks, but until now, did not find a suitable solution without compromizing the integration benefits.
+I tried some lambda enabled test frameworks, but until now (2014), did not find a suitable solution without compromizing the integration benefits.
 
 Thus I decided to write a small and generic test library that allows writing of functional test without reinventing the wheel.
 LambdaTest works on top of JUnit and TestNG, all you need is to add it to the test classpath.
 No further adaptions to your existing test setup are needed.
-You will immediately gain the joy of Lambda-enabled functional testing, better assertion messages and nicely colored output.
+You will immediately gain the joy of Lambda-enabled functional testing, better assertion messages and nicely colored output. 
 
 == Features
 
@@ -39,7 +39,7 @@ Most important features are:
 * Opt-in to not fail fast when using `expectXXX`-methods (see more than the first assertion error)
 * Easy to mark pending tests
 * Contains useful tools to work with temporary files and directories
-
+* Easy way to create proxies as mock dependencies
 
 == Download from Maven Central
 
@@ -431,7 +431,7 @@ If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[
 
 == Changelog
 
-=== LambdaTest 0.5.0 - not yet released
+=== LambdaTest 0.5.0 - 2018-06-11
 
 * Added `TestProxy` in package `de.tobiasroeser.lambdatest.proxy` to easily create mock dependencies / proxies.
 
