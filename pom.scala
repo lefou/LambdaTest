@@ -19,6 +19,7 @@ object Plugins {
   val retrolambda = "net.orfjackal.retrolambda" % "retrolambda-maven-plugin" % "1.8.0"
   val reproducibleBuild = "io.github.zlika" % "reproducible-build-maven-plugin" % "0.7"
   val translate = "io.takari.polyglot" % "polyglot-translate-plugin" % "0.3.0"
+  val javadoc = "org.apache.maven.plugins" % "maven-javadoc-plugin" % "3.0.1"
 }
 
 def bndExecution(id: String, classesDir: String) = Execution(
@@ -142,6 +143,16 @@ Model(
       Resource(
         directory = ".",
         includes = Seq("LICENSE.txt", "README.adoc")
+      )
+    ),
+    pluginManagement = PluginManagement(
+      plugins = Seq(
+        Plugin(
+          Plugins.javadoc,
+          configuration = Config(
+            failOnError = "false"
+          )
+        )
       )
     ),
     plugins = Seq(
