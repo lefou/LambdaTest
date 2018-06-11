@@ -241,6 +241,86 @@ To create and work with temporary files, you can use `TempFile.withTempDir` and 
 
 There are more useful methods in class `TempFile`, e.g. `readFile`, `writeToFile` and `deleteRecursive`. Please inspect the class for more information.
 
+== Using `TestProxy` to create mock objects
+
+The general idea in unit testing is to isolate a class under test from its dependencies. 
+
+An naive way to do this is to create dummy implementations, but this can be a very cumbersome, repetitive and booring task. Also it creates a lot of boilerplate code, which is also unnecessary hard to maintain.
+
+On the opposite end, you can  find very advanced mocking frameworks which will create mocks that can be trained and replayed, but the resulting code is no longer easy to understand and also adds lots of new dependencies. 
+
+Therefore in the middle there is `TestProxy` to easily create dummy proxy instances.
+By default, each invoked method on the proxy will throw an `UnsupportedOperationException` which a meaningful detail message.
+
+You can also provide explicit behaviour to your proxy by providing delegate objects.
+Whenever a method is invoked on the proxy, the given objects will be checked if they contain a method with a matching signature, and if so, that method will be invoked an behalf of the proxy.
+
+You can either use the more explicit way with `TestProxy.proxy(ClassLoader, List<Class<?>>, List<Object>)` or the more convenient and compact `TestProxy.proxy(Object...)` method.
+
+// TODO: example
+.Example Test using `TestProxy`
+[source,java]
+----
+package org.example;
+
+import static de.tobiasroeser.lambdatest.Expect.expectEquals;
+
+import de.tobiasroeser.lambdatest.proxy.TestProxy;
+import de.tobiasroeser.lambdatest.testng.FreeSpec;
+
+public class ExampleProxyTest extends FreeSpec {
+
+	interface Dependency {
+		String hello();
+	}
+
+	class ServiceWithDependency {
+		private Dependency dependency;
+
+		public ServiceWithDependency(final Dependency dependency) {
+			this.dependency = dependency;
+		}
+
+		String usingDependency() {
+			return dependency.hello();
+		}
+
+		String notUsingDependency() {
+			return "Have a nice day!";
+		}
+	}
+
+	public ExampleProxyTest() {
+
+			test("A proxy without delegates as optional dependencies should be sufficient", () -> {
+				final Dependency dep = TestProxy.proxy(Dependency.class);
+				final ServiceWithDependency service = new ServiceWithDependency(dep);
+				expectEquals(service.notUsingDependency(), "Have a nice day!");
+			});
+			
+			test("A proxy without delegates as mandatory dependencies should fail", () -> {
+				final Dependency dep = TestProxy.proxy(Dependency.class);
+				final ServiceWithDependency service = new ServiceWithDependency(dep);
+				intercept(UnsupportedOperationException.class, () -> {
+					service.usingDependency();
+				});
+			});
+			
+			test("A proxy with delegates as mandatory dependency should succeed", () -> {
+				final Dependency dep = TestProxy.proxy(Dependency.class, new Object() {
+					@SuppressWarnings("unused")
+					public String hello() {
+						return "Hello Proxy!";
+					}
+				});
+				final ServiceWithDependency service = new ServiceWithDependency(dep);
+				expectEquals(service.usingDependency(), "Hello Proxy!");
+			});
+      
+	}
+}
+----
+
 == Working on Java7 or below
 
 Even though writing functional test makes most sence under Java 8,
@@ -351,6 +431,10 @@ You can also find me on https://twitter.com/TobiasRoeser[Twitter as @TobiasRoese
 If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[GitHub]. This will help me to set my priorities. Thanks!
 
 == Changelog
+
+=== LambdaTest 0.5.0 - not yet released
+
+* Added `TestProxy` in package `de.tobiasroeser.lambdatest.proxy` to easily create mock dependencies / proxies.
 
 === LambdaTest 0.4.0 - 2018-03-05
 
