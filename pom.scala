@@ -2,7 +2,7 @@ import org.sonatype.maven.polyglot.scala.model._
 import scala.collection.immutable.Seq
 
 val namespace = "de.tobiasroeser.lambdatest"
-val lambdatest = "de.tototec" % namespace % "0.4.1-SNAPSHOT"
+val lambdatest = "de.tototec" % namespace % "0.5.0-SNAPSHOT"
 
 object Deps {
   val testng = "org.testng" % "testng" % "6.11"
@@ -36,7 +36,8 @@ def bndExecution(id: String, classesDir: String) = Execution(
         namespace,
         namespace + ".generic",
         namespace + ".junit",
-        namespace + ".testng"
+        namespace + ".testng",
+        namespace + ".proxy"
 
       ).mkString(",")
     }
