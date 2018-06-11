@@ -12,7 +12,7 @@ object Deps {
 }
 
 object Plugins {
-  val bnd = "biz.aQute.bnd" % "bnd-maven-plugin" % "3.5.0"
+  val bnd = "biz.aQute.bnd" % "bnd-maven-plugin" % "4.0.0"
   val bundle = "org.apache.felix" % "maven-bundle-plugin" % "3.3.0"
   val clean = "org.apache.maven.plugins" % "maven-clean-plugin" % "3.0.0"
   val jar = "org.apache.maven.plugins" % "maven-jar-plugin" % "2.5"
