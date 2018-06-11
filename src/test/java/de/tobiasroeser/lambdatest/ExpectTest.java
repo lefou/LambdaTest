@@ -186,14 +186,14 @@ public class ExpectTest {
 		Expect.setup(true);
 		Expect.expectNotNull(null);
 	}
-	
+
 	@Test
 	public void testAssertEqualsByteArray() throws Exception {
-		Assert.assertEquals(null, null);
-		Assert.assertEquals(new byte[] {}, new byte[] {});
-		Assert.assertEquals(new byte[] {}, new Byte[] {});
-		Assert.assertEquals(new Byte[] {}, new byte[] {});
-		Assert.assertEquals(new Byte[] {}, new Byte[] {});
+		assertEquals((Object) null, (Object) null);
+		assertEquals(new byte[] {}, new byte[] {});
+		assertEquals(new byte[] {}, new Byte[] {});
+		assertEquals(new Byte[] {}, new byte[] {});
+		assertEquals(new Byte[] {}, new Byte[] {});
 
 		final byte[] a = new byte[3];
 		final byte[] b = new byte[3];

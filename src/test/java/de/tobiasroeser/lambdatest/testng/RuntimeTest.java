@@ -29,7 +29,7 @@ public class RuntimeTest {
 		public SimpleFailureTest() {
 			if (runInnerTests) {
 				test("should fail", () -> {
-					Assert.assertTrue(false);
+					assertTrue(false);
 				});
 			}
 		}
@@ -61,7 +61,7 @@ public class RuntimeTest {
 		public SimpleSuccessTest() {
 			if (runInnerTests) {
 				test("should succeed", () -> {
-					Assert.assertTrue(true);
+					assertTrue(true);
 				});
 			}
 		}
