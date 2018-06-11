@@ -14,4 +14,4 @@ pom.xml: pom.scala
 	mvn -Pgen-pom-xml initialize
 
 eclipse: pom.xml
-	mvn initialize de.tototec:de.tobiasroeser.eclipse-maven-plugin:0.1.1-SNAPSHOT:eclipse
+	mvn initialize de.tototec:de.tobiasroeser.eclipse-maven-plugin:0.1.1:eclipse
