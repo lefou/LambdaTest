@@ -106,9 +106,6 @@ Model(
   name = "LambdaTest",
   description = "Lambda-enabled functional testing on top of JUnit and TestNG",
   url = "https://github.com/lefou/LambdaTest",
-  prerequisites = Prerequisites(
-    maven = "3.3.1"
-  ),
   developers = Seq(
     Developer(
       email = "le.petit.fou@web.de",
