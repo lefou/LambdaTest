@@ -1,12 +1,14 @@
 package de.tobiasroeser.lambdatest.proxy;
 
+import static de.tobiasroeser.lambdatest.internal.Util.filterType;
+import static de.tobiasroeser.lambdatest.internal.Util.find;
+import static de.tobiasroeser.lambdatest.internal.Util.mkString;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.tobiasroeser.lambdatest.F1;
 import de.tobiasroeser.lambdatest.Optional;
 
 /**
@@ -22,12 +24,12 @@ import de.tobiasroeser.lambdatest.Optional;
  * {@link #proxy(ClassLoader, List, List, List)} or the more compact
  * {@link #proxy(Object[]) proxy(Object..)} A new proxy class will be created
  * (using the optionally given ClassLoader) which implements all the given
- * interfaces. Additionally, you can provide one ore more delegate objects. Whenever a
- * method is invoked on the proxy, the given objects will be checked if they
- * contain a method with a matching signature, and if so, that method will be
- * invoked an behalf of the proxy. If there are no object(s) or no matching method
- * was found, an {@link UnsupportedOperationException} with a meaningful message
- * will be thrown.
+ * interfaces. Additionally, you can provide one ore more delegate objects.
+ * Whenever a method is invoked on the proxy, the given objects will be checked
+ * if they contain a method with a matching signature, and if so, that method
+ * will be invoked an behalf of the proxy. If there are no object(s) or no
+ * matching method was found, an {@link UnsupportedOperationException} with a
+ * meaningful message will be thrown.
  */
 public class TestProxy {
 
@@ -153,61 +155,6 @@ public class TestProxy {
 			}
 		}
 		return proxy(cl != null ? cl : TestProxy.class.getClassLoader(), interfaces, delegates, options);
-	}
-
-	// Utility methods below (copied from FList)
-
-	private static <T> List<T> filterType(final Iterable<?> source, final Class<T> type) {
-		final List<T> result = new LinkedList<T>();
-		for (final Object object : source) {
-			if (object != null && type.isAssignableFrom(object.getClass())) {
-				@SuppressWarnings("unchecked")
-				final T t = (T) object;
-				result.add(t);
-			}
-		}
-		return result;
-	}
-
-	private static <T> Optional<T> find(final Iterable<T> source, final F1<? super T, Boolean> accept) {
-		for (final T t : source) {
-			if (accept.apply(t)) {
-				return Optional.some(t);
-			}
-		}
-		return Optional.none();
-	}
-
-	private static String mkString(final Iterable<?> source, final String separator) {
-		return mkString(source, null, separator, null, null);
-	}
-
-	private static String mkString(final Object[] source, final String separator) {
-		return mkString(Arrays.asList(source), separator);
-	}
-
-	private static <T> String mkString(final Iterable<T> source, final String prefix, final String separator,
-			final String suffix, final F1<? super T, String> convert) {
-		final StringBuilder result = new StringBuilder();
-		if (prefix != null) {
-			result.append(prefix);
-		}
-		boolean sep = false;
-		for (final T t : source) {
-			if (sep && separator != null) {
-				result.append(separator);
-			}
-			sep = true;
-			if (convert != null) {
-				result.append(convert.apply(t));
-			} else {
-				result.append(t == null ? null : t.toString());
-			}
-		}
-		if (suffix != null) {
-			result.append(suffix);
-		}
-		return result.toString();
 	}
 
 }
