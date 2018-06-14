@@ -50,6 +50,10 @@ Most important features are:
 * Contains useful tools to work with temporary files and directories
 * Easy way to create proxies as mock dependencies
 
+== Documentation
+
+Beside this document, you can also read the https://lefou.github.io/LambdaTest/javadoc/{lambdatestversion}/[JavadDoc for LambdaTest {lambdatestversion}]
+
 == Download from Maven Central
 
 {lambdatest} is available from http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22de.tototec%22%20AND%20a%3A%22de.tobiasroeser.lambdatest%22[Maven central repository].
