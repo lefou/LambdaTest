@@ -7,6 +7,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * Value class representing an optional value.
+ *
+ * This class is immutable and thus thread-safe.
+ *
+ * @param <T>
+ *            The type of the optional value.
+ */
 public class Optional<T> implements Iterable<T>, Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -14,10 +22,17 @@ public class Optional<T> implements Iterable<T>, Serializable {
 	@SuppressWarnings("rawtypes")
 	private static final Optional<?> NONE = new Optional();
 
+	/**
+	 * Create a defined {@link Optional} with the given value `some`.
+	 */
 	public static <S> Optional<S> some(final S some) {
 		return new Optional<S>(some);
 	}
 
+	/**
+	 * Create an {@link Optional} from the given object or a `none` in case the
+	 * object was `null`.
+	 */
 	public static <S> Optional<S> lift(final S someOrNull) {
 		if (someOrNull == null) {
 			return new Optional<S>();

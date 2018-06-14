@@ -1,5 +1,10 @@
 package de.tobiasroeser.lambdatest;
 
+/**
+ * A Section represents some hierarchical organisation of test cases in a test
+ * suite.
+ *
+ */
 public class Section {
 
 	private final String name;

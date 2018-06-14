@@ -13,6 +13,12 @@ import java.util.Set;
 import de.tobiasroeser.lambdatest.internal.LoggerFactory;
 import de.tobiasroeser.lambdatest.internal.Util;
 
+/**
+ * Holds various assert-methods.
+ * 
+ * @see Expect
+ *
+ */
 public class Assert {
 
 	private static final List<Class<?>> LONG_TYPES = Arrays.asList(Byte.class, Short.class, Integer.class, Long.class);

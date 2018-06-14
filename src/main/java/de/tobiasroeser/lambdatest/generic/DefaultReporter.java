@@ -12,6 +12,10 @@ import de.tobiasroeser.lambdatest.Section;
 import de.tobiasroeser.lambdatest.internal.AnsiColor;
 import de.tobiasroeser.lambdatest.internal.AnsiColor.Color;
 
+/**
+ * The default reporter outputs to a PrintStream.
+ *
+ */
 public class DefaultReporter implements Reporter {
 
 	private final AnsiColor ansi = new AnsiColor();
@@ -19,14 +23,31 @@ public class DefaultReporter implements Reporter {
 	private final boolean showStacktrace;
 	private Map<String, Section> lastSuiteSection = new LinkedHashMap<>();
 
+	/**
+	 * Creates a reporter with output to STDOUT and full stacktraces.
+	 */
 	public DefaultReporter() {
 		this(System.out);
 	}
 
+	/**
+	 * Creates a reporter with full stacktraces.
+	 * 
+	 * @param printStream
+	 *            The {@link PrintStream} used to output.
+	 */
 	public DefaultReporter(final PrintStream printStream) {
 		this(printStream, true);
 	}
-	
+
+	/**
+	 * Creates a reporter.
+	 * 
+	 * @param printStream
+	 *            The {@link PrintStream} used to output.
+	 * @param showStacktrace
+	 *            If `true`, full stacktraces are included in the output.
+	 */
 	public DefaultReporter(final PrintStream printStream, final boolean showStacktrace) {
 		out = printStream;
 		this.showStacktrace = showStacktrace;

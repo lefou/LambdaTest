@@ -20,18 +20,19 @@ import de.tobiasroeser.lambdatest.internal.Util;
 /**
  * Inherit from this class to create a new TestNG test suite and use the
  * {@link FreeSpec#test} method to add test cases.
- * <p>
+ * 
  * It provides the following methods:
- * <ul>
- * <li>{@link FreeSpec#test(String, RunnableWithException)} to declare a new
- * test case
- * <li>{@link FreeSpec#intercept(Class, RunnableWithException)} and
+ * 
+ * - {@link FreeSpec#test(String, RunnableWithException)} to declare a new test
+ * case
+ * 
+ * - {@link FreeSpec#intercept(Class, RunnableWithException)} and
  * {@link FreeSpec#intercept(Class, String, RunnableWithException)} to intercept
- * and assert expected exceptions.</li>
- * <li>{@link FreeSpec#pending()} to mark a test case as pending. All code
- * before it's usage including asserts will be executed, but code after it will
- * be skipped. Thus you can mark a test also as work-in-progress.</li>
- * </ul>
+ * and assert expected exceptions.
+ * 
+ * - {@link FreeSpec#pending()} to mark a test case as pending. All code before
+ * it's usage including asserts will be executed, but code after it will be
+ * skipped. Thus you can mark a test also as work-in-progress.
  *
  * TODO: example
  *
@@ -76,8 +77,8 @@ public class FreeSpec extends FreeSpecBase implements LambdaTest {
 	}
 
 	/**
-	 * Marks the test as pending. Instructions after <code>pending()</code> will not
-	 * be executed and TestNG marks the test as skipped.
+	 * Marks the test as pending. Instructions after <code>pending()</code> will
+	 * not be executed and TestNG marks the test as skipped.
 	 */
 	@Override
 	public void pending() {
@@ -85,9 +86,9 @@ public class FreeSpec extends FreeSpecBase implements LambdaTest {
 	}
 
 	/**
-	 * Marks the test as pending and uses the given <code>reason</code> as message.
-	 * Instructions after <code>pending()</code> will not be executed and TestNG
-	 * marks the test as skipped.
+	 * Marks the test as pending and uses the given `reason` as
+	 * message. Instructions after `pending()` will not be executed
+	 * and TestNG marks the test as skipped.
 	 */
 	@Override
 	public void pending(final String reason) {

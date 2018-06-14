@@ -12,11 +12,15 @@ import java.io.PrintStream;
 import java.io.StringWriter;
 import java.io.Writer;
 
+/**
+ * Utility methods to work with temporary files and directories.
+ *
+ */
 public class TempFile {
 
 	/**
-	 * Apply <code>f</code> to a newly created temporary directory which is
-	 * deleted after <code>f</code> returns.
+	 * Apply `f` to a newly created temporary directory which is deleted after
+	 * `f` returns.
 	 */
 	public static <T> T withTempDir(final FunctionWithException<File, T> f) throws Exception {
 		File file = null;
@@ -34,8 +38,8 @@ public class TempFile {
 	}
 
 	/**
-	 * Apply <code>p</code> to a newly created temporary directory which is
-	 * deleted after <code>p</code> returns.
+	 * Apply `p` to a newly created temporary directory which is deleted after
+	 * `p` returns.
 	 *
 	 * This is the procedural equivalent of
 	 * {@link #withTempDir(FunctionWithException)}.
@@ -48,8 +52,8 @@ public class TempFile {
 	}
 
 	/**
-	 * Creates a new temporary file with the given content <code>content</code>.
-	 * After execution of the given function <code>f</code> the file is deleted.
+	 * Creates a new temporary file with the given content `content`. After
+	 * execution of the given function `f` the file is deleted.
 	 */
 	public static <T> T withTempFile(final String content, final FunctionWithException<File, T> f) throws Exception {
 		final File tmpFile = File.createTempFile("lambdatest", "");
@@ -60,9 +64,8 @@ public class TempFile {
 	}
 
 	/**
-	 * Creates a new temporary file with the given content <code>content</code>.
-	 * After execution of the given procedure <code>p</code> the file is
-	 * deleted.
+	 * Creates a new temporary file with the given content `content`. After
+	 * execution of the given procedure `p` the file is deleted.
 	 *
 	 * This is the procedural equivalent of
 	 * {@link #withTempFile(String, FunctionWithException)}.
@@ -90,6 +93,15 @@ public class TempFile {
 		}
 	}
 
+	/**
+	 * Reads the given text file and return it's contents.
+	 * 
+	 * @param file
+	 *            The text file.
+	 * @return The text contents.
+	 * @throws IOException
+	 *             In case the file is missing or can't be read as text.
+	 */
 	public static String readFile(final File file) throws IOException {
 		final Writer writer = new StringWriter();
 		try (
@@ -107,8 +119,8 @@ public class TempFile {
 	}
 
 	/**
-	 * Apply <code>f</code> to the given file <code>file</code> and delete the
-	 * file after the function returns.
+	 * Apply `f` to the given file `file` and delete the file after the function
+	 * returns.
 	 */
 	public static <T> T deleteAfter(final File file, final FunctionWithException<File, T> f) throws Exception {
 		try {
@@ -121,7 +133,7 @@ public class TempFile {
 	/**
 	 * Delete a file recursively.
 	 *
-	 * @return <code>true</code> if the deletion was successful.
+	 * @return `true` if the deletion was successful.
 	 */
 	public static boolean deleteRecursive(final File file) {
 		boolean result = true;

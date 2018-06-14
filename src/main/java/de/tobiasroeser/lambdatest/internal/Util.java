@@ -9,6 +9,11 @@ import java.util.List;
 import de.tobiasroeser.lambdatest.F1;
 import de.tobiasroeser.lambdatest.Optional;
 
+/**
+ * Some internally used helper methods, mostly copied from
+ * de.tototec.utils.functional project.
+ *
+ */
 public class Util {
 
 	public static <T> Optional<T> find(final Iterable<T> source,
@@ -43,7 +48,8 @@ public class Util {
 		return mkString(source, prefix, separator, suffix, null);
 	}
 
-	public static <T> String mkString(final T[] source, final String prefix, final String separator, final String suffix) {
+	public static <T> String mkString(final T[] source, final String prefix, final String separator,
+			final String suffix) {
 		return mkString(Arrays.asList(source), prefix, separator, suffix);
 	}
 
@@ -85,4 +91,5 @@ public class Util {
 		}
 		return result;
 	}
+
 }

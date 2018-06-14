@@ -2,6 +2,10 @@ package de.tobiasroeser.lambdatest;
 
 import java.util.regex.Pattern;
 
+/**
+ * 
+ *
+ */
 public class Intercept {
 
 	/**

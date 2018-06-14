@@ -13,6 +13,13 @@ import de.tobiasroeser.lambdatest.Reporter;
 import de.tobiasroeser.lambdatest.RunnableWithException;
 import de.tobiasroeser.lambdatest.Section;
 
+/**
+ * Common base class containing framework agnostic implementation of
+ * FreeSpec-like classes.
+ * 
+ * @see de.tobiasroeser.lambdatest.junit.FreeSpec
+ * @see de.tobiasroeser.lambdatest.testng.FreeSpec
+ */
 public abstract class FreeSpecBase implements LambdaTest {
 
 	private static final ThreadLocal<Section> sectionHolder = new ThreadLocal<Section>();

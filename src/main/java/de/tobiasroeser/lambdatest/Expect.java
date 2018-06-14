@@ -56,25 +56,26 @@ public class Expect {
 	}
 
 	/**
-	 * Expect that the given actual value is null.
+	 * Expect that the given actual value is `null`.
 	 * 
 	 * @param actual
 	 *            The actual value to check.
 	 * @param msg
-	 *            The message to print in case of a failed expectation.
+	 *            The additional message to print in case of a failed
+	 *            expectation.
 	 * 
 	 * @since 0.3.0
 	 */
 	public static void expectNull(final Object actual, String msg) {
 		try {
 			Assert.assertNull(actual, msg);
-		} catch (AssertionError e) {
+		} catch (final AssertionError e) {
 			handleAssertionError(e);
 		}
 	}
 
 	/**
-	 * Expect that the given actual value is null.
+	 * Expect that the given actual value is `null`.
 	 * 
 	 * @param actual
 	 *            The actual value to check.
@@ -86,25 +87,26 @@ public class Expect {
 	}
 
 	/**
-	 * Expect that the given actual value is not null.
+	 * Expect that the given actual value is not `null`.
 	 * 
 	 * @param actual
 	 *            The actual value to check.
 	 * @param msg
-	 *            The message to print in case of a failed expectation.
+	 *            The additional message to print in case of a failed
+	 *            expectation.
 	 * 
 	 * @since 0.3.0
 	 */
 	public static void expectNotNull(final Object actual, String msg) {
 		try {
 			Assert.assertNotNull(actual, msg);
-		} catch (AssertionError e) {
+		} catch (final AssertionError e) {
 			handleAssertionError(e);
 		}
 	}
 
 	/**
-	 * Expect that the given actual value is not null.
+	 * Expect that the given actual value is not `null`.
 	 * 
 	 * @param actual
 	 *            The actual value to check.
@@ -123,7 +125,7 @@ public class Expect {
 	 * @param expected
 	 *            The expected object.
 	 * @param msg
-	 *            A message to output if the expectation failed.
+	 *            An additional message to output if the expectation failed.
 	 */
 	public static void expectEquals(final Object actual, final Object expected, final String msg) {
 		try {
@@ -176,10 +178,24 @@ public class Expect {
 		}
 	}
 
+	/**
+	 * Expect that the given value is `true`.
+	 * 
+	 * @param actual
+	 *            The value th check.
+	 */
 	public static void expectTrue(final boolean actual) {
 		expectTrue(actual, null);
 	}
 
+	/**
+	 * Expect that the given value is `false`.
+	 * 
+	 * @param actual
+	 *            The value th check.
+	 * @param msg
+	 *            An additional message to output if the expectation failed.
+	 */
 	public static void expectFalse(final boolean actual, final String msg) {
 		try {
 			Assert.assertFalse(actual, msg);
@@ -193,14 +209,15 @@ public class Expect {
 	}
 
 	/**
-	 * Check for non-null {@link String} and provided further checks on the actual
-	 * string in a fluent API.
+	 * Check for non-null {@link String} and provided further checks on the
+	 * actual string in a fluent API.
 	 *
 	 * @see ExpectString
 	 *
 	 * @param actual
-	 * @return A {@link ExpectString} to express further expectations on the actual
-	 *         string.
+	 *            The string to check.
+	 * @return A {@link ExpectString} to express further expectations on the
+	 *         actual string.
 	 */
 	public static ExpectString expectString(final String actual) {
 		return new ExpectString(actual);

@@ -11,24 +11,23 @@ import de.tobiasroeser.lambdatest.Optional;
 
 /**
  * Utility class for simple mocking of interfaces.
- * <p>
+ *
  * The idea is, to isolate a class under test from its dependencies, by using
  * mocks or dummies as dependencies. As some interfaces are rather large and
  * contain many methods, implementing them for each test results in lots of
  * boilerplate code which is also hard to maintain.
- * <p>
- * This class provides an alternative way to easily create proxys with
- * {@link TestProxy#proxy}. You can either use the more explicit way with
- * {@link #proxy(ClassLoader, List, List)} or the more compact
- * {@link #proxy(Object...)}. With the optional Cloassloader, a new proxy clas
- * will be created which implements all the given interfaces. Additionally, you
- * can provide one ore more objects. Whenever a method is invoked on the proxy,
- * the given objects will be checked if they contain a method with a matching
- * signature, and if so, that method will be invoked an behalf of the proxy. If
- * er are no object(s) or no matching method was found, an
- * {@link UnsupportedOperationException} with a meaningful message will be
- * thrown.
- *
+ * 
+ * This class provides an alternative way to easily create proxys with the
+ * `proxy`-methods. You can either use the more explicit way with
+ * {@link #proxy(ClassLoader, List, List, List)} or the more compact
+ * {@link #proxy(Object[]) proxy(Object..)} A new proxy class will be created
+ * (using the optionally given ClassLoader) which implements all the given
+ * interfaces. Additionally, you can provide one ore more delegate objects. Whenever a
+ * method is invoked on the proxy, the given objects will be checked if they
+ * contain a method with a matching signature, and if so, that method will be
+ * invoked an behalf of the proxy. If there are no object(s) or no matching method
+ * was found, an {@link UnsupportedOperationException} with a meaningful message
+ * will be thrown.
  */
 public class TestProxy {
 

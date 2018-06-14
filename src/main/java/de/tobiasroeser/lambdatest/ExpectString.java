@@ -9,6 +9,10 @@ import java.util.Arrays;
 
 import de.tobiasroeser.lambdatest.internal.Util;
 
+/**
+ * Various self descriptive methods to check properties of a given string.
+ *
+ */
 public class ExpectString {
 
 	private String actual;

@@ -1,19 +1,16 @@
 package de.tobiasroeser.lambdatest.internal;
 
+/**
+ * Helper class to format ANSI colors in console output.
+ *
+ */
 public class AnsiColor {
 
 	private static final char ESC = 27;
 	private static final String CSI = ESC + "[";
 
 	public enum Color {
-		BLACK(0),
-		RED(1),
-		GREEN(2),
-		YELLOW(3),
-		BLUE(4),
-		MAGENTA(5),
-		CYAN(6),
-		WHITE(7);
+		BLACK(0), RED(1), GREEN(2), YELLOW(3), BLUE(4), MAGENTA(5), CYAN(6), WHITE(7);
 
 		public int code;
 
