@@ -3,8 +3,11 @@ import scala.collection.immutable.Seq
 
 val namespace = "de.tobiasroeser.lambdatest"
 val lambdatest = "de.tototec" % namespace % "0.5.1-SNAPSHOT"
+val gav = lambdatest
+val url = "https://github.com/lefou/LambdaTest"
 
 object Deps {
+  val asciiDoclet = "org.asciidoctor" % "asciidoclet" % "1.5.4"
   val testng = "org.testng" % "testng" % "6.11"
   val junit = "junit" % "junit" % "4.12"
   val slf4j = "org.slf4j" % "slf4j-api" % "1.7.25"
@@ -122,7 +125,7 @@ Model(
     )
   ),
   scm = Scm(
-    url = "https://github.com/lefou/LambdaTest"
+    url = url
   ),
   dependencies = Seq(
     Deps.testng % "provided",
@@ -223,6 +226,29 @@ Model(
             classifier = "java6",
             classesDir = "${project.build.directory}/java6-classes"
           )
+        )
+      ),
+      // Use Asciidoclet processor instead of standard Javadoc
+      Plugin(
+        Plugins.javadoc,
+        configuration = Config(
+          failOnError = "false",
+          source = "${maven.compiler.source}",
+          doclet = "org.asciidoctor.Asciidoclet",
+          docletArtifact = Config(
+            groupId = Deps.asciiDoclet.groupId.get,
+            artifactId = Deps.asciiDoclet.artifactId,
+            version = Deps.asciiDoclet.version.get
+          ),
+          overview = "README.adoc",
+          additionalparam = s"""--base-dir "$${project.basedir}"
+            | --attribute "name=${gav.artifactId}"
+						| --attribute "version=${gav.version.get}"
+						| --attribute "lambdatestversion=${gav.version.get}"
+						| --attribute "documentationversion=${gav.version.get}"
+						| --attribute "javasuffix=.html"
+						| --attribute "title-link=${url}[${gav.artifactId} ${gav.version.get}]"
+						| --attribute "env-asciidoclet=true"""".stripMargin
         )
       ),
       Plugin(
