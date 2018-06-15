@@ -27,7 +27,7 @@ Documentation for LambdaTest {documentationversion}.
 
 == Motivation
 
-When constrained to work in a Java-only toolchain, I really miss my http://scalatest.org[ScalaTest].
+When constrained to work in a Java-only toolchain, I really miss http://scalatest.org[ScalaTest].
 I tried some lambda enabled test frameworks, but until now (2014), did not find a suitable solution without compromizing the integration benefits.
 
 Thus I decided to write a small and generic test library that allows writing of functional test without reinventing the wheel.
