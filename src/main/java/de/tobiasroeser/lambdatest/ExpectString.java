@@ -27,82 +27,94 @@ public class ExpectString extends ExpectBase<ExpectString> {
 	}
 
 	public ExpectString isEqualIgnoreCase(final String expected) {
-		return check(actual.equalsIgnoreCase(expected), "Actual is not equal to \"{0}\" (ignore case), actual: \"{1}\"",
+		return check(actual.equalsIgnoreCase(expected),
+				"Actual string is not equal to \"{0}\" (ignore case), actual: \"{1}\"",
 				expected, actual);
 	}
 
 	public ExpectString isNotEqualIgnoreCase(final String expected) {
 		return check(!actual.equalsIgnoreCase(expected),
-				"Actual must not be equal to \"{0}\" (ignore case), actual: \"{1}\"", expected,
+				"Actual string must not be equal to \"{0}\" (ignore case), actual: \"{1}\"", expected,
 				actual);
 	}
 
 	public ExpectString startsWith(final String prefix) {
-		return check(actual.startsWith(prefix), "Actual does not start with \"{0}\", actual: \"{1}\"", prefix, actual);
+		return check(actual.startsWith(prefix), "Actual string does not start with \"{0}\", actual: \"{1}\"", prefix,
+				actual);
 	}
 
 	public ExpectString startsWithNot(final String prefix) {
-		return check(!actual.startsWith(prefix), "Actual must not start with \"{0}\", actual: \"{1}\"", prefix, actual);
+		return check(!actual.startsWith(prefix), "Actual string must not start with \"{0}\", actual: \"{1}\"", prefix,
+				actual);
 	}
 
 	public ExpectString endsWith(final String suffix) {
-		return check(actual.endsWith(suffix), "Actual does not end with \"{0}\", actual: \"{1}\"", suffix, actual);
+		return check(actual.endsWith(suffix), "Actual string does not end with \"{0}\", actual: \"{1}\"", suffix,
+				actual);
 	}
 
 	public ExpectString endsWithNot(final String suffix) {
-		return check(!actual.endsWith(suffix), "Actual must not end with \"{0}\", actual: \"{1}\"", suffix, actual);
+		return check(!actual.endsWith(suffix), "Actual string must not end with \"{0}\", actual: \"{1}\"", suffix,
+				actual);
 	}
 
 	public ExpectString matches(final String regex) {
-		return check(actual.matches(regex), "Actual does not match regular expression \"{0}\", actual: \"{1}\"", regex,
+		return check(actual.matches(regex), "Actual string does not match regular expression \"{0}\", actual: \"{1}\"",
+				regex,
 				actual);
 	}
 
 	public ExpectString matchesNot(final String regex) {
-		return check(!actual.matches(regex), "Actual must not match regular expression \"{0}\", actual: \"{1}\"", regex,
+		return check(!actual.matches(regex), "Actual string must not match regular expression \"{0}\", actual: \"{1}\"",
+				regex,
 				actual);
 	}
 
 	public ExpectString hasLength(final int length) {
-		return check(actual.length() == length, "Actual has not a length of {0}, actual: {1}", length, actual.length());
+		return check(actual.length() == length, "Actual string has not a length of {0}, actual: {1}", length,
+				actual.length());
 	}
 
 	public ExpectString hasLengthNot(final int length) {
-		return check(actual.length() != length, "Actual must not have a length of {0}, actual: {1}", length,
+		return check(actual.length() != length, "Actual string must not have a length of {0}, actual: {1}", length,
 				actual.length());
 	}
 
 	public ExpectString isLongerThan(final int length) {
-		return check(actual.length() > length, "Actual ist not longer than {0}, actual: {1}", length, actual.length());
+		return check(actual.length() > length, "Actual string is not longer than {0}, actual: {1}", length,
+				actual.length());
 	}
 
 	public ExpectString isShorterThan(final int length) {
-		return check(actual.length() < length, "Actual ist not shorter than {0}, actual: {1}", length, actual.length());
+		return check(actual.length() < length, "Actual string is not shorter than {0}, actual: {1}", length,
+				actual.length());
 	}
 
 	public ExpectString isTrimmed() {
-		return check(actual.equals(actual.trim()), "Actual ist not trimmed, actual: {0}", actual.length());
+		return check(actual.equals(actual.trim()), "Actual string is not trimmed, actual: {0}", actual.length());
 	}
 
 	public ExpectString contains(final String fragment) {
-		return check(actual.contains(fragment), "Actual does not contain fragment \"{0}\", actual: \"{1}\"", fragment,
+		return check(actual.contains(fragment), "Actual string does not contain fragment \"{0}\", actual: \"{1}\"",
+				fragment,
 				actual);
 	}
 
 	public ExpectString containsNot(final String fragment) {
-		return check(!actual.contains(fragment), "Actual must not contain fragment \"{0}\", actual: \"{1}\"", fragment,
+		return check(!actual.contains(fragment), "Actual string must not contain fragment \"{0}\", actual: \"{1}\"",
+				fragment,
 				actual);
 	}
 
 	public ExpectString containsIgnoreCase(final String fragment) {
 		return check(actual.toLowerCase().contains(fragment.toLowerCase()),
-				"Actual does not contain fragment \"{0}\" (ignore case), actual: \"{1}\"", fragment,
+				"Actual string does not contain fragment \"{0}\" (ignore case), actual: \"{1}\"", fragment,
 				actual);
 	}
 
 	public ExpectString containsIgnoreCaseNot(final String fragment) {
 		return check(!actual.toLowerCase().contains(fragment.toLowerCase()),
-				"Actual must not contain fragment \"{0}\" (ignore case), actual: \"{1}\"", fragment,
+				"Actual string must not contain fragment \"{0}\" (ignore case), actual: \"{1}\"", fragment,
 				actual);
 	}
 
