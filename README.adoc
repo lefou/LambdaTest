@@ -264,7 +264,7 @@ An naive way to do this is to create dummy implementations, but this can be a ve
 On the opposite end, you can  find very advanced mocking frameworks which will create mocks that can be trained and replayed, but the resulting code is no longer easy to understand and also adds lots of new dependencies.
 
 Therefore in the middle there is `TestProxy` to easily create dummy proxy instances.
-By default, each invoked method on the proxy will throw an `UnsupportedOperationException` which a meaningful detail message.
+By default, each invoked method on the proxy will throw an `UnsupportedOperationException` with a meaningful detail message.
 
 You can also provide explicit behaviour to your proxy by providing delegate objects.
 Whenever a method is invoked on the proxy, the given objects will be checked if they contain a method with a matching signature, and if so, that method will be invoked an behalf of the proxy.
