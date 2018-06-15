@@ -28,31 +28,30 @@ public class ExampleProxyTest extends FreeSpec {
 
 	public ExampleProxyTest() {
 
-			test("A proxy without delegates as optional dependencies should be sufficient", () -> {
-				final Dependency dep = TestProxy.proxy(Dependency.class);
-				final ServiceWithDependency service = new ServiceWithDependency(dep);
-				expectEquals(service.notUsingDependency(), "Have a nice day!");
+		test("A proxy without delegates as optional dependencies should be sufficient", () -> {
+			final Dependency dep = TestProxy.proxy(Dependency.class);
+			final ServiceWithDependency service = new ServiceWithDependency(dep);
+			expectEquals(service.notUsingDependency(), "Have a nice day!");
+		});
+
+		test("A proxy without delegates as mandatory dependencies should fail", () -> {
+			final Dependency dep = TestProxy.proxy(Dependency.class);
+			final ServiceWithDependency service = new ServiceWithDependency(dep);
+			intercept(UnsupportedOperationException.class, () -> {
+				service.usingDependency();
 			});
-			
-			test("A proxy without delegates as mandatory dependencies should fail", () -> {
-				final Dependency dep = TestProxy.proxy(Dependency.class);
-				final ServiceWithDependency service = new ServiceWithDependency(dep);
-				intercept(UnsupportedOperationException.class, () -> {
-					service.usingDependency();
-				});
+		});
+
+		test("A proxy with delegates as mandatory dependency should succeed", () -> {
+			final Dependency dep = TestProxy.proxy(Dependency.class, new Object() {
+				@SuppressWarnings("unused")
+				public String hello() {
+					return "Hello Proxy!";
+				}
 			});
-			
-			test("A proxy with delegates as mandatory dependency should succeed", () -> {
-				final Dependency dep = TestProxy.proxy(Dependency.class, new Object() {
-					@SuppressWarnings("unused")
-					public String hello() {
-						return "Hello Proxy!";
-					}
-				});
-				final ServiceWithDependency service = new ServiceWithDependency(dep);
-				expectEquals(service.usingDependency(), "Hello Proxy!");
-			});
-			
+			final ServiceWithDependency service = new ServiceWithDependency(dep);
+			expectEquals(service.usingDependency(), "Hello Proxy!");
+		});
 
 	}
 
