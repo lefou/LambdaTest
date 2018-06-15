@@ -3,3 +3,6 @@
 /pom.xml
 /mvn-deploy-settings.xml
 /target-ide/
+/.mvn.polyglot/
+/gh-pages/
+
