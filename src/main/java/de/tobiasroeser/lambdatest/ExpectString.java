@@ -1,6 +1,5 @@
 package de.tobiasroeser.lambdatest;
 
-import de.tobiasroeser.lambdatest.internal.ExpectCommon;
 import static de.tobiasroeser.lambdatest.Expect.expectEquals;
 import static de.tobiasroeser.lambdatest.Expect.expectNotEquals;
 
@@ -8,18 +7,13 @@ import static de.tobiasroeser.lambdatest.Expect.expectNotEquals;
  * Various self descriptive methods to check properties of a given string.
  *
  */
-public class ExpectString {
+public class ExpectString extends ExpectBase<ExpectString> {
 
 	private String actual;
 
 	public ExpectString(final String actual) {
 		check(actual != null, "Actual is not a String but null");
 		this.actual = actual;
-	}
-
-	private ExpectString check(final boolean cond, final String msg, final Object... args) {
-		ExpectCommon.internalCheck(cond, msg, args);
-		return this;
 	}
 
 	public ExpectString isEqual(final String expected) {

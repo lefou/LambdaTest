@@ -6,10 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import de.tobiasroeser.lambdatest.internal.ExpectCommon;
 import de.tobiasroeser.lambdatest.internal.Util;
 
-public class ExpectCollection<T> {
+public class ExpectCollection<T> extends ExpectBase<ExpectCollection<T>> {
 	final private Collection<T> actual;
 
 	public ExpectCollection(final Collection<T> actual) {
@@ -21,10 +20,6 @@ public class ExpectCollection<T> {
 		return new ExpectCollection<T>(actual);
 	}
 	
-	private ExpectCollection<T> check(final boolean cond, final String msg, final Object... args) {
-		ExpectCommon.internalCheck(cond,msg,args);
-		return this;
-	}
 	public ExpectCollection<T> isEmpty() {
 		return check(actual.isEmpty(), "Is not empty and has a size of {0}.", actual.size());
 	}
