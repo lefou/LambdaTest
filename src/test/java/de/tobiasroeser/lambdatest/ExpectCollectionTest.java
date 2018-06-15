@@ -10,18 +10,12 @@ import static org.testng.Assert.assertThrows;
 public class ExpectCollectionTest extends FreeSpec {
 	public ExpectCollectionTest() {
 		section("ExpectCollection size tests", () -> {
-			test("empty collection", () ->
-					expectCollection(Arrays.asList()).isEmpty()
-			);
-			test("test for correct size", () ->
-					expectCollection(Arrays.asList(1)).hasSize(1)
-			);
+			test("empty collection", () -> expectCollection(Arrays.asList()).isEmpty());
+			test("test for correct size", () -> expectCollection(Arrays.asList(1)).hasSize(1));
 		});
 
 		section("ExpectCollection contains tests", () -> {
-			test("empty collection contains nothing", () ->
-					expectCollection(Arrays.asList()).containsNot(1)
-			);
+			test("empty collection contains nothing", () -> expectCollection(Arrays.asList()).containsNot(1));
 			test("[1,2,3] contains 1, 2 and 3", () -> {
 				expectCollection(Arrays.asList(1, 2, 3)).contains(1);
 				expectCollection(Arrays.asList(1, 2, 3)).contains(2);
@@ -37,12 +31,8 @@ public class ExpectCollectionTest extends FreeSpec {
 		});
 
 		section("ExpectCollection duplicates tests", () -> {
-			test("empty list has no duplicates", () ->
-					expectCollection(Arrays.asList()).hasNoDuplicates()
-			);
-			test("[1,2,3] has no duplicates", () ->
-					expectCollection(Arrays.asList(1, 2, 3)).hasNoDuplicates()
-			);
+			test("empty list has no duplicates", () -> expectCollection(Arrays.asList()).hasNoDuplicates());
+			test("[1,2,3] has no duplicates", () -> expectCollection(Arrays.asList(1, 2, 3)).hasNoDuplicates());
 		});
 
 	}

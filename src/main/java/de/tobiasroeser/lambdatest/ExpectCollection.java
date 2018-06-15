@@ -16,13 +16,14 @@ public class ExpectCollection<T> extends ExpectBase<ExpectCollection<T>> {
 		this.actual = actual;
 	}
 
-	public static <T> ExpectCollection<T> expectCollection(Collection<T> actual){
+	public static <T> ExpectCollection<T> expectCollection(Collection<T> actual) {
 		return new ExpectCollection<T>(actual);
 	}
-	
+
 	public ExpectCollection<T> isEmpty() {
 		return check(actual.isEmpty(), "Is not empty and has a size of {0}.", actual.size());
 	}
+
 	public ExpectCollection<T> hasSize(int expected) {
 		return check(actual.size() == expected, "Actual has not a size of {0}, actual: {1}", expected, actual.size());
 	}
@@ -30,22 +31,23 @@ public class ExpectCollection<T> extends ExpectBase<ExpectCollection<T>> {
 	public ExpectCollection<T> hasNoDuplicates() {
 		final HashSet<T> set = new HashSet<>(actual);
 		final boolean cond = actual.size() == set.size();
-		if(cond) return this;
+		if (cond)
+			return this;
 
-		final List<String> duplicatesAsString= new LinkedList<>();
+		final List<String> duplicatesAsString = new LinkedList<>();
 		final Set<T> seen = new HashSet<>();
 
 		int pos = 0;
-		for(T e : actual) {
-			if(seen.contains(e)) {
-				duplicatesAsString.add("["+pos+ "] = " + e );
+		for (final T e : actual) {
+			if (seen.contains(e)) {
+				duplicatesAsString.add("[" + pos + "] = " + e);
 			} else {
 				seen.add(e);
 			}
 			pos++;
 		}
 
-		return check(false, "Actual has duplicates:", Util.mkString(duplicatesAsString,"{",",","}"));
+		return check(false, "Actual has duplicates:", Util.mkString(duplicatesAsString, "{", ",", "}"));
 	}
 
 	public ExpectCollection<T> contains(final T fragment) {
@@ -57,7 +59,5 @@ public class ExpectCollection<T> extends ExpectBase<ExpectCollection<T>> {
 		return check(!actual.contains(fragment), "Actual must not contain element \"{0}\", actual: \"{1}\"", fragment,
 				actual);
 	}
-	
-	
-	
+
 }
