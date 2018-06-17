@@ -13,7 +13,8 @@ public class ExpectCollectionTest extends FreeSpec {
 
 		section("ExpectCollection.isEmpty", () -> {
 			test("for empty collection", () -> expectCollection(Collections.emptyList()).isEmpty());
-			testFail("for non-empty collection should fail", () -> expectCollection(Collections.singletonList("1")).isEmpty());
+			testFail("for non-empty collection should fail",
+					() -> expectCollection(Collections.singletonList("1")).isEmpty());
 		});
 
 		section("ExpectCollection.hasSize", () -> {
@@ -39,7 +40,8 @@ public class ExpectCollectionTest extends FreeSpec {
 
 		section("ExpectCollection.containsNot", () -> {
 			test("empty collection contains nothing", () -> expectCollection(Collections.emptyList()).containsNot(1));
-			testFail("should fail for contained elements", () -> expectCollection(Collections.singletonList(1)).containsNot(1));
+			testFail("should fail for contained elements",
+					() -> expectCollection(Collections.singletonList(1)).containsNot(1));
 
 			test("[1,2,3] contains 1, 2 and 3", () -> expectCollection(Arrays.asList(1, 2, 3)).containsNot(0));
 			test("[a,b,c] contains a, b and c", () -> expectCollection(Arrays.asList("a", "b", "c")).containsNot("x"));
