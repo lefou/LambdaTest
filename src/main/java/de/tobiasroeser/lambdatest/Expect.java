@@ -1,5 +1,6 @@
 package de.tobiasroeser.lambdatest;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -221,6 +222,30 @@ public class Expect {
 	 */
 	public static ExpectString expectString(final String actual) {
 		return new ExpectString(actual);
+	}
+
+
+	/**
+	 * Check for non-null {@link Collection} and provided further checks on the
+	 * actual collection in a fluent API.
+	 *
+	 * @see ExpectCollection
+	 *
+	 * @param actual
+	 *            The Collection<T> to check.
+	 * @return A {@link ExpectCollection} to express further expectations on the
+	 *         actual collection.
+	 */
+	public static <T> ExpectCollection<T> expectCollection(final Collection<T> actual) {
+		return new ExpectCollection<>(actual);
+	}
+
+	public static ExpectString expect(final String actual) {
+		return expectString(actual);
+	}
+
+	public static <T> ExpectCollection<T> expect(final Collection<T> actual) {
+		return expectCollection(actual);
 	}
 
 	public static <T extends Throwable> T intercept(final Class<T> exceptionType,
