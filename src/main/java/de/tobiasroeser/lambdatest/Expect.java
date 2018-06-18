@@ -3,6 +3,7 @@ package de.tobiasroeser.lambdatest;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import de.tobiasroeser.lambdatest.internal.Util;
 
@@ -240,12 +241,20 @@ public class Expect {
 		return new ExpectCollection<>(actual);
 	}
 
+	public static <K,V> ExpectMap<K,V>  expectMap(Map<K,V> actual) {
+		return new ExpectMap<>(actual);
+	}
+
 	public static ExpectString expect(final String actual) {
 		return expectString(actual);
 	}
 
 	public static <T> ExpectCollection<T> expect(final Collection<T> actual) {
 		return expectCollection(actual);
+	}
+
+	public static <K,V> ExpectMap<K,V> expect(final Map<K,V> actual) {
+		return new ExpectMap<>(actual);
 	}
 
 	public static <T extends Throwable> T intercept(final Class<T> exceptionType,

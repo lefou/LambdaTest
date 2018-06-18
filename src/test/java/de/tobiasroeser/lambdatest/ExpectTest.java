@@ -220,4 +220,10 @@ public class ExpectTest {
 	public void testExpectOverloadForCollection() {
 		Expect.expect(Collections.singleton("abc")).hasSize(1);
 	}
+
+	@Test
+	public void testExpectOverloadForMap() {
+		Expect.expect(Collections.singletonMap("a", 1L)).containsKey("a");
+		Expect.expect(Collections.singletonMap("a", 1L)).containsNotKey("b");
+	}
 }

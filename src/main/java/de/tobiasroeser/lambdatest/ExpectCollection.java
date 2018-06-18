@@ -17,7 +17,7 @@ public class ExpectCollection<T> extends ExpectBase<ExpectCollection<T>> {
 	}
 
 	public static <T> ExpectCollection<T> expectCollection(Collection<T> actual) {
-		return new ExpectCollection<T>(actual);
+		return new ExpectCollection<>(actual);
 	}
 
 	public ExpectCollection<T> isEmpty() {
