@@ -1,12 +1,11 @@
 package de.tobiasroeser.lambdatest;
 
+import static de.tobiasroeser.lambdatest.ExpectCollection.expectCollection;
+
 import java.util.Arrays;
 import java.util.Collections;
 
 import de.tobiasroeser.lambdatest.testng.FreeSpec;
-import org.testng.annotations.Test;
-import static de.tobiasroeser.lambdatest.ExpectCollection.expectCollection;
-import static org.testng.Assert.assertThrows;
 
 public class ExpectCollectionTest extends FreeSpec {
 
@@ -27,6 +26,8 @@ public class ExpectCollectionTest extends FreeSpec {
 			test("for empty collection", () -> expectCollection(Collections.emptyList()).hasSize(0));
 			test("non-empty collection", () -> expectCollection(Arrays.asList(1, 2, 3)).hasSize(3));
 			testFail("wrong size should fail", () -> expectCollection(Arrays.asList("1")).hasSize(2));
+			testFail("negative size should fail with IllegalArgumentException", IllegalArgumentException.class,
+					() -> expectCollection(Arrays.asList("1")).hasSize(-1));
 		});
 
 		section("ExpectCollection.contains", () -> {
@@ -66,7 +67,11 @@ public class ExpectCollectionTest extends FreeSpec {
 	}
 
 	private void testFail(String testName, RunnableWithException testCase) {
-		test(testName, () -> intercept(AssertionError.class, testCase));
+		testFail(testName, AssertionError.class, testCase);
+	}
+
+	private void testFail(String testName, Class<? extends Throwable> exType, RunnableWithException testCase) {
+		test(testName, () -> intercept(exType, testCase));
 	}
 
 }

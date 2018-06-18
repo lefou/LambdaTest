@@ -24,9 +24,13 @@ public class ExpectCollection<T> extends ExpectBase<ExpectCollection<T>> {
 		return check(actual.isEmpty(), "Actual collection is not empty but has a size of {0}.", actual.size());
 	}
 
-	public ExpectCollection<T> hasSize(int expected) {
-		return check(actual.size() == expected, "Actual collection has not expected size of {0}, actual: {1}", expected,
-				actual.size());
+	public ExpectCollection<T> hasSize(int expectedCount) {
+		if (expectedCount < 0) {
+			throw new IllegalArgumentException("Parameter `count` must be not negative");
+		}
+		return check(actual.size() == expectedCount,
+				"Actual collection has not expected size of {0}, actual: {1}", expectedCount, actual.size());
+	}
 	}
 
 	public ExpectCollection<T> hasNoDuplicates() {
