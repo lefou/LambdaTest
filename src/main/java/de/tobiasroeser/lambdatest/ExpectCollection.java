@@ -2,6 +2,7 @@ package de.tobiasroeser.lambdatest;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -31,16 +32,34 @@ public class ExpectCollection<T> extends ExpectBase<ExpectCollection<T>> {
 		return check(actual.size() == expectedCount,
 				"Actual collection has not expected size of {0}, actual: {1}", expectedCount, actual.size());
 	}
+
+	/**
+	 * Check, that the collection has `count` duplicates.
+	 * 
+	 * @param expectedCount
+	 *            The number of expected duplicates.
+	 * @return
+	 */
+	public ExpectCollection<T> hasDuplicates(int expectedCount) {
+		if (expectedCount < 0) {
+			throw new IllegalArgumentException("Parameter `count` must be not negative");
+		}
+		final HashSet<T> set = new LinkedHashSet<>(actual);
+		final int duplicates = actual.size() - set.size();
+		return check(duplicates == expectedCount,
+				"Actual collection has not the expected count of duplicates of {0}, actual: {1}",
+				expectedCount, duplicates);
 	}
 
 	public ExpectCollection<T> hasNoDuplicates() {
-		final HashSet<T> set = new HashSet<>(actual);
+		final HashSet<T> set = new LinkedHashSet<>(actual);
 		final boolean cond = actual.size() == set.size();
-		if (cond)
+		if (cond) {
 			return this;
+		}
 
 		final List<String> duplicatesAsString = new LinkedList<>();
-		final Set<T> seen = new HashSet<>();
+		final Set<T> seen = new LinkedHashSet<>();
 
 		int pos = 0;
 		for (final T e : actual) {
@@ -52,7 +71,7 @@ public class ExpectCollection<T> extends ExpectBase<ExpectCollection<T>> {
 			pos++;
 		}
 
-		return check(false, "Actual collection has duplicates:", Util.mkString(duplicatesAsString, "{", ",", "}"));
+		return check(false, "Actual collection has duplicates: ", Util.mkString(duplicatesAsString, "{", ",", "}"));
 	}
 
 	public ExpectCollection<T> contains(final T fragment) {

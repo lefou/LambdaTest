@@ -64,6 +64,27 @@ public class ExpectCollectionTest extends FreeSpec {
 			});
 		});
 
+		section("ExpectCollection.hasDuplicates", () -> {
+			testFail("negative duplicate count should fail", IllegalArgumentException.class,
+					() -> expectCollection(Arrays.asList(1)).hasDuplicates(-1));
+
+			section("ExpectCollection.hasDuplicates(0)", () -> {
+				test("empty list has no duplicates", () -> expectCollection(Arrays.asList()).hasNoDuplicates());
+				test("[1,2,3] has no duplicates", () -> expectCollection(Arrays.asList(1, 2, 3)).hasNoDuplicates());
+				testFail("for collection with dulicates should fail", () -> {
+					expectCollection(Arrays.asList(1, 2, 1)).hasNoDuplicates();
+					expectCollection(Arrays.asList(2, 2)).hasNoDuplicates();
+				});
+			});
+			section("ExpectCollection.hasDuplicates(n > 0)", () -> {
+				testFail("always fails for empty list", () -> expectCollection(Arrays.asList()).hasDuplicates(1));
+				testFail("[1,2,3] has not 1 duplicates",
+						() -> expectCollection(Arrays.asList(1, 2, 3)).hasDuplicates(1));
+				test("[1,2,3,1] has 1 duplicates", () -> expectCollection(Arrays.asList(1, 2, 3, 1)).hasDuplicates(1));
+				test("[1,2,2,1] has 2 duplicates", () -> expectCollection(Arrays.asList(1, 2, 2, 1)).hasDuplicates(2));
+			});
+		});
+
 	}
 
 	private void testFail(String testName, RunnableWithException testCase) {
