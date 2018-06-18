@@ -16,6 +16,15 @@ import de.tobiasroeser.lambdatest.Optional;
  */
 public class Util {
 
+	public static <T> boolean exists(final Iterable<T> source, final F1<? super T, Boolean> exists) {
+		for (final T t : source) {
+			if (exists.apply(t)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static <T> List<T> filterType(final Iterable<?> source, final Class<T> type) {
 		final List<T> result = new LinkedList<T>();
 		for (final Object object : source) {
@@ -36,6 +45,15 @@ public class Util {
 			}
 		}
 		return Optional.none();
+	}
+
+	public static <T> boolean forall(final Iterable<T> source, final F1<? super T, Boolean> forall) {
+		for (final T t : source) {
+			if (!forall.apply(t)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public static <R, T> List<R> map(final Iterable<T> source, final F1<? super T, ? extends R> convert) {
