@@ -58,7 +58,7 @@ public class ExpectCollectionTest extends FreeSpec {
 			test("[a1,a2] contains a1", () -> expectCollection(Arrays.asList(a1, a2)).contains(a1));
 			test("[a1,a2] contains a2", () -> expectCollection(Arrays.asList(a1, a2)).contains(a2));
 			testFail("[a1,a2] contains a3 should fail", () -> expectCollection(Arrays.asList(a1, a2)).contains(a3));
-		
+
 			// Proxies fail equality
 			final TypeA b1 = TestProxy.proxy(TypeA.class, new Object() {
 				@Override
@@ -72,12 +72,14 @@ public class ExpectCollectionTest extends FreeSpec {
 					return super.equals(obj);
 				}
 			});
-			testFail("[b1,b2] contains b1 fails with proxies", () -> expectCollection(Arrays.asList(b1, b2)).contains(b1));
-			testFail("[b1,b2] contains b2 fails with proxies", () -> expectCollection(Arrays.asList(b1, b2)).contains(b2));
+			testFail("[b1,b2] contains b1 fails with proxies",
+					() -> expectCollection(Arrays.asList(b1, b2)).contains(b1));
+			testFail("[b1,b2] contains b2 fails with proxies",
+					() -> expectCollection(Arrays.asList(b1, b2)).contains(b2));
 		});
 
 		section("ExpectCollection.containsIdentical", () -> {
-			
+
 			// Reference
 			final TypeA a1 = new TypeA() {
 			};
@@ -88,14 +90,15 @@ public class ExpectCollectionTest extends FreeSpec {
 			test("[a1,a2] contains a1", () -> expectCollection(Arrays.asList(a1, a2)).containsIdentical(a1));
 			test("[a1,a2] contains a2", () -> expectCollection(Arrays.asList(a1, a2)).containsIdentical(a2));
 			testFail("[a1,a2] contains not a3", () -> expectCollection(Arrays.asList(a1, a2)).containsIdentical(a3));
-			
+
 			// Proxies fail equality, but not identity
 			final TypeA b1 = TestProxy.proxy(TypeA.class);
 			final TypeA b2 = TestProxy.proxy(TypeA.class);
 			final TypeA b3 = TestProxy.proxy(TypeA.class);
 			test("[b1,b2] contains b1", () -> expectCollection(Arrays.asList(b1, b2)).containsIdentical(b1));
 			test("[b1,b2] contains b2", () -> expectCollection(Arrays.asList(b1, b2)).containsIdentical(b2));
-			testFail("[b1,b2] contains b3 should fail", () -> expectCollection(Arrays.asList(b1, b2)).containsIdentical(b3));
+			testFail("[b1,b2] contains b3 should fail",
+					() -> expectCollection(Arrays.asList(b1, b2)).containsIdentical(b3));
 		});
 
 		section("ExpectCollection.containsNot", () -> {
