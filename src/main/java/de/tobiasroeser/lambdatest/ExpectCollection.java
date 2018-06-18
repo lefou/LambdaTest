@@ -93,8 +93,22 @@ public class ExpectCollection<T> extends ExpectBase<ExpectCollection<T>> {
 	}
 
 	public ExpectCollection<T> containsNot(final T fragment) {
-		return check(!actual.contains(fragment), "Actual must not contain expected element \"{0}\", actual: \"{1}\"", fragment,
-				actual);
+		return check(!actual.contains(fragment),
+				"Actual must not contain expected element \"{0}\", actual: \"{1}\"", fragment, actual);
+	}
+
+	/**
+	 * Same as {@link #containsNot(Object)}, but not using
+	 * {@link #equals(Object)} to compare the contained elements but the `==`
+	 * operation.
+	 * 
+	 * @param element
+	 *            The element that must be contained in the collection.
+	 * @return
+	 */
+	public ExpectCollection<T> containsNotIdentical(final T element) {
+		return check(Util.forall(actual, e -> e != element),
+				"Actual must not contain expected element \"{0}\", actual: \"{1}\"", element, actual);
 	}
 
 }

@@ -47,6 +47,15 @@ public class Util {
 		return Optional.none();
 	}
 
+	public static <T> boolean forall(final Iterable<T> source, final F1<? super T, Boolean> forall) {
+		for (final T t : source) {
+			if (!forall.apply(t)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public static <R, T> List<R> map(final Iterable<T> source, final F1<? super T, ? extends R> convert) {
 		final List<R> result = (source instanceof Collection<?>) ? new ArrayList<R>(((Collection<?>) source).size())
 				: new LinkedList<R>();

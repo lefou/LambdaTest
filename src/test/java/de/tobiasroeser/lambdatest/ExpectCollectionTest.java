@@ -108,6 +108,22 @@ public class ExpectCollectionTest extends FreeSpec {
 			test("[a,b,c] contains a, b and c", () -> expectCollection(Arrays.asList("a", "b", "c")).containsNot("x"));
 		});
 
+		section("ExpectCollection.containsNotIdentical", () -> {
+			test("empty collection contains nothing", () -> expectCollection(Arrays.asList()).containsNotIdentical(1));
+			testFail("should fail for contained elements",
+					() -> expectCollection(Arrays.asList(1)).containsNotIdentical(1));
+			// Proxies fail equality, but not identity
+			final TypeA b1 = TestProxy.proxy(TypeA.class);
+			final TypeA b2 = TestProxy.proxy(TypeA.class);
+			final TypeA b3 = TestProxy.proxy(TypeA.class);
+			test("[b1,b2] contains not b3",
+					() -> expectCollection(Arrays.asList(b1, b2)).containsNotIdentical(b3));
+			testFail("[b1,b2] contains not b1 should fail",
+					() -> expectCollection(Arrays.asList(b1, b2)).containsNotIdentical(b1));
+			testFail("[b1,b2] contains not b2 should fail",
+					() -> expectCollection(Arrays.asList(b1, b2)).containsNotIdentical(b2));
+		});
+
 		section("ExpectCollection.hasNoDuplicates", () -> {
 			test("empty list has no duplicates", () -> expectCollection(Arrays.asList()).hasNoDuplicates());
 			test("[1,2,3] has no duplicates", () -> expectCollection(Arrays.asList(1, 2, 3)).hasNoDuplicates());
