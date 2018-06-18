@@ -21,9 +21,10 @@ import de.tobiasroeser.lambdatest.generic.FreeSpecBase;
  * {@link FreeSpec#intercept(Class, String, RunnableWithException)} to intercept
  * and assert expected exceptions.
  * 
- * - {@link FreeSpec#pending()} and {@link FreeSpec#pending(String)} to mark a test case as pending. All code before
- * it's usage including assert will be executed, but code after it will be
- * skipped. Thus you can mark a test also as work-in-progress.
+ * - {@link FreeSpec#pending()} and {@link FreeSpec#pending(String)} to mark a
+ * test case as pending. All code before it's usage including assert will be
+ * executed, but code after it will be skipped. Thus you can mark a test also as
+ * work-in-progress.
  *
  * TODO: example
  *
@@ -43,25 +44,27 @@ public class FreeSpec extends FreeSpecBase implements LambdaTest {
 	}
 
 	/**
-	 * Marks the test as pending. Instructions after `pending()` will
-	 * not be executed.
+	 * Marks the test as pending. Instructions after `pending()` will not be
+	 * executed.
 	 */
+	// The org.junit.internal.AssumptionViolatedException is deprecated since
+	// JUnit 4.12, but we want to support older versions too.
+	@SuppressWarnings("deprecation")
 	@Override
 	public void pending() {
 		throw new AssumptionViolatedException(Reporter.PENDING_DEFAULT_MSG);
 	}
 
 	/**
-	 * Marks the test as pending and uses the given `reason` as
-	 * message. Instructions after `pending()` will not be executed.
+	 * Marks the test as pending and uses the given `reason` as message.
+	 * Instructions after `pending()` will not be executed.
 	 */
+	// The org.junit.internal.AssumptionViolatedException is deprecated since
+	// JUnit 4.12, but we want to support older versions too.
+	@SuppressWarnings("deprecation")
 	@Override
 	public void pending(final String reason) {
 		throw new AssumptionViolatedException(reason);
 	}
-
-	// protected List<DefaultTestCase> getTestCases() {
-	// return testCases;
-	// }
 
 }
