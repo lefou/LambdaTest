@@ -245,18 +245,6 @@ public class Expect {
 		return new ExpectMap<>(actual);
 	}
 
-	public static ExpectString expect(final String actual) {
-		return expectString(actual);
-	}
-
-	public static <T> ExpectCollection<T> expect(final Collection<T> actual) {
-		return expectCollection(actual);
-	}
-
-	public static <K,V> ExpectMap<K,V> expect(final Map<K,V> actual) {
-		return new ExpectMap<>(actual);
-	}
-
 	public static <T extends Throwable> T intercept(final Class<T> exceptionType,
 			final RunnableWithException throwing) throws Exception {
 		return intercept(exceptionType, ".*", throwing);
