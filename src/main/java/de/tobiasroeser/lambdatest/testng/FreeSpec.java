@@ -9,7 +9,7 @@ import org.testng.TestException;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import de.tobiasroeser.lambdatest.Expect;
+import de.tobiasroeser.lambdatest.ExpectContext;
 import de.tobiasroeser.lambdatest.LambdaTest;
 import de.tobiasroeser.lambdatest.Reporter;
 import de.tobiasroeser.lambdatest.RunnableWithException;
@@ -106,7 +106,7 @@ public class FreeSpec extends FreeSpecBase implements LambdaTest {
 		}
 
 		try {
-			Expect.setup(getExpectFailFast());
+			ExpectContext.setup(getExpectFailFast());
 			Throwable uncatchedTestError = null;
 			Throwable delayedTestError = null;
 			try {
@@ -116,7 +116,7 @@ public class FreeSpec extends FreeSpecBase implements LambdaTest {
 				uncatchedTestError = t;
 			}
 			try {
-				Expect.finish();
+				ExpectContext.finish();
 			} catch (final Throwable t) {
 				delayedTestError = t;
 			}

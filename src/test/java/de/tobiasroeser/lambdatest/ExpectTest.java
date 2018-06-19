@@ -14,15 +14,15 @@ public class ExpectTest {
 
 	@Test
 	public void testBaseSuccess() {
-		Expect.clear();
-		assertEquals(Expect.__TEST_threadContext(), null);
+		ExpectContext.clear();
+		assertEquals(ExpectContext.threadContext(), null);
 		Expect.expectEquals(1, 1, "ONE");
 	}
 
 	@Test(dependsOnGroups = { "intercept" })
 	public void testBaseFailure() throws Exception {
-		Expect.clear();
-		assertEquals(Expect.__TEST_threadContext(), null);
+		ExpectContext.clear();
+		assertEquals(ExpectContext.threadContext(), null);
 		intercept(AssertionError.class, "ONE -- Details: .*", () -> {
 			Expect.expectEquals(1, 2, "ONE");
 		});
@@ -30,68 +30,68 @@ public class ExpectTest {
 
 	@Test
 	public void testPlainSetupFinishCycle() {
-		Expect.clear();
-		assertEquals(Expect.__TEST_threadContext(), null);
-		Expect.setup(false);
-		assertNotEquals(Expect.__TEST_threadContext(), null);
-		Expect.finish();
-		assertEquals(Expect.__TEST_threadContext(), null);
+		ExpectContext.clear();
+		assertEquals(ExpectContext.threadContext(), null);
+		ExpectContext.setup(false);
+		assertNotEquals(ExpectContext.threadContext(), null);
+		ExpectContext.finish();
+		assertEquals(ExpectContext.threadContext(), null);
 	}
 
 	@Test
 	public void testOneSuccessfulAssert() {
-		Expect.clear();
-		assertEquals(Expect.__TEST_threadContext(), null);
-		Expect.setup(false);
-		assertNotEquals(Expect.__TEST_threadContext(), null);
+		ExpectContext.clear();
+		assertEquals(ExpectContext.threadContext(), null);
+		ExpectContext.setup(false);
+		assertNotEquals(ExpectContext.threadContext(), null);
 		Expect.expectEquals(1, 1, "ONE");
-		Expect.finish();
-		assertEquals(Expect.__TEST_threadContext(), null);
+		ExpectContext.finish();
+		assertEquals(ExpectContext.threadContext(), null);
 	}
 
 	@Test(dependsOnGroups = { "intercept" })
 	public void testOneFailingAssert() throws Exception {
-		Expect.clear();
-		assertEquals(Expect.__TEST_threadContext(), null);
-		Expect.setup(false);
-		assertNotEquals(Expect.__TEST_threadContext(), null);
+		ExpectContext.clear();
+		assertEquals(ExpectContext.threadContext(), null);
+		ExpectContext.setup(false);
+		assertNotEquals(ExpectContext.threadContext(), null);
 		Expect.expectEquals(1, 2, "ONE");
 		intercept(AssertionError.class, "ONE -- Details: .*", () -> {
-			Expect.finish();
+			ExpectContext.finish();
 		});
-		assertEquals(Expect.__TEST_threadContext(), null);
+		assertEquals(ExpectContext.threadContext(), null);
 	}
 
 	@Test
 	public void testTwoSuccessfulAssert() {
-		Expect.clear();
-		assertEquals(Expect.__TEST_threadContext(), null);
-		Expect.setup(false);
-		assertNotEquals(Expect.__TEST_threadContext(), null);
+		ExpectContext.clear();
+		assertEquals(ExpectContext.threadContext(), null);
+		ExpectContext.setup(false);
+		assertNotEquals(ExpectContext.threadContext(), null);
 		Expect.expectEquals(1, 1, "ONE");
 		Expect.expectEquals(2, 2, "TWO");
-		Expect.finish();
-		assertEquals(Expect.__TEST_threadContext(), null);
+		ExpectContext.finish();
+		assertEquals(ExpectContext.threadContext(), null);
 	}
 
 	@Test(dependsOnGroups = { "intercept" })
 	public void testTwoFailingAssert() throws Exception {
-		Expect.clear();
-		assertEquals(Expect.__TEST_threadContext(), null);
-		Expect.setup(false);
-		assertNotEquals(Expect.__TEST_threadContext(), null);
+		ExpectContext.clear();
+		assertEquals(ExpectContext.threadContext(), null);
+		ExpectContext.setup(false);
+		assertNotEquals(ExpectContext.threadContext(), null);
 		Expect.expectEquals(1, 2, "ONE");
 		Expect.expectEquals(2, 1, "TWO");
 		intercept(AssertionError.class, () -> {
-			Expect.finish();
+			ExpectContext.finish();
 		});
-		assertEquals(Expect.__TEST_threadContext(), null);
+		assertEquals(ExpectContext.threadContext(), null);
 	}
 
 	@Test
 	public void testTwoBoolean() throws Exception {
-		Expect.clear();
-		assertEquals(Expect.__TEST_threadContext(), null);
+		ExpectContext.clear();
+		assertEquals(ExpectContext.threadContext(), null);
 		Expect.expectEquals(true, true);
 		Expect.expectEquals(false, false);
 		intercept(AssertionError.class, () -> {
@@ -100,15 +100,15 @@ public class ExpectTest {
 		intercept(AssertionError.class, () -> {
 			Expect.expectEquals(true, false);
 		});
-		assertEquals(Expect.__TEST_threadContext(), null);
+		assertEquals(ExpectContext.threadContext(), null);
 	}
 
 	@Test(dependsOnGroups = { "intercept" })
 	public void testExpectEqualsStringArrayFailEarly() throws Exception {
-		Expect.clear();
-		assertEquals(Expect.__TEST_threadContext(), null);
-		Expect.setup(true);
-		assertNotEquals(Expect.__TEST_threadContext(), null);
+		ExpectContext.clear();
+		assertEquals(ExpectContext.threadContext(), null);
+		ExpectContext.setup(true);
+		assertNotEquals(ExpectContext.threadContext(), null);
 
 		Expect.expectEquals(null, null);
 		Expect.expectEquals(new String[] {}, new String[] {});
@@ -145,16 +145,16 @@ public class ExpectTest {
 					Expect.expectEquals(new String[] { "a" }, new String[] { "b" });
 				});
 
-		Expect.finish();
-		assertEquals(Expect.__TEST_threadContext(), null);
+		ExpectContext.finish();
+		assertEquals(ExpectContext.threadContext(), null);
 	}
 
 	@Test(dependsOnGroups = { "intercept" })
 	public void testExpectEqualsStringArrayNotFailEarly() throws Exception {
-		Expect.clear();
-		assertEquals(Expect.__TEST_threadContext(), null);
-		Expect.setup(false);
-		assertNotEquals(Expect.__TEST_threadContext(), null);
+		ExpectContext.clear();
+		assertEquals(ExpectContext.threadContext(), null);
+		ExpectContext.setup(false);
+		assertNotEquals(ExpectContext.threadContext(), null);
 
 		Expect.expectEquals(null, null);
 		Expect.expectEquals(new String[] {}, new String[] {});
@@ -168,22 +168,22 @@ public class ExpectTest {
 		Expect.expectEquals(new String[] { "a" }, new String[] { "b" });
 
 		intercept(AssertionError.class, "\\Q7 expectations failed\\E[\\s\\S]*", () -> {
-			Expect.finish();
+			ExpectContext.finish();
 		});
-		assertEquals(Expect.__TEST_threadContext(), null);
+		assertEquals(ExpectContext.threadContext(), null);
 	}
 
 	@Test
 	public void testExpectNotNull() {
-		Expect.clear();
-		Expect.setup(true);
+		ExpectContext.clear();
+		ExpectContext.setup(true);
 		Expect.expectNotNull(new Object());
 	}
 
 	@Test(expectedExceptions = AssertionError.class)
 	public void testExpectNotNullFail() {
-		Expect.clear();
-		Expect.setup(true);
+		ExpectContext.clear();
+		ExpectContext.setup(true);
 		Expect.expectNotNull(null);
 	}
 

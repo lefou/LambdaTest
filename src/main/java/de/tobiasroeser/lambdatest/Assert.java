@@ -24,7 +24,7 @@ public class Assert {
 	private static final List<Class<?>> LONG_TYPES = Arrays.asList(Byte.class, Short.class, Integer.class, Long.class);
 	private static final List<Class<?>> DOUBLE_TYPES = Arrays.asList(Float.class, Double.class);
 
-	private static void fail(final String userGivenMessageOrNull, final String msg, final Object... args) {
+	/* package */ static void fail(final String userGivenMessageOrNull, final String msg, final Object... args) {
 		final String formatted;
 		if (args == null || args.length == 0) {
 			formatted = msg;
