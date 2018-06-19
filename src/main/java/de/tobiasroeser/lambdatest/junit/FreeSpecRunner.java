@@ -10,7 +10,7 @@ import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.ParentRunner;
 import org.junit.runners.model.InitializationError;
 
-import de.tobiasroeser.lambdatest.Expect;
+import de.tobiasroeser.lambdatest.ExpectContext;
 import de.tobiasroeser.lambdatest.Reporter;
 import de.tobiasroeser.lambdatest.generic.DefaultTestCase;
 
@@ -70,7 +70,7 @@ public class FreeSpecRunner extends ParentRunner<DefaultTestCase> {
 		runNotifier.fireTestStarted(description);
 
 		try {
-			Expect.setup(expectFailFast);
+			ExpectContext.setup(expectFailFast);
 			Throwable uncatchedTestError = null;
 			Throwable delayedTestError = null;
 			try {
@@ -80,7 +80,7 @@ public class FreeSpecRunner extends ParentRunner<DefaultTestCase> {
 				uncatchedTestError = t;
 			}
 			try {
-				Expect.finish();
+				ExpectContext.finish();
 			} catch (final Throwable t) {
 				delayedTestError = t;
 			}

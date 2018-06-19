@@ -13,7 +13,7 @@ public class ExpectCollection<T> extends ExpectBase<ExpectCollection<T>> {
 	final private Collection<T> actual;
 
 	public ExpectCollection(final Collection<T> actual) {
-		check(actual != null, "Actual is not a Collection but null");
+		check(actual != null, "Actual is not a Collection but null.");
 		this.actual = actual;
 	}
 
@@ -22,7 +22,7 @@ public class ExpectCollection<T> extends ExpectBase<ExpectCollection<T>> {
 	}
 
 	public ExpectCollection<T> isEmpty() {
-		return check(actual.isEmpty(), "Actual collection is not empty but has a size of {0}.", actual.size());
+		return check(actual.isEmpty(), "Actual collection is not empty but has a size of {0}.\nActual: {1}", actual.size(), actual);
 	}
 
 	public ExpectCollection<T> hasSize(int expectedCount) {
@@ -30,7 +30,7 @@ public class ExpectCollection<T> extends ExpectBase<ExpectCollection<T>> {
 			throw new IllegalArgumentException("Parameter `count` must be not negative");
 		}
 		return check(actual.size() == expectedCount,
-				"Actual collection has not expected size of {0}, actual: {1}", expectedCount, actual.size());
+				"Actual collection has not expected size of {0}, actual size: {1}.\nActual: {2}", expectedCount, actual.size(), actual);
 	}
 
 	/**

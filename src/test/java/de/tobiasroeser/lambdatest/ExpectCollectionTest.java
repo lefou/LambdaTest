@@ -15,17 +15,30 @@ public class ExpectCollectionTest extends FreeSpec {
 
 	public ExpectCollectionTest() {
 		setExpectFailFast(true);
+		
+		test("EcpectCollection creation", () -> expectCollection(Arrays.asList()));
+		testFail("EcpectCollection creation with null should fail", 
+				"\\QActual is not a Collection but null.\\E",
+				() -> expectCollection(null));
+		
+		section("ExpectCollection size tests", () -> {
+			test("empty collection", () -> expectCollection(Arrays.asList()).isEmpty());
+			test("test for correct size", () -> expectCollection(Arrays.asList(1)).hasSize(1));
+		});
 
 		section("ExpectCollection.isEmpty", () -> {
-			test("for empty collection", () -> expectCollection(Collections.emptyList()).isEmpty());
+			test("for empty collection", () -> expectCollection(Arrays.asList()).isEmpty());
 			testFail("for non-empty collection should fail",
+					"\\QActual collection is not empty but has a size of 1.\nActual: [1]\\E",
 					() -> expectCollection(Collections.singletonList("1")).isEmpty());
 		});
 
 		section("ExpectCollection.hasSize", () -> {
 			test("for empty collection", () -> expectCollection(Collections.emptyList()).hasSize(0));
 			test("non-empty collection", () -> expectCollection(Arrays.asList(1, 2, 3)).hasSize(3));
-			testFail("wrong size should fail", () -> expectCollection(Collections.singletonList("1")).hasSize(2));
+			testFail("wrong size should fail",
+					"\\QActual collection has not expected size of 2, actual size: 1.\nActual: [1]\\E",
+					() -> expectCollection(Collections.singletonList("1")).hasSize(2));
 			testFail("negative size should fail with IllegalArgumentException", IllegalArgumentException.class,
 					() -> expectCollection(Arrays.asList("1")).hasSize(-1));
 		});
@@ -53,7 +66,9 @@ public class ExpectCollectionTest extends FreeSpec {
 			};
 			test("[a1,a2] contains a1", () -> expectCollection(Arrays.asList(a1, a2)).contains(a1));
 			test("[a1,a2] contains a2", () -> expectCollection(Arrays.asList(a1, a2)).contains(a2));
-			testFail("[a1,a2] contains a3 should fail", () -> expectCollection(Arrays.asList(a1, a2)).contains(a3));
+			testFail("[a1,a2] contains a3 should fail",
+					"\\QActual collection does not contain expected element \"de.tobiasroeser.lambdatest.ExpectCollectionTest\\E.*",
+					() -> expectCollection(Arrays.asList(a1, a2)).contains(a3));
 
 			// Proxies fail equality
 			final TypeA b1 = TestProxy.proxy(TypeA.class, new Object() {
@@ -154,8 +169,13 @@ public class ExpectCollectionTest extends FreeSpec {
 
 	}
 
+	@Deprecated
 	private void testFail(String testName, RunnableWithException testCase) {
-		testFail(testName, AssertionError.class, testCase);
+		test(testName, () -> intercept(AssertionError.class, testCase));
+	}
+
+	private void testFail(String testName, String msgRegex, RunnableWithException testCase) {
+		test(testName, () -> intercept(AssertionError.class, msgRegex, testCase));
 	}
 
 	private void testFail(String testName, Class<? extends Throwable> exType, RunnableWithException testCase) {

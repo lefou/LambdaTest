@@ -1,11 +1,7 @@
 package de.tobiasroeser.lambdatest;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-
-import de.tobiasroeser.lambdatest.internal.Util;
 
 /**
  * Various assertion methods plus the ability to disable default fail-fast
@@ -15,47 +11,6 @@ import de.tobiasroeser.lambdatest.internal.Util;
  *
  */
 public class Expect {
-
-	private static ThreadLocal<ExpectContext> threadContext = new ThreadLocal<ExpectContext>();
-
-	/* package */ static ExpectContext __TEST_threadContext() {
-		return threadContext.get();
-	}
-
-	public static void setup(final boolean failEarly) {
-		if (threadContext.get() != null) {
-			System.out.println("Warning: Overriding already setup expect context");
-		}
-		threadContext.set(new ExpectContext(failEarly));
-	}
-
-	public static void finish() {
-		final ExpectContext context = threadContext.get();
-		threadContext.set(null);
-		if (context != null) {
-			final List<AssertionError> errors = context.getErrors();
-			if (errors.isEmpty()) {
-				return;
-			} else if (errors.size() == 1) {
-				throw errors.get(0);
-			} else {
-				// TODO: create a multi-Exception
-				final List<String> formatted = Util.map(errors, error -> {
-					final String msg = error.getClass().getName() + ": " + error.getMessage() + "\n\tat " +
-							Util.mkString(error.getStackTrace(), "\n\tat ");
-					return msg;
-				});
-
-				throw new AssertionError("" + errors.size()
-						+ " expectations failed\n--------------------------------------------------\n" +
-						Util.mkString(formatted, "\n\n") + "\n--------------------------------------------------");
-			}
-		}
-	}
-
-	public static void clear() {
-		threadContext.set(null);
-	}
 
 	/**
 	 * Expect that the given actual value is `null`.
@@ -72,7 +27,7 @@ public class Expect {
 		try {
 			Assert.assertNull(actual, msg);
 		} catch (final AssertionError e) {
-			handleAssertionError(e);
+			ExpectContext.handleAssertionError(e);
 		}
 	}
 
@@ -103,7 +58,7 @@ public class Expect {
 		try {
 			Assert.assertNotNull(actual, msg);
 		} catch (final AssertionError e) {
-			handleAssertionError(e);
+			ExpectContext.handleAssertionError(e);
 		}
 	}
 
@@ -133,7 +88,7 @@ public class Expect {
 		try {
 			Assert.assertEquals(actual, expected, msg);
 		} catch (final AssertionError e) {
-			handleAssertionError(e);
+			ExpectContext.handleAssertionError(e);
 		}
 	}
 
@@ -156,7 +111,7 @@ public class Expect {
 		try {
 			Assert.assertNotEquals(actual, expected, msg);
 		} catch (final AssertionError e) {
-			handleAssertionError(e);
+			ExpectContext.handleAssertionError(e);
 		}
 	}
 
@@ -176,7 +131,7 @@ public class Expect {
 		try {
 			Assert.assertTrue(actual, msg);
 		} catch (final AssertionError e) {
-			handleAssertionError(e);
+			ExpectContext.handleAssertionError(e);
 		}
 	}
 
@@ -202,7 +157,7 @@ public class Expect {
 		try {
 			Assert.assertFalse(actual, msg);
 		} catch (final AssertionError e) {
-			handleAssertionError(e);
+			ExpectContext.handleAssertionError(e);
 		}
 	}
 
@@ -256,33 +211,24 @@ public class Expect {
 		try {
 			return Intercept.intercept(exceptionType, messageRegex, throwing);
 		} catch (final AssertionError e) {
-			final ExpectContext context = threadContext.get();
+			final ExpectContext context = ExpectContext.threadContext();
 			if (context != null && !context.getFailEarly()) {
 				context.addAssertionError(e);
 				// this throws in any case, but the compiler doesn't know
-				finish();
+				ExpectContext.finish();
 				// so we throw nevertheless in the outer block
 			}
 			throw e;
 		}
 	}
 
-	public static List<AssertionError> getContextErrors() {
-		final ExpectContext context = threadContext.get();
-		if (context != null) {
-			return context.getErrors();
-		} else {
-			return Collections.emptyList();
-		}
-	}
-
-	private static void handleAssertionError(AssertionError e) {
-		final ExpectContext context = threadContext.get();
-		if (context != null && !context.getFailEarly()) {
-			context.addAssertionError(e);
-		} else {
-			throw e;
-		}
-	}
+	// public static List<AssertionError> getContextErrors() {
+	// final ExpectContext context = threadContext.get();
+	// if (context != null) {
+	// return context.getErrors();
+	// } else {
+	// return Collections.emptyList();
+	// }
+	// }
 
 }
