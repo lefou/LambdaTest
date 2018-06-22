@@ -1,8 +1,8 @@
 = Lambda Test
 :toc:
 :toc-placement: preamble
-:lambdatestversion: 0.5.0
-:documentationversion: 0.6.0-SNAPSHOT
+:lambdatestversion: 0.6.0
+:documentationversion: 0.6.0
 :testngversion: 6.11
 :junitversion: 4.12
 :lambdatest: LambdaTest
@@ -459,7 +459,7 @@ If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[
 
 == Changelog
 
-=== LambdaTest {master} - NOT RELEASED
+=== LambdaTest 0.6.0 - 2018-06-22
 
 * Added `Expect.expectCollection` and `ExpectCollection` class to assert properties of collection with a fluent API.
 * `TestProxy` now properly passes exceptions thrown by delegate objects.
