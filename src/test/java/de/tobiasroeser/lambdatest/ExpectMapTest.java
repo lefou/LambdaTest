@@ -1,10 +1,11 @@
 package de.tobiasroeser.lambdatest;
 
+import static de.tobiasroeser.lambdatest.Expect.expectMap;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import de.tobiasroeser.lambdatest.testng.FreeSpec;
-import static de.tobiasroeser.lambdatest.Expect.expectMap;
 
 public class ExpectMapTest extends FreeSpec {
 
@@ -49,26 +50,26 @@ public class ExpectMapTest extends FreeSpec {
 			});
 		});
 
-		section("ExpectMap.keySet", () -> {
+		section("ExpectMap.keys", () -> {
 			test("should delegate to ExpectCollection", () -> {
-				expectMap(mapOf(1, 1, 2, 2, 3, 3)).keySet().contains(1);
-				expectMap(mapOf(1, 1, 2, 2, 3, 3)).keySet().contains(2);
-				expectMap(mapOf(1, 1, 2, 2, 3, 3)).keySet().contains(3);
+				expectMap(mapOf(1, 1, 2, 2, 3, 3)).keys().contains(1);
+				expectMap(mapOf(1, 1, 2, 2, 3, 3)).keys().contains(2);
+				expectMap(mapOf(1, 1, 2, 2, 3, 3)).keys().contains(3);
 			});
 		});
 
-		section("Expect.expectMap()", () -> {
+		section("Expect.expectMap", () -> {
 			test("should delegate to ExpectMap", () -> {
 				Expect.expectMap(mapOf(1, 1)).containsKey(1);
 			});
 		});
 	}
 
-	private void testFail(String testName, RunnableWithException testCase) {
+	private void testFail(final String testName, final RunnableWithException testCase) {
 		test(testName, () -> intercept(AssertionError.class, testCase));
 	}
 
-	static private <K> Map<K, K> mapOf(K... ks) {
+	private static <K> Map<K, K> mapOf(final K... ks) {
 		if (ks.length % 2 != 0) {
 			new AssertionError("parameter count must be even");
 		}

@@ -23,7 +23,7 @@ public class Expect {
 	 * 
 	 * @since 0.3.0
 	 */
-	public static void expectNull(final Object actual, String msg) {
+	public static void expectNull(final Object actual, final String msg) {
 		try {
 			Assert.assertNull(actual, msg);
 		} catch (final AssertionError e) {
@@ -54,7 +54,7 @@ public class Expect {
 	 * 
 	 * @since 0.3.0
 	 */
-	public static void expectNotNull(final Object actual, String msg) {
+	public static void expectNotNull(final Object actual, final String msg) {
 		try {
 			Assert.assertNotNull(actual, msg);
 		} catch (final AssertionError e) {
@@ -180,9 +180,8 @@ public class Expect {
 		return new ExpectString(actual);
 	}
 
-
 	/**
-	 * Check for non-null {@link Collection} and provided further checks on the
+	 * Check for non-null {@link Collection} and provides further checks on the
 	 * actual collection in a fluent API.
 	 *
 	 * @see ExpectCollection
@@ -193,11 +192,22 @@ public class Expect {
 	 *         actual collection.
 	 */
 	public static <T> ExpectCollection<T> expectCollection(final Collection<T> actual) {
-		return new ExpectCollection<>(actual);
+		return ExpectCollection.expectCollection(actual);
 	}
 
-	public static <K,V> ExpectMap<K,V>  expectMap(Map<K,V> actual) {
-		return new ExpectMap<>(actual);
+	/**
+	 * Check for non-null {@link Map} and provides further checks on the actual
+	 * map in a fluent API.
+	 *
+	 * @see ExpectMap
+	 *
+	 * @param actual
+	 *            The Map<K,V> to check.
+	 * @return A {@link ExpectMap} to express further expectations on the actual
+	 *         map.
+	 */
+	public static <K, V> ExpectMap<K, V> expectMap(final Map<K, V> actual) {
+		return ExpectMap.expectMap(actual);
 	}
 
 	public static <T extends Throwable> T intercept(final Class<T> exceptionType,

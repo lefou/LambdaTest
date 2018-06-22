@@ -208,6 +208,10 @@ public class ExpectTest {
 	@Test
 	public void testExpectCollection() {
 		Expect.expectCollection(Collections.singleton("abc")).hasSize(1);
+	}
 
+	@Test
+	public void testExpectMap() {
+		Expect.expectMap(Collections.singletonMap("key", "value")).hasSize(1);
 	}
 }
