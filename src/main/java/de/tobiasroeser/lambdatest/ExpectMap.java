@@ -34,4 +34,12 @@ public class ExpectMap<K,V> extends ExpectBase<ExpectMap<K,V>> {
 				actual);
 	}
 
+	public ExpectCollection<V> values() {
+		return ExpectCollection.expectCollection(actual.values());
+	}
+
+	public ExpectCollection<K> keySet() {
+		return ExpectCollection.expectCollection(actual.keySet());
+	}
+
 }
