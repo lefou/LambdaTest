@@ -2,7 +2,7 @@ import org.sonatype.maven.polyglot.scala.model._
 import scala.collection.immutable.Seq
 
 val namespace = "de.tobiasroeser.lambdatest"
-val lambdatest = "de.tototec" % namespace % "0.6.0"
+val lambdatest = "de.tototec" % namespace % "0.6.1-SNAPSHOT"
 val gav = lambdatest
 val url = "https://github.com/lefou/LambdaTest"
 
