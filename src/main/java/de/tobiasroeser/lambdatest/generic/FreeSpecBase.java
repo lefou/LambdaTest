@@ -155,12 +155,15 @@ public abstract class FreeSpecBase implements LambdaTest {
 
 	public void section(final String section, final Runnable code) {
 		final Section parent = sectionHolder.get();
-		sectionHolder.set(new Section(section, parent));
-		code.run();
-		if (parent == null) {
-			sectionHolder.remove();
-		} else {
-			sectionHolder.set(parent);
+		try {
+			sectionHolder.set(new Section(section, parent));
+			code.run();
+		} finally {
+			if (parent == null) {
+				sectionHolder.remove();
+			} else {
+				sectionHolder.set(parent);
+			}
 		}
 	}
 
