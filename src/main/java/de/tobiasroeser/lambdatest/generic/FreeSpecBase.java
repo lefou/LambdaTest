@@ -24,7 +24,31 @@ public abstract class FreeSpecBase implements LambdaTest {
 
 	private static final ThreadLocal<Section> sectionHolder = new ThreadLocal<Section>();
 
-	private Reporter reporter = new LoggingWrappingReporter(new DefaultReporter());
+	private static Reporter defaultReporter = new LoggingWrappingReporter(new DefaultReporter());
+
+	public static Reporter getDefaultReporter() {
+		return defaultReporter;
+	}
+
+	public static void setDefaultReporter(final Reporter reporter) {
+		defaultReporter = reporter;
+	}
+
+	public interface F0WithException<R> {
+		public R apply() throws Exception;
+	}
+
+	public static <T> T withDefaultReporter(final Reporter reporter, final F0WithException<T> f) throws Exception {
+		final Reporter defRep = getDefaultReporter();
+		try {
+			setDefaultReporter(reporter);
+			return f.apply();
+		} finally {
+			setDefaultReporter(defRep);
+		}
+	}
+
+	private Reporter reporter = defaultReporter;
 	private final List<DefaultTestCase> testCases = new LinkedList<>();
 	private String suiteName = getClass().getName();
 	private boolean expectFailFast;
