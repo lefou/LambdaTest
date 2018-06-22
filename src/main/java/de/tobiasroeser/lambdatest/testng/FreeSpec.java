@@ -11,7 +11,6 @@ import org.testng.annotations.Test;
 
 import de.tobiasroeser.lambdatest.ExpectContext;
 import de.tobiasroeser.lambdatest.LambdaTest;
-import de.tobiasroeser.lambdatest.Reporter;
 import de.tobiasroeser.lambdatest.RunnableWithException;
 import de.tobiasroeser.lambdatest.generic.DefaultTestCase;
 import de.tobiasroeser.lambdatest.generic.FreeSpecBase;
@@ -74,15 +73,6 @@ public class FreeSpec extends FreeSpecBase implements LambdaTest {
 	 */
 	public void test(final String name, final RunnableWithException testCase) {
 		super.test(name, testCase);
-	}
-
-	/**
-	 * Marks the test as pending. Instructions after <code>pending()</code> will
-	 * not be executed and TestNG marks the test as skipped.
-	 */
-	@Override
-	public void pending() {
-		throw new SkipException(Reporter.PENDING_DEFAULT_MSG);
 	}
 
 	/**

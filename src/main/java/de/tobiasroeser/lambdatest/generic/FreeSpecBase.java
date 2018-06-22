@@ -168,4 +168,9 @@ public abstract class FreeSpecBase implements LambdaTest {
 		return Optional.lift(sectionHolder.get());
 	}
 
+	@Override
+	public void pending() {
+		pending(Reporter.PENDING_DEFAULT_MSG);
+	}
+
 }

@@ -4,7 +4,6 @@ import org.junit.internal.AssumptionViolatedException;
 import org.junit.runner.RunWith;
 
 import de.tobiasroeser.lambdatest.LambdaTest;
-import de.tobiasroeser.lambdatest.Reporter;
 import de.tobiasroeser.lambdatest.RunnableWithException;
 import de.tobiasroeser.lambdatest.generic.FreeSpecBase;
 
@@ -41,18 +40,6 @@ public class FreeSpec extends FreeSpecBase implements LambdaTest {
 	@Override
 	public void setRunInParallel(final boolean runInParallel) {
 		getReporter().suiteWarning(suiteName, "RunInParallel not supported under JUnit.");
-	}
-
-	/**
-	 * Marks the test as pending. Instructions after `pending()` will not be
-	 * executed.
-	 */
-	// The org.junit.internal.AssumptionViolatedException is deprecated since
-	// JUnit 4.12, but we want to support older versions too.
-	@SuppressWarnings("deprecation")
-	@Override
-	public void pending() {
-		throw new AssumptionViolatedException(Reporter.PENDING_DEFAULT_MSG);
 	}
 
 	/**
