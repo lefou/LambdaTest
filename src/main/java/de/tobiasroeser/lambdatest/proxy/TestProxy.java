@@ -4,12 +4,14 @@ import static de.tobiasroeser.lambdatest.internal.Util.filterType;
 import static de.tobiasroeser.lambdatest.internal.Util.find;
 import static de.tobiasroeser.lambdatest.internal.Util.mkString;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.LinkedList;
 import java.util.List;
 
 import de.tobiasroeser.lambdatest.Optional;
+import de.tobiasroeser.lambdatest.internal.LoggerFactory;
 
 /**
  * Utility class for simple mocking of interfaces.
@@ -110,6 +112,14 @@ public class TestProxy {
 				try {
 					final Object invokeReturn = m.invoke(handler.get().a(), args);
 					return invokeReturn;
+				} catch (final InvocationTargetException e) {
+					LoggerFactory.getLogger(TestProxy.class)
+							.debug("The invoked method [" + method + "] of proxy " + "Proxy["
+									+ mkString(interfaces, " & ") + "]@"
+									+ System.identityHashCode(proxy) + " throw an exception", e.getCause());
+					// the underlying method throw an exception, which we simply
+					// pass through
+					throw e.getCause();
 				} finally {
 					if (resetAccessible) {
 						m.setAccessible(false);

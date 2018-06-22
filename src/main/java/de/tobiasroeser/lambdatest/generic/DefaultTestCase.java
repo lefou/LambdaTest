@@ -54,6 +54,16 @@ public class DefaultTestCase implements LambdaTestCase {
 		return name;
 	}
 
+	public String getSectionAndTestName() {
+		String result = name;
+		Section sec = section;
+		while (sec != null) {
+			result = sec.getName() + " / " + result;
+			sec = sec.getParent();
+		}
+		return result;
+	}
+
 	public RunnableWithException getTest() {
 		return test;
 	}

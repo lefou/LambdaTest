@@ -11,7 +11,7 @@ public class Section {
 	private final Section parent;
 	private final int level;
 
-	public Section(String name, Section parent) {
+	public Section(final String name, final Section parent) {
 		this.name = name;
 		this.parent = parent;
 		this.level = 1 + (parent == null ? 0 : parent.getLevel());
@@ -34,7 +34,7 @@ public class Section {
 		return name;
 	}
 
-	public Optional<Section> findInParents(Section section) {
+	public Optional<Section> findInParents(final Section section) {
 		if (section == null) {
 			return Optional.none();
 		} else if (this.equals(section)) {

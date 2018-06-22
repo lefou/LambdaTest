@@ -22,9 +22,57 @@ import de.tobiasroeser.lambdatest.Section;
  */
 public abstract class FreeSpecBase implements LambdaTest {
 
+	/**
+	 * The ThreadLocal used to hold the current section.
+	 * 
+	 * @see #section(String, Runnable)
+	 */
 	private static final ThreadLocal<Section> sectionHolder = new ThreadLocal<Section>();
 
-	private Reporter reporter = new LoggingWrappingReporter(new DefaultReporter());
+	private static Reporter defaultReporter = new LoggingWrappingReporter(new DefaultReporter());
+
+	public static Reporter getDefaultReporter() {
+		return defaultReporter;
+	}
+
+	/**
+	 * Set the default reporter.
+	 * 
+	 * @see #withDefaultReporter(Reporter, F0WithException)
+	 */
+	public static void setDefaultReporter(final Reporter reporter) {
+		defaultReporter = reporter;
+	}
+
+	public interface F0WithException<R> {
+		public R apply() throws Exception;
+	}
+
+	/**
+	 * Executes a given function `f` with the default reporter set to
+	 * `reporter`, and restored the previous default reporter afterwards.
+	 * 
+	 * @param reporter
+	 *            The default reporter to be used while executing `f`.
+	 * @param f
+	 *            The function to apply.
+	 * @return The return value of the function `f`.
+	 * @throws Exception
+	 *             All expeceptions thrown by `f`.
+	 */
+	public static <T> T withDefaultReporter(final Reporter reporter, final F0WithException<T> f) throws Exception {
+		final Reporter defRep = getDefaultReporter();
+		try {
+			setDefaultReporter(reporter);
+			return f.apply();
+		} finally {
+			setDefaultReporter(defRep);
+		}
+	}
+
+	// END OF STATIC PART
+	
+	private Reporter reporter = defaultReporter;
 	private final List<DefaultTestCase> testCases = new LinkedList<>();
 	private String suiteName = getClass().getName();
 	private boolean expectFailFast;
@@ -75,10 +123,16 @@ public abstract class FreeSpecBase implements LambdaTest {
 	 *            documentation for more details.
 	 */
 	public void test(final String name, final RunnableWithException testCase) {
-		if (find(testCases, tc -> name.equals(tc.getName())).isDefined()) {
-			getReporter().suiteWarning(suiteName, "Test with non-unique name added: " + name);
+		final DefaultTestCase newTestCase = new DefaultTestCase(sectionHolder.get(), name, suiteName, testCase);
+		final String sectionAndTestName = newTestCase.getSectionAndTestName();
+		if (find(testCases, tc -> tc.getSectionAndTestName().equals(sectionAndTestName)).isDefined()) {
+			if (newTestCase.getSection().isDefined()) {
+				getReporter().suiteWarning(suiteName, "Test name is not unique in this section: " + sectionAndTestName);
+			} else {
+				getReporter().suiteWarning(suiteName, "Test name is not unique: " + name);
+			}
 		}
-		this.testCases.add(new DefaultTestCase(sectionHolder.get(), name, suiteName, testCase));
+		this.testCases.add(newTestCase);
 	}
 
 	public List<DefaultTestCase> getTestCases() {
@@ -131,17 +185,25 @@ public abstract class FreeSpecBase implements LambdaTest {
 
 	public void section(final String section, final Runnable code) {
 		final Section parent = sectionHolder.get();
-		sectionHolder.set(new Section(section, parent));
-		code.run();
-		if (parent == null) {
-			sectionHolder.remove();
-		} else {
-			sectionHolder.set(parent);
+		try {
+			sectionHolder.set(new Section(section, parent));
+			code.run();
+		} finally {
+			if (parent == null) {
+				sectionHolder.remove();
+			} else {
+				sectionHolder.set(parent);
+			}
 		}
 	}
 
 	public Optional<Section> getCurrentSection() {
 		return Optional.lift(sectionHolder.get());
+	}
+
+	@Override
+	public void pending() {
+		pending(Reporter.PENDING_DEFAULT_MSG);
 	}
 
 }
