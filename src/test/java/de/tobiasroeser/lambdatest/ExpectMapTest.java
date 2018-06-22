@@ -24,6 +24,21 @@ public class ExpectMapTest extends FreeSpec {
 			testFail("wrong size should fail", () -> expectMap(mapOf(1, 1)).hasSize(2));
 		});
 
+		section("ExpectMap.contains", () -> {
+			test("for existing key value pairs", () -> {
+				expectMap(mapOf(1, 1, 2, 2, 3, 3)).contains(1, 1);
+				expectMap(mapOf(1, 1, 2, 2, 3, 3)).contains(2, 2);
+				expectMap(mapOf(1, 1, 2, 2, 3, 3)).contains(3, 3);
+			});
+			testFail("for non-contained key should fail", () -> expectMap(mapOf(1, 1, 2, 2, 3, 3)).contains(4, 1));
+			testFail("for non-contained value should fail", () -> expectMap(mapOf(1, 1, 2, 2, 3, 3)).contains(1, 4));
+			testFail("for null value should fail", () -> expectMap(mapOf(1, 1, 2, 2, 3, 3)).contains(1, null));
+			test("for null-values", () -> {
+				expectMap(mapOf(1, 1, 2, null)).contains(1, 1);
+				expectMap(mapOf(1, 1, 2, null)).contains(2, null);
+			});
+		});
+
 		section("ExpectMap.containsKey", () -> {
 			test("[1->1,2->2,3->3] containsKeys 1, 2 and 3", () -> {
 				expectMap(mapOf(1, 1, 2, 2, 3, 3)).containsKey(1);

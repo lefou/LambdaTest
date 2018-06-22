@@ -1,7 +1,9 @@
 package de.tobiasroeser.lambdatest;
 
 import java.util.Map;
+import java.util.Map.Entry;
 
+import de.tobiasroeser.lambdatest.internal.Util;
 
 /**
  * Check for non-null {@link Map} and provides methods on the actual map in a
@@ -62,6 +64,20 @@ public class ExpectMap<K, V> extends ExpectBase<ExpectMap<K, V>> {
 	}
 
 	/**
+	 * Checks, if the map contains an entry with the given `key` and `value`.
+	 * 
+	 * @param key
+	 *            The key that must be contained in the map.
+	 * @param value
+	 *            The values that must be belong to the key.
+	 */
+	public ExpectMap<K, V> contains(final K key, final V value) {
+		return check(Util.find(actual.entrySet(), e -> ((key != null && key.equals(e.getKey())) || key == e.getKey()) &&
+				((value != null && value.equals(e.getValue())) || value == e.getValue())).isDefined(),
+				"Actual collection does not contain expected entry [{0} -> {1}], actual: {2}",
+				key, value, actual);
+	}
+	
 	/**
 	 * Checks, that the map contains an entry for the given key.
 	 * 
