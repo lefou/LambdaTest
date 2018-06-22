@@ -99,10 +99,16 @@ public abstract class FreeSpecBase implements LambdaTest {
 	 *            documentation for more details.
 	 */
 	public void test(final String name, final RunnableWithException testCase) {
-		if (find(testCases, tc -> name.equals(tc.getName())).isDefined()) {
-			getReporter().suiteWarning(suiteName, "Test with non-unique name added: " + name);
+		final DefaultTestCase newTestCase = new DefaultTestCase(sectionHolder.get(), name, suiteName, testCase);
+		final String sectionAndTestName = newTestCase.getSectionAndTestName();
+		if (find(testCases, tc -> tc.getSectionAndTestName().equals(sectionAndTestName)).isDefined()) {
+			if (newTestCase.getSection().isDefined()) {
+				getReporter().suiteWarning(suiteName, "Test name is not unique in this section: " + sectionAndTestName);
+			} else {
+				getReporter().suiteWarning(suiteName, "Test name is not unique: " + name);
+			}
 		}
-		this.testCases.add(new DefaultTestCase(sectionHolder.get(), name, suiteName, testCase));
+		this.testCases.add(newTestCase);
 	}
 
 	public List<DefaultTestCase> getTestCases() {
