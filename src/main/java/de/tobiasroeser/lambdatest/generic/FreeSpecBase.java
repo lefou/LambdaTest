@@ -22,6 +22,11 @@ import de.tobiasroeser.lambdatest.Section;
  */
 public abstract class FreeSpecBase implements LambdaTest {
 
+	/**
+	 * The ThreadLocal used to hold the current section.
+	 * 
+	 * @see #section(String, Runnable)
+	 */
 	private static final ThreadLocal<Section> sectionHolder = new ThreadLocal<Section>();
 
 	private static Reporter defaultReporter = new LoggingWrappingReporter(new DefaultReporter());
@@ -30,6 +35,11 @@ public abstract class FreeSpecBase implements LambdaTest {
 		return defaultReporter;
 	}
 
+	/**
+	 * Set the default reporter.
+	 * 
+	 * @see #withDefaultReporter(Reporter, F0WithException)
+	 */
 	public static void setDefaultReporter(final Reporter reporter) {
 		defaultReporter = reporter;
 	}
@@ -38,6 +48,18 @@ public abstract class FreeSpecBase implements LambdaTest {
 		public R apply() throws Exception;
 	}
 
+	/**
+	 * Executes a given function `f` with the default reporter set to
+	 * `reporter`, and restored the previous default reporter afterwards.
+	 * 
+	 * @param reporter
+	 *            The default reporter to be used while executing `f`.
+	 * @param f
+	 *            The function to apply.
+	 * @return The return value of the function `f`.
+	 * @throws Exception
+	 *             All expeceptions thrown by `f`.
+	 */
 	public static <T> T withDefaultReporter(final Reporter reporter, final F0WithException<T> f) throws Exception {
 		final Reporter defRep = getDefaultReporter();
 		try {
@@ -48,6 +70,8 @@ public abstract class FreeSpecBase implements LambdaTest {
 		}
 	}
 
+	// END OF STATIC PART
+	
 	private Reporter reporter = defaultReporter;
 	private final List<DefaultTestCase> testCases = new LinkedList<>();
 	private String suiteName = getClass().getName();
