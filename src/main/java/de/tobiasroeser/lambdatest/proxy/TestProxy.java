@@ -133,11 +133,12 @@ public class TestProxy {
 				final String methodSignature = methodSignature(method, args);
 				final String interfaceName = method.getDeclaringClass().getSimpleName();
 
-				throw new UnsupportedOperationException(""
-						+ "Unhandled call: proxy=" + proxy + ", method=" + method + ", args=" + mkString(args, ", ")
-						+ "\nTo handle this call in the proxy, add the following to " + interfaceName
-						+ "\n ==> " + methodSignature + "{}"
-						+ "\n");
+				throw new UnsupportedOperationException("" +
+						"Unhandled call: proxy=" + proxy + ", method=" + method + ", args=" +
+						(args == null ? "null" : mkString(args, ", ")) +
+						"\nTo handle this call in the proxy, add the following to " + interfaceName +
+						"\n ==> " + methodSignature + "{}" +
+						"\n");
 			}
 		});
 	}
