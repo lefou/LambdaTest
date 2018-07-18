@@ -1,17 +1,18 @@
 package de.tobiasroeser.lambdatest.proxy;
 
-import static de.tobiasroeser.lambdatest.internal.Util.filterType;
-import static de.tobiasroeser.lambdatest.internal.Util.find;
-import static de.tobiasroeser.lambdatest.internal.Util.mkString;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import de.tobiasroeser.lambdatest.Optional;
 import de.tobiasroeser.lambdatest.internal.LoggerFactory;
+import static de.tobiasroeser.lambdatest.internal.Util.filterType;
+import static de.tobiasroeser.lambdatest.internal.Util.find;
+import static de.tobiasroeser.lambdatest.internal.Util.map;
+import static de.tobiasroeser.lambdatest.internal.Util.mkString;
 
 /**
  * Utility class for simple mocking of interfaces.
@@ -91,11 +92,12 @@ public class TestProxy {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T proxy(final ClassLoader classLoader, final List<Class<?>> interfaces,
-			final List<Object> delegates, final List<Option> options) {
+							  final List<Object> delegates, final List<Option> options) {
 
 		return (T) Proxy.newProxyInstance(classLoader, interfaces.toArray(new Class<?>[0]), (proxy, method, args) -> {
+			final String methodName = method.getName();
 			final Optional<IgnoreMethod> ignore = find(filterType(options, IgnoreMethod.class),
-					i -> i.getName().equals(method.getName()));
+					i -> i.getName().equals(methodName));
 			if (ignore.isDefined()) {
 				return ignore.get().getDefaultReturn();
 			}
@@ -125,14 +127,43 @@ public class TestProxy {
 						m.setAccessible(false);
 					}
 				}
-			} else if (method.getName().equals("toString") && args == null) {
+			} else if (methodName.equals("toString") && args == null) {
 				return "Proxy[" + mkString(interfaces, " & ") + "]@" + System.identityHashCode(proxy);
 			} else {
+				final String methodSignature = methodSignature(method, args);
+				final String interfaceName = method.getDeclaringClass().getSimpleName();
+
 				throw new UnsupportedOperationException(
 						"Unhandled call: proxy=" + proxy + ", method=" + method + ", args="
-								+ (args == null ? "null" : mkString(args, ",")));
+						+ mkArgListString(args)
+						+ "\n ==> Add to " + interfaceName + "::  " + methodSignature + "\n"
+				);
 			}
 		});
+	}
+
+	private static String methodSignature(final Method method, final Object[] args) {
+		final String argList = mkArgListString(args);
+		final String methodName = method.getName();
+		final String returnTypeName = method.getReturnType().getSimpleName();
+		return "public " + returnTypeName + " " + methodName + "(" + argList + ")";
+	}
+
+	private static String decapitalize(String string) {
+	    return string == null || string.isEmpty() ? "" : Character.toLowerCase(string.charAt(0)) + string.substring(1);
+	}
+
+	private static String mkArgListString(final Object[] args) {
+		if (args == null) {
+			return "";
+		}
+		final List<Object> argList = Arrays.asList(args);
+		return mkString(map(argList, o -> {
+					final String className = o.getClass().getSimpleName();
+					final String argName = decapitalize(className);
+					return className + " " + argName;
+				}),
+				" ,");
 	}
 
 	/**
