@@ -2,15 +2,17 @@ package de.tobiasroeser.lambdatest.proxy;
 
 import static de.tobiasroeser.lambdatest.internal.Util.filterType;
 import static de.tobiasroeser.lambdatest.internal.Util.find;
-import static de.tobiasroeser.lambdatest.internal.Util.map;
 import static de.tobiasroeser.lambdatest.internal.Util.mkString;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import de.tobiasroeser.lambdatest.Optional;
 import de.tobiasroeser.lambdatest.internal.LoggerFactory;
@@ -131,11 +133,12 @@ public class TestProxy {
 			} else if (methodName.equals("toString") && args == null) {
 				return "Proxy[" + mkString(interfaces, " & ") + "]@" + System.identityHashCode(proxy);
 			} else {
-				final String methodSignature = methodSignature(method, args);
+				final String methodSignature = methodSignature(method);
 				final String interfaceName = method.getDeclaringClass().getSimpleName();
 
+				final String argObjects = args == null ? "" : mkString(args, ", ");
 				throw new UnsupportedOperationException(""
-						+ "Unhandled call: proxy=" + proxy + ", method=" + method + ", args=" + mkString(args, ", ")
+						+ "Unhandled call: proxy=" + proxy + ", method=" + method + ", args=" + argObjects
 						+ "\nTo handle this call in the proxy, add the following to " + interfaceName
 						+ "\n ==> " + methodSignature + "{}"
 						+ "\n");
@@ -143,28 +146,45 @@ public class TestProxy {
 		});
 	}
 
-	private static String methodSignature(final Method method, final Object[] args) {
-		final String argList = mkArgListString(args);
+	private static String methodSignature(final Method method) {
+		final String argList = mkArgListString(method.getGenericParameterTypes());
 		final String methodName = method.getName();
-		final String returnTypeName = method.getReturnType().getSimpleName();
-		return "public " + returnTypeName + " " + methodName + "(" + argList + ")";
+		final String returnTypeName = removeAllPackages(method.getGenericReturnType().getTypeName());
+		final TypeVariable<Method>[] typeParameters = method.getTypeParameters();
+		final String typeVariables = typeParameters == null || typeParameters.length == 0 ? "" : mkTypeVariablesList(typeParameters) + " ";
+
+		return "public " + typeVariables + returnTypeName + " " + methodName + "(" + argList + ")";
 	}
 
 	private static String decapitalize(String string) {
 		return string == null || string.isEmpty() ? "" : Character.toLowerCase(string.charAt(0)) + string.substring(1);
 	}
 
-	private static String mkArgListString(final Object[] args) {
+	private static String filterLetters(String string) {
+		return string.replaceAll("[^a-zA-Z0-9]","");
+	}
+
+	private static String mkTypeVariablesList(TypeVariable<Method>[] typeParameters){
+		return "<" + mkString(Arrays.stream(typeParameters).map(t -> t.getTypeName()).collect(Collectors.toList()),", ") + ">";
+	}
+	private static String mkArgListString(final Type[] args) {
 		if (args == null) {
 			return "";
 		}
-		final List<Object> argList = Arrays.asList(args);
-		final List<String> argsWithClassAndParameterName = map(argList, o -> {
-			final String className = o.getClass().getSimpleName();
-			final String argName = decapitalize(className);
-			return className + " " + argName;
-		});
+		final List<String> argsWithClassAndParameterName = new LinkedList<>();
+		for(int i =0; i < args.length; i++) {
+			final Type arg = args[i];
+			final String argWithPackages = arg.getTypeName();
+			final String className = removeAllPackages(argWithPackages);
+
+			final String argName = filterLetters(decapitalize("x"));
+			argsWithClassAndParameterName.add(className + " " + argName + i);
+		}
 		return mkString(argsWithClassAndParameterName," ,");
+	}
+
+	private static String removeAllPackages(final String argWithPackages) {
+		return argWithPackages.replaceAll("[a-zA-Z0-1_]+\\.","");
 	}
 
 	/**
