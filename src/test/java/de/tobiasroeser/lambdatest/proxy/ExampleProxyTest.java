@@ -1,13 +1,14 @@
 package de.tobiasroeser.lambdatest.proxy;
 
-import static de.tobiasroeser.lambdatest.Expect.expectEquals;
-
 import de.tobiasroeser.lambdatest.testng.FreeSpec;
+import static de.tobiasroeser.lambdatest.Expect.expectEquals;
 
 public class ExampleProxyTest extends FreeSpec {
 
 	interface Dependency {
 		String hello();
+
+		int foobar(String s1, int i2);
 	}
 
 	class ServiceWithDependency {
@@ -37,9 +38,7 @@ public class ExampleProxyTest extends FreeSpec {
 		test("A proxy without delegates as mandatory dependencies should fail", () -> {
 			final Dependency dep = TestProxy.proxy(Dependency.class);
 			final ServiceWithDependency service = new ServiceWithDependency(dep);
-			intercept(UnsupportedOperationException.class, () -> {
-				service.usingDependency();
-			});
+			intercept(UnsupportedOperationException.class, "(?s).*public String hello\\(\\).*",() -> service.usingDependency());
 		});
 
 		test("A proxy with delegates as mandatory dependency should succeed", () -> {
@@ -51,6 +50,17 @@ public class ExampleProxyTest extends FreeSpec {
 			});
 			final ServiceWithDependency service = new ServiceWithDependency(dep);
 			expectEquals(service.usingDependency(), "Hello Proxy!");
+		});
+
+		test("A proxy with with missing implementation should print a nice (copy 'n paste -able) method signature", () -> {
+			final Dependency dep = TestProxy.proxy(Dependency.class, new Object() {
+				@SuppressWarnings("unused")
+				public String hello() {
+					return "Hello Proxy!";
+				}
+			});
+			intercept(UnsupportedOperationException.class, "(?s).*public int foobar\\(String string ,Integer integer\\).*",
+					() -> dep.foobar("a",1));
 		});
 
 	}
