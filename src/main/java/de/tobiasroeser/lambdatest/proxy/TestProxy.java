@@ -159,12 +159,12 @@ public class TestProxy {
 			return "";
 		}
 		final List<Object> argList = Arrays.asList(args);
-		return mkString(map(argList, o -> {
+		final List<String> argsWithClassAndParameterName = map(argList, o -> {
 			final String className = o.getClass().getSimpleName();
 			final String argName = decapitalize(className);
 			return className + " " + argName;
-		}),
-				" ,");
+		});
+		return mkString(argsWithClassAndParameterName," ,");
 	}
 
 	/**
