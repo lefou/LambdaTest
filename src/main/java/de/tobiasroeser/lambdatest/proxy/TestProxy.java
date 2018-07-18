@@ -84,15 +84,15 @@ public class TestProxy {
 	 * @param delegates
 	 *            The objects to which method-invocations of the proxy will be
 	 *            delegated to.
-	 * @return The invocation result of the delegated method calls, if found. If
-	 *         no delegate was found, an exception.
+	 * @return The invocation result of the delegated method calls, if found. If no
+	 *         delegate was found, an exception.
 	 *
 	 * @throws UnsupportedOperationException
 	 *             If no delegate method was found.
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T proxy(final ClassLoader classLoader, final List<Class<?>> interfaces,
-							  final List<Object> delegates, final List<Option> options) {
+			final List<Object> delegates, final List<Option> options) {
 
 		return (T) Proxy.newProxyInstance(classLoader, interfaces.toArray(new Class<?>[0]), (proxy, method, args) -> {
 			final String methodName = method.getName();
@@ -133,11 +133,11 @@ public class TestProxy {
 				final String methodSignature = methodSignature(method, args);
 				final String interfaceName = method.getDeclaringClass().getSimpleName();
 
-				throw new UnsupportedOperationException(
-						"Unhandled call: proxy=" + proxy + ", method=" + method + ", args="
-						+ mkArgListString(args)
-						+ "\n ==> Add to " + interfaceName + "::  " + methodSignature + "\n"
-				);
+				throw new UnsupportedOperationException(""
+						+ "Unhandled call: proxy=" + proxy + ", method=" + method + ", args=" + mkString(args, ", ")
+						+ "\nTo handle this call in the proxy, add the following to " + interfaceName
+						+ "\n ==> " + methodSignature + "{}"
+						+ "\n");
 			}
 		});
 	}
@@ -150,7 +150,7 @@ public class TestProxy {
 	}
 
 	private static String decapitalize(String string) {
-	    return string == null || string.isEmpty() ? "" : Character.toLowerCase(string.charAt(0)) + string.substring(1);
+		return string == null || string.isEmpty() ? "" : Character.toLowerCase(string.charAt(0)) + string.substring(1);
 	}
 
 	private static String mkArgListString(final Object[] args) {
@@ -159,10 +159,10 @@ public class TestProxy {
 		}
 		final List<Object> argList = Arrays.asList(args);
 		return mkString(map(argList, o -> {
-					final String className = o.getClass().getSimpleName();
-					final String argName = decapitalize(className);
-					return className + " " + argName;
-				}),
+			final String className = o.getClass().getSimpleName();
+			final String argName = decapitalize(className);
+			return className + " " + argName;
+		}),
 				" ,");
 	}
 
@@ -170,12 +170,11 @@ public class TestProxy {
 	 * Compact version of {@link #proxy(ClassLoader, List, List, List)}.
 	 *
 	 * @param classLoaderOrInterfaceOrDelegateOrOption
-	 *            Variable set of parameters used the following way: 1) if
-	 *            instance of {@link Option}, than used as option, 2) if
-	 *            instance of ClassLoader, then used to create the proxy
-	 *            instance, 3) if a class (no interface), used as delegate
-	 *            object, 4) else it will be used as interface to be implemented
-	 *            by the proxy.
+	 *            Variable set of parameters used the following way: 1) if instance
+	 *            of {@link Option}, than used as option, 2) if instance of
+	 *            ClassLoader, then used to create the proxy instance, 3) if a class
+	 *            (no interface), used as delegate object, 4) else it will be used
+	 *            as interface to be implemented by the proxy.
 	 *
 	 * @see #proxy(ClassLoader, List, List, List)
 	 */
