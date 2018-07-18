@@ -1,18 +1,22 @@
 package de.tobiasroeser.lambdatest.proxy;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
-import de.tobiasroeser.lambdatest.Optional;
-import de.tobiasroeser.lambdatest.internal.LoggerFactory;
+import static de.tobiasroeser.lambdatest.internal.Util.decapitalize;
 import static de.tobiasroeser.lambdatest.internal.Util.filterType;
 import static de.tobiasroeser.lambdatest.internal.Util.find;
 import static de.tobiasroeser.lambdatest.internal.Util.map;
 import static de.tobiasroeser.lambdatest.internal.Util.mkString;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import de.tobiasroeser.lambdatest.Optional;
+import de.tobiasroeser.lambdatest.internal.LoggerFactory;
 
 /**
  * Utility class for simple mocking of interfaces.
@@ -84,8 +88,8 @@ public class TestProxy {
 	 * @param delegates
 	 *            The objects to which method-invocations of the proxy will be
 	 *            delegated to.
-	 * @return The invocation result of the delegated method calls, if found. If no
-	 *         delegate was found, an exception.
+	 * @return The invocation result of the delegated method calls, if found. If
+	 *         no delegate was found, an exception.
 	 *
 	 * @throws UnsupportedOperationException
 	 *             If no delegate method was found.
@@ -130,52 +134,56 @@ public class TestProxy {
 			} else if (methodName.equals("toString") && args == null) {
 				return "Proxy[" + mkString(interfaces, " & ") + "]@" + System.identityHashCode(proxy);
 			} else {
-				final String methodSignature = methodSignature(method, args);
-				final String interfaceName = method.getDeclaringClass().getSimpleName();
-
+				final String methodSignature = methodSignature(method);
 				throw new UnsupportedOperationException("" +
 						"Unhandled call: proxy=" + proxy + ", method=" + method + ", args=" +
 						(args == null ? "null" : mkString(args, ", ")) +
-						"\nTo handle this call in the proxy, add the following to " + interfaceName +
-						"\n ==> " + methodSignature + "{}" +
+						"\nTo handle this call in the proxy delegate object, add a method with the following signature:"
+						+
+						"\n  " + methodSignature + " {\n  }" +
 						"\n");
 			}
 		});
 	}
 
-	private static String methodSignature(final Method method, final Object[] args) {
-		final String argList = mkArgListString(args);
+	private static String methodSignature(final Method method) {
+		final String argList = mkArgListString(method.getParameterTypes());
 		final String methodName = method.getName();
 		final String returnTypeName = method.getReturnType().getSimpleName();
 		return "public " + returnTypeName + " " + methodName + "(" + argList + ")";
 	}
 
-	private static String decapitalize(String string) {
-		return string == null || string.isEmpty() ? "" : Character.toLowerCase(string.charAt(0)) + string.substring(1);
-	}
-
-	private static String mkArgListString(final Object[] args) {
-		if (args == null) {
+	private static String mkArgListString(Class<?>[] types) {
+		if (types == null) {
 			return "";
 		}
-		final List<Object> argList = Arrays.asList(args);
-		return mkString(map(argList, o -> {
-			final String className = o.getClass().getSimpleName();
+
+		// type count to avoid clashing names
+		final Map<String, Integer> count = new LinkedHashMap<>();
+
+		final List<Class<?>> paramList = Arrays.asList(types);
+		final List<String> args = map(paramList, o -> {
+			final String className = o.getSimpleName();
 			final String argName = decapitalize(className);
-			return className + " " + argName;
-		}),
-				" ,");
+			Integer c = count.get(argName);
+			c = c == null ? 1 : c + 1;
+			count.put(argName, c);
+			return className + " " + argName + c;
+		});
+
+		return mkString(args, ", ");
 	}
 
 	/**
 	 * Compact version of {@link #proxy(ClassLoader, List, List, List)}.
 	 *
 	 * @param classLoaderOrInterfaceOrDelegateOrOption
-	 *            Variable set of parameters used the following way: 1) if instance
-	 *            of {@link Option}, than used as option, 2) if instance of
-	 *            ClassLoader, then used to create the proxy instance, 3) if a class
-	 *            (no interface), used as delegate object, 4) else it will be used
-	 *            as interface to be implemented by the proxy.
+	 *            Variable set of parameters used the following way: 1) if
+	 *            instance of {@link Option}, than used as option, 2) if
+	 *            instance of ClassLoader, then used to create the proxy
+	 *            instance, 3) if a class (no interface), used as delegate
+	 *            object, 4) else it will be used as interface to be implemented
+	 *            by the proxy.
 	 *
 	 * @see #proxy(ClassLoader, List, List, List)
 	 */
