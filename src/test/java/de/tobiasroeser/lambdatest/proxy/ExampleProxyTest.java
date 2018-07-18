@@ -59,7 +59,7 @@ public class ExampleProxyTest extends FreeSpec {
 			expectEquals(service.usingDependency(), "Hello Proxy!");
 		});
 
-		test("A proxy with with missing implementation should print a nice (copy 'n paste -able) method signature",
+		test("A proxy with missing implementation should print a nice (copy 'n paste -able) method signature",
 				() -> {
 					final Dependency dep = TestProxy.proxy(Dependency.class, new Object() {
 						@SuppressWarnings("unused")
