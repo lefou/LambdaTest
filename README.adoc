@@ -1,8 +1,8 @@
 = Lambda Test
 :toc:
 :toc-placement: preamble
-:lambdatestversion: 0.5.0
-:documentationversion: 0.5.0
+:lambdatestversion: 0.6.0
+:documentationversion: 0.6.0
 :testngversion: 6.11
 :junitversion: 4.12
 :lambdatest: LambdaTest
@@ -209,7 +209,9 @@ You can use these as an alternative to the assertion methods provides by other u
 * `expectNotEquals` - Assert non-equality of two given objects or values.
 * `expectTrue` - Assert a value evaluates to `true`
 * `expectFalse` - Assert a value evaluates to `false`
-* `expectString` - Assert that a given string is non-null and return an instance of `ExpectString` with provides furter checks on the actual string in a fluent API
+* `expectString` - Assert that a given string is non-null and return an instance of `ExpectString` with provides further checks on the actual string in a fluent API
+* `expectCollection` - Assert that a given collection is non-null and return an instance of `ExpectCollection` with provides further checks on the actual colletion in a fluent API
+* `expectMap` - Assert that a given map is non-null and return an instance of `ExpectMap` with provides further checks on the actual map in a fluent API
 * `intercept` - Assert that a code block throws an Exception of the given type and optional with an message matching a given regular expression. Returns the thrown exception for further analysis
 
 There are more method in `Expect` with setup and control it non-fail-fast handling via ThreadLocals. Those are only needed, if you want to use these behaviour outside of `FreeSpec`.
@@ -219,9 +221,13 @@ There are more method in `Expect` with setup and control it non-fail-fast handli
 If you want to use the non-fail-fast behaviour of the `Expect` class  outside of `FreeSpec`, you have to take care of setup and finalization by yourself.
 --
 
-== Fluent String analysis with `ExpectString`
+== Fluent API to investigate common types
 
-To inspect and assert string, use the class `ExpectString`, which is also returned, if you use `Expect.expectString`.
+All fluet API `ExpectXXX` classes support the fail-late behaviour.
+
+=== Analyze Strings with `ExpectString`
+
+To inspect and assert strings, use the class `ExpectString`, which is also returned, if you use `Expect.expectString`.
 
 .Methods of `ExpectString`
 * `isEqual`
@@ -243,6 +249,14 @@ To inspect and assert string, use the class `ExpectString`, which is also return
 * `containsNot`
 * `containsIgnoreCase`
 * `containsIgnoreCaseNot`
+
+=== Analyze Collections with `ExpectCollection`
+
+To inspect and assert collections, use the class `ExpectCollection`, which is also returned, if you use `Expect.expectCollection`.
+
+=== Analyze Maps with `ExpectMap`
+
+To inspect and assert maps, use the class `ExpectMap`, which is also returned, if you use `Expect.expectMap`.
 
 
 == Testing files and directories with `TempFile`
@@ -445,9 +459,14 @@ If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[
 
 == Changelog
 
-=== LambdaTest {master} - NOT RELEASED
+=== LambdaTest 0.6.0 - 2018-06-22
 
-* Added `Expect.expectCollection` and `ExpectCollection` class to assert properties of collection with a fluet api.
+* Added `Expect.expectCollection` and `ExpectCollection` class to assert properties of collection with a fluent API.
+* `TestProxy` now properly passes exceptions thrown by delegate objects.
+* Improved detection of test name collisions (reported as suite warning).
+* The default reporter can now be set via `FreeSpecBase.setDefaultReporter`.
+* Added `Expect.expectMap` and `ExpectMap` class to assert properties of maps with a fluent API.
+
 
 === LambdaTest 0.5.0 - 2018-06-11
 

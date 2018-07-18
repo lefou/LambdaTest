@@ -2,7 +2,7 @@ import org.sonatype.maven.polyglot.scala.model._
 import scala.collection.immutable.Seq
 
 val namespace = "de.tobiasroeser.lambdatest"
-val lambdatest = "de.tototec" % namespace % "0.6.0-SNAPSHOT"
+val lambdatest = "de.tototec" % namespace % "0.6.1-SNAPSHOT"
 val gav = lambdatest
 val url = "https://github.com/lefou/LambdaTest"
 
@@ -21,7 +21,7 @@ object Plugins {
   val jar = "org.apache.maven.plugins" % "maven-jar-plugin" % "2.5"
   val retrolambda = "net.orfjackal.retrolambda" % "retrolambda-maven-plugin" % "1.8.0"
   val reproducibleBuild = "io.github.zlika" % "reproducible-build-maven-plugin" % "0.7"
-  val translate = "io.takari.polyglot" % "polyglot-translate-plugin" % "0.3.0"
+  val translate = "io.takari.polyglot" % "polyglot-translate-plugin" % "0.3.1"
   val javadoc = "org.apache.maven.plugins" % "maven-javadoc-plugin" % "3.0.1"
 }
 

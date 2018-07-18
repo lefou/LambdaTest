@@ -16,6 +16,10 @@ import de.tobiasroeser.lambdatest.Optional;
  */
 public class Util {
 
+	public static String decapitalize(String string) {
+		return string == null || string.isEmpty() ? "" : Character.toLowerCase(string.charAt(0)) + string.substring(1);
+	}
+
 	public static <T> boolean exists(final Iterable<T> source, final F1<? super T, Boolean> exists) {
 		for (final T t : source) {
 			if (exists.apply(t)) {

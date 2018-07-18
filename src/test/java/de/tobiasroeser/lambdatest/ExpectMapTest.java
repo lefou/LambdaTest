@@ -1,10 +1,11 @@
 package de.tobiasroeser.lambdatest;
 
+import static de.tobiasroeser.lambdatest.Expect.expectMap;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import de.tobiasroeser.lambdatest.testng.FreeSpec;
-import static de.tobiasroeser.lambdatest.Expect.expectMap;
 
 public class ExpectMapTest extends FreeSpec {
 
@@ -21,6 +22,21 @@ public class ExpectMapTest extends FreeSpec {
 			test("for empty map", () -> expectMap(mapOf()).hasSize(0));
 			test("non-empty map", () -> expectMap(mapOf(1, 1, 2, 2, 3, 3)).hasSize(3));
 			testFail("wrong size should fail", () -> expectMap(mapOf(1, 1)).hasSize(2));
+		});
+
+		section("ExpectMap.contains", () -> {
+			test("for existing key value pairs", () -> {
+				expectMap(mapOf(1, 1, 2, 2, 3, 3)).contains(1, 1);
+				expectMap(mapOf(1, 1, 2, 2, 3, 3)).contains(2, 2);
+				expectMap(mapOf(1, 1, 2, 2, 3, 3)).contains(3, 3);
+			});
+			testFail("for non-contained key should fail", () -> expectMap(mapOf(1, 1, 2, 2, 3, 3)).contains(4, 1));
+			testFail("for non-contained value should fail", () -> expectMap(mapOf(1, 1, 2, 2, 3, 3)).contains(1, 4));
+			testFail("for null value should fail", () -> expectMap(mapOf(1, 1, 2, 2, 3, 3)).contains(1, null));
+			test("for null-values", () -> {
+				expectMap(mapOf(1, 1, 2, null)).contains(1, 1);
+				expectMap(mapOf(1, 1, 2, null)).contains(2, null);
+			});
 		});
 
 		section("ExpectMap.containsKey", () -> {
@@ -49,26 +65,26 @@ public class ExpectMapTest extends FreeSpec {
 			});
 		});
 
-		section("ExpectMap.keySet", () -> {
+		section("ExpectMap.keys", () -> {
 			test("should delegate to ExpectCollection", () -> {
-				expectMap(mapOf(1, 1, 2, 2, 3, 3)).keySet().contains(1);
-				expectMap(mapOf(1, 1, 2, 2, 3, 3)).keySet().contains(2);
-				expectMap(mapOf(1, 1, 2, 2, 3, 3)).keySet().contains(3);
+				expectMap(mapOf(1, 1, 2, 2, 3, 3)).keys().contains(1);
+				expectMap(mapOf(1, 1, 2, 2, 3, 3)).keys().contains(2);
+				expectMap(mapOf(1, 1, 2, 2, 3, 3)).keys().contains(3);
 			});
 		});
 
-		section("Expect.expectMap()", () -> {
+		section("Expect.expectMap", () -> {
 			test("should delegate to ExpectMap", () -> {
 				Expect.expectMap(mapOf(1, 1)).containsKey(1);
 			});
 		});
 	}
 
-	private void testFail(String testName, RunnableWithException testCase) {
+	private void testFail(final String testName, final RunnableWithException testCase) {
 		test(testName, () -> intercept(AssertionError.class, testCase));
 	}
 
-	static private <K> Map<K, K> mapOf(K... ks) {
+	private static <K> Map<K, K> mapOf(final K... ks) {
 		if (ks.length % 2 != 0) {
 			new AssertionError("parameter count must be even");
 		}

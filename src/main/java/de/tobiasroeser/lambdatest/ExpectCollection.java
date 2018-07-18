@@ -9,28 +9,60 @@ import java.util.Set;
 
 import de.tobiasroeser.lambdatest.internal.Util;
 
+/**
+ * Check for non-null {@link Collection} and provides further checks on the
+ * actual collection in a fluent API.
+ *
+ * @param <T>
+ *            The type of the collection elements.
+ */
 public class ExpectCollection<T> extends ExpectBase<ExpectCollection<T>> {
-	final private Collection<T> actual;
 
+	/**
+	 * Check for non-null {@link Collection} and provides further checks on the
+	 * actual collection in a fluent API.
+	 *
+	 * @see ExpectCollection
+	 *
+	 * @param actual
+	 *            The Collection<T> to check.
+	 * @return A {@link ExpectCollection} to express further expectations on the
+	 *         actual collection.
+	 */
+	public static <T> ExpectCollection<T> expectCollection(final Collection<T> actual) {
+		return new ExpectCollection<>(actual);
+	}
+
+	private final Collection<T> actual;
+
+	/**
+	 * Creates an instance for the non-null collection `actual`.
+	 *
+	 * @param actual
+	 *            The Collection<T> to check.
+	 */
 	public ExpectCollection(final Collection<T> actual) {
 		check(actual != null, "Actual is not a Collection but null.");
 		this.actual = actual;
 	}
 
-	public static <T> ExpectCollection<T> expectCollection(Collection<T> actual) {
-		return new ExpectCollection<>(actual);
-	}
-
 	public ExpectCollection<T> isEmpty() {
-		return check(actual.isEmpty(), "Actual collection is not empty but has a size of {0}.\nActual: {1}", actual.size(), actual);
+		return check(actual.isEmpty(), "Actual collection is not empty but has a size of {0}.\nActual: {1}",
+				actual.size(), actual);
 	}
 
-	public ExpectCollection<T> hasSize(int expectedCount) {
-		if (expectedCount < 0) {
+	/**
+	 * Checks, that the collection has the expected site.
+	 * 
+	 * @param expectedSize
+	 */
+	public ExpectCollection<T> hasSize(final int expectedSize) {
+		if (expectedSize < 0) {
 			throw new IllegalArgumentException("Parameter `count` must be not negative");
 		}
-		return check(actual.size() == expectedCount,
-				"Actual collection has not expected size of {0}, actual size: {1}.\nActual: {2}", expectedCount, actual.size(), actual);
+		return check(actual.size() == expectedSize,
+				"Actual collection has not expected size of {0}, actual size: {1}.\nActual: {2}",
+				expectedSize, actual.size(), actual);
 	}
 
 	/**
@@ -38,9 +70,8 @@ public class ExpectCollection<T> extends ExpectBase<ExpectCollection<T>> {
 	 * 
 	 * @param expectedCount
 	 *            The number of expected duplicates.
-	 * @return
 	 */
-	public ExpectCollection<T> hasDuplicates(int expectedCount) {
+	public ExpectCollection<T> hasDuplicates(final int expectedCount) {
 		if (expectedCount < 0) {
 			throw new IllegalArgumentException("Parameter `count` must be not negative");
 		}
@@ -51,6 +82,9 @@ public class ExpectCollection<T> extends ExpectBase<ExpectCollection<T>> {
 				expectedCount, duplicates);
 	}
 
+	/**
+	 * Check, that the collection has no duplicates.
+	 */
 	public ExpectCollection<T> hasNoDuplicates() {
 		final HashSet<T> set = new LinkedHashSet<>(actual);
 		final boolean cond = actual.size() == set.size();
@@ -74,9 +108,15 @@ public class ExpectCollection<T> extends ExpectBase<ExpectCollection<T>> {
 		return check(false, "Actual collection has duplicates: ", Util.mkString(duplicatesAsString, "{", ",", "}"));
 	}
 
-	public ExpectCollection<T> contains(final T fragment) {
-		return check(actual.contains(fragment),
-				"Actual collection does not contain expected element \"{0}\", actual: \"{1}\"", fragment, actual);
+	/**
+	 * Checks, that the collection contains the given element.
+	 * 
+	 * @param element
+	 *            The element that must be contained in the collection.
+	 */
+	public ExpectCollection<T> contains(final T element) {
+		return check(actual.contains(element),
+				"Actual collection does not contain expected element \"{0}\", actual: \"{1}\"", element, actual);
 	}
 
 	/**
@@ -85,13 +125,18 @@ public class ExpectCollection<T> extends ExpectBase<ExpectCollection<T>> {
 	 * 
 	 * @param element
 	 *            The element that must be contained in the collection.
-	 * @return
 	 */
 	public ExpectCollection<T> containsIdentical(final T element) {
 		return check(Util.exists(actual, e -> e == element),
 				"Actual collection does not contain expected element \"{0}\", actual: \"{1}\"", element, actual);
 	}
 
+	/**
+	 * Checks, that the collection does not contain the given element.
+	 * 
+	 * @param element
+	 *            The element that must be not contained in the collection.
+	 */
 	public ExpectCollection<T> containsNot(final T fragment) {
 		return check(!actual.contains(fragment),
 				"Actual must not contain expected element \"{0}\", actual: \"{1}\"", fragment, actual);
@@ -104,7 +149,6 @@ public class ExpectCollection<T> extends ExpectBase<ExpectCollection<T>> {
 	 * 
 	 * @param element
 	 *            The element that must be contained in the collection.
-	 * @return
 	 */
 	public ExpectCollection<T> containsNotIdentical(final T element) {
 		return check(Util.forall(actual, e -> e != element),

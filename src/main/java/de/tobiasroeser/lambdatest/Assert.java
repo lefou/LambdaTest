@@ -32,8 +32,8 @@ public class Assert {
 			final Object[] niceArgs = new Object[args.length];
 			for (int i = 0; i < args.length; ++i) {
 				final Object arg = args[i];
-				final Class<? extends Object> argClass = arg.getClass();
-				if (arg != null && argClass.isArray()) {
+				if (arg != null && arg.getClass().isArray()) {
+					final Class<? extends Object> argClass = arg.getClass();
 					List<Object> argObjects = new LinkedList<Object>();
 					if (argClass.equals(boolean[].class)) {
 						for (final boolean b : (boolean[]) arg) {
