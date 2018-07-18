@@ -11,10 +11,12 @@ import de.tobiasroeser.lambdatest.testng.FreeSpec;
 
 public class ExampleProxyTest extends FreeSpec {
 
-	interface Dependency {
+	interface Dependency<U> {
 		String hello();
 
 		int foobar(String s1, int i2);
+
+		U baz(List<U> arg1);
 
 		String list(List<String> strings);
 
@@ -22,7 +24,7 @@ public class ExampleProxyTest extends FreeSpec {
 
 		<T, S> T generics2(List<S> ts);
 
-		<T, S> T generics3(Map<S,List<T>> ts);
+		<T, S> T generics3(Map<S, List<T>> ts);
 	}
 
 	class ServiceWithDependency {
@@ -81,6 +83,18 @@ public class ExampleProxyTest extends FreeSpec {
 										"(?s).*public int foobar\\(String x0 ,int x1\\).*",
 										() -> dep.foobar("a", 1));
 							});
+					test("case: U baz(List<U> arg1)",
+							() -> {
+								final Dependency dep = TestProxy.proxy(Dependency.class, new Object() {
+									@SuppressWarnings("unused")
+									public String hello() {
+										return "Hello Proxy!";
+									}
+								});
+								intercept(UnsupportedOperationException.class,
+										"(?s).*public U baz\\(List<U> x0\\).*",
+										() -> dep.baz(new ArrayList()));
+							});
 					test("case: String list(List<String> strings)",
 							() -> {
 								final Dependency dep = TestProxy.proxy(Dependency.class, new Object() {
@@ -120,17 +134,19 @@ public class ExampleProxyTest extends FreeSpec {
 							});
 
 					test("case: <T, S> T generics3(Map<S,List<T>> ts)",
-											() -> {
-												final Dependency dep = TestProxy.proxy(Dependency.class, new Object() {
-													@SuppressWarnings("unused")
-													public String hello() {
-														return "Hello Proxy!";
-													}
-												});
-												intercept(UnsupportedOperationException.class,
-														"(?s).*public <T, S> T generics3\\(Map<S, List<T>> x0\\).*",
-														() -> dep.generics3(new LinkedHashMap<String, List<String>>()));
-											});
+							() -> {
+								final Dependency dep = TestProxy.proxy(Dependency.class, new Object() {
+									@SuppressWarnings("unused")
+									public String hello() {
+										return "Hello Proxy!";
+									}
+								});
+								intercept(UnsupportedOperationException.class,
+										"(?s).*public <T, S> T generics3\\(Map<S, List<T>> x0\\).*",
+										() -> {
+											dep.generics3(new LinkedHashMap<String, List<String>>());
+										});
+							});
 				});
 	}
 
