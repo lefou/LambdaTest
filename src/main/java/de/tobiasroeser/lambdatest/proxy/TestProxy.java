@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 import de.tobiasroeser.lambdatest.Optional;
 import de.tobiasroeser.lambdatest.internal.LoggerFactory;
+import de.tobiasroeser.lambdatest.internal.Util;
 
 /**
  * Utility class for simple mocking of interfaces.
@@ -156,10 +157,6 @@ public class TestProxy {
 		return "public " + typeVariables + returnTypeName + " " + methodName + "(" + argList + ")";
 	}
 
-	private static String decapitalize(String string) {
-		return string == null || string.isEmpty() ? "" : Character.toLowerCase(string.charAt(0)) + string.substring(1);
-	}
-
 	private static String filterLetters(String string) {
 		return string.replaceAll("[^a-zA-Z0-9]","");
 	}
@@ -177,7 +174,7 @@ public class TestProxy {
 			final String argWithPackages = arg.getTypeName();
 			final String className = removeAllPackages(argWithPackages);
 
-			final String argName = filterLetters(decapitalize("x"));
+			final String argName = filterLetters(Util.decapitalize("x"));
 			argsWithClassAndParameterName.add(className + " " + argName + i);
 		}
 		return mkString(argsWithClassAndParameterName," ,");
