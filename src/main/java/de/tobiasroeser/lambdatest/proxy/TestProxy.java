@@ -1,5 +1,10 @@
 package de.tobiasroeser.lambdatest.proxy;
 
+import static de.tobiasroeser.lambdatest.internal.Util.filterType;
+import static de.tobiasroeser.lambdatest.internal.Util.find;
+import static de.tobiasroeser.lambdatest.internal.Util.map;
+import static de.tobiasroeser.lambdatest.internal.Util.mkString;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -9,10 +14,6 @@ import java.util.List;
 
 import de.tobiasroeser.lambdatest.Optional;
 import de.tobiasroeser.lambdatest.internal.LoggerFactory;
-import static de.tobiasroeser.lambdatest.internal.Util.filterType;
-import static de.tobiasroeser.lambdatest.internal.Util.find;
-import static de.tobiasroeser.lambdatest.internal.Util.map;
-import static de.tobiasroeser.lambdatest.internal.Util.mkString;
 
 /**
  * Utility class for simple mocking of interfaces.

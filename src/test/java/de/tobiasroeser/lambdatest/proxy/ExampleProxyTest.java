@@ -1,7 +1,8 @@
 package de.tobiasroeser.lambdatest.proxy;
 
-import de.tobiasroeser.lambdatest.testng.FreeSpec;
 import static de.tobiasroeser.lambdatest.Expect.expectEquals;
+
+import de.tobiasroeser.lambdatest.testng.FreeSpec;
 
 public class ExampleProxyTest extends FreeSpec {
 
