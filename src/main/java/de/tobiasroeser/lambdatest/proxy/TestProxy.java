@@ -1,14 +1,19 @@
 package de.tobiasroeser.lambdatest.proxy;
 
+import static de.tobiasroeser.lambdatest.internal.Util.decapitalize;
 import static de.tobiasroeser.lambdatest.internal.Util.filterType;
 import static de.tobiasroeser.lambdatest.internal.Util.find;
+import static de.tobiasroeser.lambdatest.internal.Util.map;
 import static de.tobiasroeser.lambdatest.internal.Util.mkString;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import de.tobiasroeser.lambdatest.Optional;
 import de.tobiasroeser.lambdatest.internal.LoggerFactory;
@@ -94,8 +99,9 @@ public class TestProxy {
 			final List<Object> delegates, final List<Option> options) {
 
 		return (T) Proxy.newProxyInstance(classLoader, interfaces.toArray(new Class<?>[0]), (proxy, method, args) -> {
+			final String methodName = method.getName();
 			final Optional<IgnoreMethod> ignore = find(filterType(options, IgnoreMethod.class),
-					i -> i.getName().equals(method.getName()));
+					i -> i.getName().equals(methodName));
 			if (ignore.isDefined()) {
 				return ignore.get().getDefaultReturn();
 			}
@@ -125,14 +131,47 @@ public class TestProxy {
 						m.setAccessible(false);
 					}
 				}
-			} else if (method.getName().equals("toString") && args == null) {
+			} else if (methodName.equals("toString") && args == null) {
 				return "Proxy[" + mkString(interfaces, " & ") + "]@" + System.identityHashCode(proxy);
 			} else {
-				throw new UnsupportedOperationException(
-						"Unhandled call: proxy=" + proxy + ", method=" + method + ", args="
-								+ (args == null ? "null" : mkString(args, ",")));
+				final String methodSignature = methodSignature(method);
+				throw new UnsupportedOperationException("" +
+						"Unhandled call: proxy=" + proxy + ", method=" + method + ", args=" +
+						(args == null ? "null" : mkString(args, ", ")) +
+						"\nTo handle this call in the proxy delegate object, add a method with the following signature:"
+						+
+						"\n  " + methodSignature + " {\n  }" +
+						"\n");
 			}
 		});
+	}
+
+	private static String methodSignature(final Method method) {
+		final String argList = mkArgListString(method.getParameterTypes());
+		final String methodName = method.getName();
+		final String returnTypeName = method.getReturnType().getSimpleName();
+		return "public " + returnTypeName + " " + methodName + "(" + argList + ")";
+	}
+
+	private static String mkArgListString(Class<?>[] types) {
+		if (types == null) {
+			return "";
+		}
+
+		// type count to avoid clashing names
+		final Map<String, Integer> count = new LinkedHashMap<>();
+
+		final List<Class<?>> paramList = Arrays.asList(types);
+		final List<String> args = map(paramList, o -> {
+			final String className = o.getSimpleName();
+			final String argName = decapitalize(className);
+			Integer c = count.get(argName);
+			c = c == null ? 1 : c + 1;
+			count.put(argName, c);
+			return className + " " + argName + c;
+		});
+
+		return mkString(args, ", ");
 	}
 
 	/**
