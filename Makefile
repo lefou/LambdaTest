@@ -2,6 +2,10 @@
 build: pom.xml
 	mvn install
 
+.PHONY: test # Build and run tests
+test:
+	mvn test
+
 .PHONY: clean # Clean the project
 clean:
 	rm -r target

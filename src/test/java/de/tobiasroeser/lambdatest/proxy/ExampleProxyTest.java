@@ -1,8 +1,10 @@
 package de.tobiasroeser.lambdatest.proxy;
 
 import static de.tobiasroeser.lambdatest.Expect.expectEquals;
+import static de.tobiasroeser.lambdatest.Expect.expectTrue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +43,13 @@ public class ExampleProxyTest extends FreeSpec {
 		String notUsingDependency() {
 			return "Have a nice day!";
 		}
+
+	}
+
+	interface Generic<T> {
+		boolean genericArg(T arg1);
+
+		T pass(T t1);
 	}
 
 	public ExampleProxyTest() {
@@ -69,7 +78,52 @@ public class ExampleProxyTest extends FreeSpec {
 			expectEquals(service.usingDependency(), "Hello Proxy!");
 		});
 
+		test("A proxy handling an erased generic method should succeed", () -> {
+			final Dependency dep = TestProxy.proxy(Dependency.class, new Object() {
+				@SuppressWarnings("unused")
+				public Object baz(List<Object> arg1) {
+					return arg1.iterator().next();
+				}
+			});
+
+			expectEquals(dep.baz(Arrays.asList("1")), "1");
+		});
+
+		test("A Proxy handling a non-erased generic method should succeed", () -> {
+			final Dependency<String> dep = TestProxy.proxy(Dependency.class, new Object() {
+				@SuppressWarnings("unused")
+				public String baz(List<String> arg1) {
+					return arg1.iterator().next();
+				}
+			});
+
+			expectEquals(dep.baz(Arrays.asList("1")), "1");
+		});
+
+		test("A proxy handing an erased generic arg method should succeed", () -> {
+			final Generic<String> dep = TestProxy.proxy(Generic.class, new Object() {
+				@SuppressWarnings("unused")
+				public boolean genericArg(Object arg1) {
+					return true;
+				}
+			});
+			expectTrue(dep.genericArg("1"));
+		});
+
+		test("A proxy handing an non-erased generic arg method should fail", () -> {
+			final Generic<String> dep = TestProxy.proxy(Generic.class, new Object() {
+				@SuppressWarnings("unused")
+				public boolean genericArg(String arg1) {
+					return true;
+				}
+			});
+			intercept(UnsupportedOperationException.class,
+					"(?s).*\\Qpublic boolean genericArg(T x0)\\E.*",
+					() -> dep.genericArg("1"));
+		});
 		section("A proxy with with missing implementation should print a nice (copy 'n paste -able) method signature",
+
+
 				() -> {
 					test("case: int foobar(String s1, int i2)",
 							() -> {
