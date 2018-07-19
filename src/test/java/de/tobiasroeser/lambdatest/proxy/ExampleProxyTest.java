@@ -121,30 +121,19 @@ public class ExampleProxyTest extends FreeSpec {
 					"(?s).*\\Qpublic boolean genericArg(T x0)\\E.*",
 					() -> dep.genericArg("1"));
 		});
-		section("A proxy with with missing implementation should print a nice (copy 'n paste -able) method signature",
 
-
+    section("A proxy with with missing implementation should print a nice (copy 'n paste -able) method signature",
 				() -> {
 					test("case: int foobar(String s1, int i2)",
 							() -> {
-								final Dependency dep = TestProxy.proxy(Dependency.class, new Object() {
-									@SuppressWarnings("unused")
-									public String hello() {
-										return "Hello Proxy!";
-									}
-								});
-								intercept(UnsupportedOperationException.class,
+								final Dependency dep = TestProxy.proxy(Dependency.class);
+                intercept(UnsupportedOperationException.class,
 										"(?s).*public int foobar\\(String x0 ,int x1\\).*",
 										() -> dep.foobar("a", 1));
 							});
 					test("case: U baz(List<U> arg1)",
 							() -> {
-								final Dependency dep = TestProxy.proxy(Dependency.class, new Object() {
-									@SuppressWarnings("unused")
-									public String hello() {
-										return "Hello Proxy!";
-									}
-								});
+								final Dependency dep = TestProxy.proxy(Dependency.class);
 								intercept(UnsupportedOperationException.class,
 										"(?s).*public U baz\\(List<U> x0\\).*",
 										() -> dep.baz(new ArrayList()));
