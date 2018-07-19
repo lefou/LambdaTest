@@ -112,12 +112,7 @@ public class ExampleProxyTest extends FreeSpec {
 		});
 		test("A proxy with missing implementation should print a nice (copy 'n paste -able) method signature",
 				() -> {
-					final Dependency dep = TestProxy.proxy(Dependency.class, new Object() {
-						@SuppressWarnings("unused")
-						public String hello() {
-							return "Hello Proxy!";
-						}
-					});
+					final Dependency dep = TestProxy.proxy(Dependency.class);
 					intercept(UnsupportedOperationException.class,
 							"(?s).*\\Qpublic int foobar(String string1, int int1)\\E.*",
 							() -> dep.foobar("a", 1));
