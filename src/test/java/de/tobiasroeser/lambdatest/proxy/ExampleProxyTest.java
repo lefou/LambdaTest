@@ -3,19 +3,30 @@ package de.tobiasroeser.lambdatest.proxy;
 import static de.tobiasroeser.lambdatest.Expect.expectEquals;
 import static de.tobiasroeser.lambdatest.Expect.expectTrue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.tobiasroeser.lambdatest.testng.FreeSpec;
 
 public class ExampleProxyTest extends FreeSpec {
 
-	interface Dependency<T> {
+	interface Dependency<U> {
 		String hello();
 
 		int foobar(String s1, int i2);
 
-		T baz(List<T> arg1);
+		U baz(List<U> arg1);
+
+		String list(List<String> strings);
+
+		<T> T generics1(List<T> ts);
+
+		<T, S> T generics2(List<S> ts);
+
+		<T, S> T generics3(Map<S, List<T>> ts);
 	}
 
 	class ServiceWithDependency {
@@ -107,22 +118,79 @@ public class ExampleProxyTest extends FreeSpec {
 				}
 			});
 			intercept(UnsupportedOperationException.class,
-					"(?s).*\\Qpublic boolean genericArg(Object object1)\\E.*",
+					"(?s).*\\Qpublic boolean genericArg(T x0)\\E.*",
 					() -> dep.genericArg("1"));
 		});
-		test("A proxy with missing implementation should print a nice (copy 'n paste -able) method signature",
+
+    section("A proxy with with missing implementation should print a nice (copy 'n paste -able) method signature",
 				() -> {
-					final Dependency dep = TestProxy.proxy(Dependency.class);
-					intercept(UnsupportedOperationException.class,
-							"(?s).*\\Qpublic int foobar(String string1, int int1)\\E.*",
-							() -> dep.foobar("a", 1));
+					test("case: int foobar(String s1, int i2)",
+							() -> {
+								final Dependency dep = TestProxy.proxy(Dependency.class);
+                intercept(UnsupportedOperationException.class,
+										"(?s).*public int foobar\\(String x0 ,int x1\\).*",
+										() -> dep.foobar("a", 1));
+							});
+					test("case: U baz(List<U> arg1)",
+							() -> {
+								final Dependency dep = TestProxy.proxy(Dependency.class);
+								intercept(UnsupportedOperationException.class,
+										"(?s).*public U baz\\(List<U> x0\\).*",
+										() -> dep.baz(new ArrayList()));
+							});
+					test("case: String list(List<String> strings)",
+							() -> {
+								final Dependency dep = TestProxy.proxy(Dependency.class, new Object() {
+									@SuppressWarnings("unused")
+									public String hello() {
+										return "Hello Proxy!";
+									}
+								});
+								intercept(UnsupportedOperationException.class,
+										"(?s).*public String list\\(List<String> x0\\).*",
+										() -> dep.list(new ArrayList<>()));
+							});
 
-					intercept(UnsupportedOperationException.class,
-							"(?s).*\\Qpublic Object baz(List list1)\\E.*",
-							() -> dep.baz(Arrays.asList("1")));
+					test("case: <T> T generics1(List<T> ts)",
+							() -> {
+								final Dependency dep = TestProxy.proxy(Dependency.class, new Object() {
+									@SuppressWarnings("unused")
+									public String hello() {
+										return "Hello Proxy!";
+									}
+								});
+								intercept(UnsupportedOperationException.class,
+										"(?s).*public <T> T generics1\\(List<T> x0\\).*",
+										() -> dep.generics1(new ArrayList<String>()));
+							});
+					test("case: <T, S> T generics2(List<S> ts)",
+							() -> {
+								final Dependency dep = TestProxy.proxy(Dependency.class, new Object() {
+									@SuppressWarnings("unused")
+									public String hello() {
+										return "Hello Proxy!";
+									}
+								});
+								intercept(UnsupportedOperationException.class,
+										"(?s).*public <T, S> T generics2\\(List<S> x0\\).*",
+										() -> dep.generics2(new ArrayList<String>()));
+							});
 
+					test("case: <T, S> T generics3(Map<S,List<T>> ts)",
+							() -> {
+								final Dependency dep = TestProxy.proxy(Dependency.class, new Object() {
+									@SuppressWarnings("unused")
+									public String hello() {
+										return "Hello Proxy!";
+									}
+								});
+								intercept(UnsupportedOperationException.class,
+										"(?s).*public <T, S> T generics3\\(Map<S, List<T>> x0\\).*",
+										() -> {
+											dep.generics3(new LinkedHashMap<String, List<String>>());
+										});
+							});
 				});
-
 	}
 
 }
