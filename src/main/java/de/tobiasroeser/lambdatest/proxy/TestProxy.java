@@ -9,14 +9,18 @@ import static de.tobiasroeser.lambdatest.internal.Util.mkString;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import de.tobiasroeser.lambdatest.Optional;
 import de.tobiasroeser.lambdatest.internal.LoggerFactory;
+import de.tobiasroeser.lambdatest.internal.Util;
 
 /**
  * Utility class for simple mocking of interfaces.
@@ -25,7 +29,7 @@ import de.tobiasroeser.lambdatest.internal.LoggerFactory;
  * mocks or dummies as dependencies. As some interfaces are rather large and
  * contain many methods, implementing them for each test results in lots of
  * boilerplate code which is also hard to maintain.
- * 
+ *
  * This class provides an alternative way to easily create proxys with the
  * `proxy`-methods. You can either use the more explicit way with
  * {@link #proxy(ClassLoader, List, List, List)} or the more compact
@@ -147,13 +151,16 @@ public class TestProxy {
 	}
 
 	private static String methodSignature(final Method method) {
-		final String argList = mkArgListString(method.getParameterTypes());
+		final String argList = mkArgListString(method.getGenericParameterTypes());
 		final String methodName = method.getName();
-		final String returnTypeName = method.getReturnType().getSimpleName();
-		return "public " + returnTypeName + " " + methodName + "(" + argList + ")";
+		final String returnTypeName = removeAllPackages(method.getGenericReturnType().getTypeName());
+		final TypeVariable<Method>[] typeParameters = method.getTypeParameters();
+		final String typeVariables = typeParameters == null || typeParameters.length == 0 ? "" : mkTypeVariablesList(typeParameters) + " ";
+
+		return "public " + typeVariables + returnTypeName + " " + methodName + "(" + argList + ")";
 	}
 
-	private static String mkArgListString(Class<?>[] types) {
+	private static String mkArgListStringOld(Class<?>[] types) {
 		if (types == null) {
 			return "";
 		}
@@ -172,6 +179,33 @@ public class TestProxy {
 		});
 
 		return mkString(args, ", ");
+	}
+
+	private static String filterLetters(String string) {
+		return string.replaceAll("[^a-zA-Z0-9]","");
+	}
+
+	private static String mkTypeVariablesList(TypeVariable<Method>[] typeParameters){
+		return "<" + mkString(Arrays.stream(typeParameters).map(t -> t.getTypeName()).collect(Collectors.toList()),", ") + ">";
+	}
+	private static String mkArgListString(final Type[] args) {
+		if (args == null) {
+			return "";
+		}
+		final List<String> argsWithClassAndParameterName = new LinkedList<>();
+		for(int i =0; i < args.length; i++) {
+			final Type arg = args[i];
+			final String argWithPackages = arg.getTypeName();
+			final String className = removeAllPackages(argWithPackages);
+
+			final String argName = filterLetters(Util.decapitalize("x"));
+			argsWithClassAndParameterName.add(className + " " + argName + i);
+		}
+		return mkString(argsWithClassAndParameterName," ,");
+	}
+
+	private static String removeAllPackages(final String argWithPackages) {
+		return argWithPackages.replaceAll("[a-zA-Z0-1_]+\\.","");
 	}
 
 	/**
