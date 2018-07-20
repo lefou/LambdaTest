@@ -22,7 +22,9 @@ public class ExampleProxyTest extends FreeSpec {
 		U baz(List<U> arg1);
 
 		String list(List<String> strings);
+
 		<T> T generic(T t);
+
 		<T> T generics1(List<T> ts);
 
 		<T, S> T generics2(List<S> ts);
@@ -123,16 +125,20 @@ public class ExampleProxyTest extends FreeSpec {
 					() -> dep.genericArg("1"));
 		});
 
-		test("A proxy handling generics works with proposed code templates",() -> {
+		test("A proxy handling generics works with proposed code templates", () -> {
 			final Dependency<String> proxy = TestProxy.proxy(Dependency.class, new Object() {
 				// ==> public <T> T generic(T x0){}
-				public <T> T generic(T x0){ return x0; }
+				public <T> T generic(T x0) {
+					return x0;
+				}
 
 				// ==> public U baz(List<U> x0){}
 				// works: public <X> X baz(List<X> x0){ return x0.get(0);}
 				// works: public String baz(List<String> x0){ return x0.get(0);}
-				// does not work public  int baz(List<Integer> x0){ return x0.get(0);}
-				public <X> X baz(List<X> x0){ return x0.get(0);}
+				// does not work public int baz(List<Integer> x0){ return x0.get(0);}
+				public <X> X baz(List<X> x0) {
+					return x0.get(0);
+				}
 
 			});
 			Expect.expectString(proxy.generic("abc")).isEqual("abc");
@@ -153,6 +159,13 @@ public class ExampleProxyTest extends FreeSpec {
 								final Dependency dep = TestProxy.proxy(Dependency.class);
 								intercept(UnsupportedOperationException.class,
 										"(?s).*public U baz\\(List<U> list0\\).*",
+										() -> dep.baz(new ArrayList()));
+							});
+					test("case: Object baz(List arg1)",
+							() -> {
+								final Dependency dep = TestProxy.proxy(Dependency.class);
+								intercept(UnsupportedOperationException.class,
+										"(?s).*public Object baz\\(List list0\\).*",
 										() -> dep.baz(new ArrayList()));
 							});
 					test("case: String list(List<String> strings)",

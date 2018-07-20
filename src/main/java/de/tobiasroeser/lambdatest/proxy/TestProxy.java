@@ -4,6 +4,7 @@ import static de.tobiasroeser.lambdatest.internal.Util.decapitalize;
 import static de.tobiasroeser.lambdatest.internal.Util.filterType;
 import static de.tobiasroeser.lambdatest.internal.Util.find;
 import static de.tobiasroeser.lambdatest.internal.Util.mkString;
+import static de.tobiasroeser.lambdatest.internal.Util.zipWithIndex;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -135,15 +136,36 @@ public class TestProxy {
 				return "Proxy[" + mkString(interfaces, " & ") + "]@" + System.identityHashCode(proxy);
 			} else {
 				final String methodSignature = methodSignature(method);
-				throw new UnsupportedOperationException("" +
+
+				final String optionalMethodSignature = hasTypeParameter(interfaces)
+						? "\nOR ==>  " + methodSignatureWithoutGenerics(method) + " { ... } "
+						: "";
+
+				throw new UnsupportedOperationException(
 						"Unhandled call: proxy=" + proxy + ", method=" + method + ", args=" +
-						(args == null ? "null" : mkString(args, ", ")) +
-						"\nTo handle this call in the proxy delegate object, add a method with the following signature:"
-						+
-						"\n  " + methodSignature + " {\n  }" +
-						"\n");
+								(args == null ? "null" : mkString(args, ", ")) +
+								"\nTo handle this call in the proxy delegate object, " +
+								"add a method with the following signature:" +
+								"\n   ==>  " + methodSignature + " { ... }  " +
+								optionalMethodSignature +
+								"\n");
 			}
 		});
+	}
+
+	private static boolean hasTypeParameter(List<Class<?>> interfaces) {
+		return interfaces.stream().anyMatch(i -> i.getTypeParameters().length > 0);
+	}
+
+	private static String methodSignatureWithoutGenerics(final Method method) {
+		final String argList = mkString(zipWithIndex(Arrays.asList(method.getParameterTypes()),
+				(i,c) ->
+						c.getSimpleName() + " " + selectLetterAndNumbers(decapitalize(c.getSimpleName())) + i)
+				, ", ");
+		final String methodName = method.getName();
+		final String returnTypeName = method.getReturnType().getSimpleName();
+
+		return "public " + returnTypeName + " " + methodName + "(" + argList + ")";
 	}
 
 	private static String methodSignature(final Method method) {
@@ -156,7 +178,7 @@ public class TestProxy {
 		return "public " + typeVariables + returnTypeName + " " + methodName + "(" + argList + ")";
 	}
 
-	private static String filterLetters(String string) {
+	private static String selectLetterAndNumbers(String string) {
 		return string.replaceAll("[^a-zA-Z0-9]","");
 	}
 
@@ -182,7 +204,7 @@ public class TestProxy {
 			final String argWithPackages = arg.getTypeName();
 
 			final String className = isErasedOrObject ? "Object" : removeAllPackages(argWithPackages);
-			final String argName = filterLetters(decapitalize(clazzSimpleName));
+			final String argName = selectLetterAndNumbers(decapitalize(clazzSimpleName));
 
 			argsWithClassAndParameterName.add(className + " " + argName + i);
 		}

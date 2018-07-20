@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.tobiasroeser.lambdatest.F1;
+import de.tobiasroeser.lambdatest.F2;
 import de.tobiasroeser.lambdatest.Optional;
 
 /**
@@ -65,6 +66,17 @@ public class Util {
 				: new LinkedList<R>();
 		for (final T t : source) {
 			result.add(convert.apply(t));
+		}
+		return result;
+	}
+
+	public static <R, T> List<R> zipWithIndex(final Iterable<T> source,
+												   final F2<? super Integer, ? super T, ? extends R> convert) {
+		final List<R> result = (source instanceof Collection<?>) ? new ArrayList<>(((Collection<?>) source).size())
+				: new LinkedList<>();
+		int i = 0;
+		for (final T t : source) {
+			result.add(convert.apply(i, t));
 		}
 		return result;
 	}
