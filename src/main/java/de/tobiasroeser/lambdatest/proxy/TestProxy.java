@@ -3,7 +3,6 @@ package de.tobiasroeser.lambdatest.proxy;
 import static de.tobiasroeser.lambdatest.internal.Util.decapitalize;
 import static de.tobiasroeser.lambdatest.internal.Util.filterType;
 import static de.tobiasroeser.lambdatest.internal.Util.find;
-import static de.tobiasroeser.lambdatest.internal.Util.map;
 import static de.tobiasroeser.lambdatest.internal.Util.mkString;
 
 import java.lang.reflect.InvocationTargetException;
@@ -12,15 +11,12 @@ import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import de.tobiasroeser.lambdatest.Optional;
 import de.tobiasroeser.lambdatest.internal.LoggerFactory;
-import de.tobiasroeser.lambdatest.internal.Util;
 
 /**
  * Utility class for simple mocking of interfaces.
@@ -160,27 +156,6 @@ public class TestProxy {
 		return "public " + typeVariables + returnTypeName + " " + methodName + "(" + argList + ")";
 	}
 
-	private static String mkArgListStringOld(Class<?>[] types) {
-		if (types == null) {
-			return "";
-		}
-
-		// type count to avoid clashing names
-		final Map<String, Integer> count = new LinkedHashMap<>();
-
-		final List<Class<?>> paramList = Arrays.asList(types);
-		final List<String> args = map(paramList, o -> {
-			final String className = o.getSimpleName();
-			final String argName = decapitalize(className);
-			Integer c = count.get(argName);
-			c = c == null ? 1 : c + 1;
-			count.put(argName, c);
-			return className + " " + argName + c;
-		});
-
-		return mkString(args, ", ");
-	}
-
 	private static String filterLetters(String string) {
 		return string.replaceAll("[^a-zA-Z0-9]","");
 	}
@@ -198,7 +173,7 @@ public class TestProxy {
 			final String argWithPackages = arg.getTypeName();
 			final String className = removeAllPackages(argWithPackages);
 
-			final String argName = filterLetters(Util.decapitalize("x"));
+			final String argName = filterLetters(decapitalize("x"));
 			argsWithClassAndParameterName.add(className + " " + argName + i);
 		}
 		return mkString(argsWithClassAndParameterName," ,");
