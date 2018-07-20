@@ -147,7 +147,7 @@ public class TestProxy {
 	}
 
 	private static String methodSignature(final Method method) {
-		final String argList = mkArgListString(method.getGenericParameterTypes());
+		final String argList = mkArgListString(method);
 		final String methodName = method.getName();
 		final String returnTypeName = removeAllPackages(method.getGenericReturnType().getTypeName());
 		final TypeVariable<Method>[] typeParameters = method.getTypeParameters();
@@ -163,17 +163,26 @@ public class TestProxy {
 	private static String mkTypeVariablesList(TypeVariable<Method>[] typeParameters){
 		return "<" + mkString(Arrays.stream(typeParameters).map(t -> t.getTypeName()).collect(Collectors.toList()),", ") + ">";
 	}
-	private static String mkArgListString(final Type[] args) {
-		if (args == null) {
+	private static String mkArgListString(Method method) {
+
+		final Type[] parameterTypes = method.getGenericParameterTypes();
+		final Class<?>[] parameterClasses = method.getParameterTypes();
+
+		if (parameterTypes == null || parameterClasses == null) {
 			return "";
 		}
-		final List<String> argsWithClassAndParameterName = new LinkedList<>();
-		for(int i =0; i < args.length; i++) {
-			final Type arg = args[i];
-			final String argWithPackages = arg.getTypeName();
-			final String className = removeAllPackages(argWithPackages);
 
-			final String argName = filterLetters(decapitalize("x"));
+		final List<String> argsWithClassAndParameterName = new LinkedList<>();
+		for(int i =0; i < parameterTypes.length; i++) {
+			final Type arg = parameterTypes[i];
+			final Class<?> clazz = parameterClasses[i];
+			final String clazzSimpleName = clazz.getSimpleName();
+
+			final String argWithPackages = arg.getTypeName();
+			boolean isUnboundType = Object.class.equals(clazz);
+			final String className = isUnboundType ? "Object" : removeAllPackages(argWithPackages);
+			final String argName = filterLetters(decapitalize(clazzSimpleName));
+
 			argsWithClassAndParameterName.add(className + " " + argName + i);
 		}
 		return mkString(argsWithClassAndParameterName," ,");
