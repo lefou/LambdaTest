@@ -176,11 +176,12 @@ public class TestProxy {
 		for(int i =0; i < parameterTypes.length; i++) {
 			final Type arg = parameterTypes[i];
 			final Class<?> clazz = parameterClasses[i];
-			final String clazzSimpleName = clazz.getSimpleName();
+			boolean isErasedOrObject = Object.class.equals(clazz);
 
+			final String clazzSimpleName = clazz.getSimpleName();
 			final String argWithPackages = arg.getTypeName();
-			boolean isUnboundType = Object.class.equals(clazz);
-			final String className = isUnboundType ? "Object" : removeAllPackages(argWithPackages);
+
+			final String className = isErasedOrObject ? "Object" : removeAllPackages(argWithPackages);
 			final String argName = filterLetters(decapitalize(clazzSimpleName));
 
 			argsWithClassAndParameterName.add(className + " " + argName + i);
