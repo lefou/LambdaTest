@@ -12,9 +12,11 @@ object Deps {
   val junit = "junit" % "junit" % "4.12"
   val slf4j = "org.slf4j" % "slf4j-api" % "1.7.25"
   val logbackClassic = "ch.qos.logback" % "logback-classic" % "1.2.3"
+  val java17Signature = "org.codehaus.mojo.signature" % "java17" % "1.0"
 }
 
 object Plugins {
+  val animalSniffer = "org.codehaus.mojo" % "animal-sniffer-maven-plugin" % "1.16"
   val bnd = "biz.aQute.bnd" % "bnd-maven-plugin" % "4.0.0"
   val bundle = "org.apache.felix" % "maven-bundle-plugin" % "3.3.0"
   val clean = "org.apache.maven.plugins" % "maven-clean-plugin" % "3.0.0"
@@ -159,6 +161,23 @@ Model(
       )
     ),
     plugins = Seq(
+      Plugin(
+        Plugins.animalSniffer,
+        executions = Seq(
+          Execution(
+            id = "check-java17-signature",
+            goals = Seq("check"),
+            phase = "process-classes"
+          )
+        ),
+        configuration = Config(
+          signature = Config(
+            groupId = Deps.java17Signature.groupId.get,
+            artifactId = Deps.java17Signature.artifactId,
+            version = Deps.java17Signature.version.get
+          )
+        )
+      ),
       Plugin(
         Plugins.retrolambda,
         executions = Seq(
