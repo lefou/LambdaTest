@@ -3,8 +3,8 @@ package de.tobiasroeser.lambdatest.proxy;
 import static de.tobiasroeser.lambdatest.internal.Util.decapitalize;
 import static de.tobiasroeser.lambdatest.internal.Util.filterType;
 import static de.tobiasroeser.lambdatest.internal.Util.find;
+import static de.tobiasroeser.lambdatest.internal.Util.map;
 import static de.tobiasroeser.lambdatest.internal.Util.mkString;
-import static de.tobiasroeser.lambdatest.internal.Util.zipWithIndex;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -12,8 +12,10 @@ import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import de.tobiasroeser.lambdatest.Optional;
@@ -158,10 +160,22 @@ public class TestProxy {
 	}
 
 	private static String methodSignatureWithoutGenerics(final Method method) {
-		final String argList = mkString(zipWithIndex(Arrays.asList(method.getParameterTypes()),
-				(i,c) ->
-						c.getSimpleName() + " " + selectLetterAndNumbers(decapitalize(c.getSimpleName())) + i)
-				, ", ");
+		final Class<?>[] types = method.getParameterTypes();
+		final String argList;
+		if (types == null) {
+			argList = "";
+		} else {
+			final Map<String, Integer> count = new LinkedHashMap<>();
+			final List<String> args = map(Arrays.asList(types), t -> {
+				final String className = t.getSimpleName();
+				final String argName = decapitalize(className);
+				Integer c = count.get(argName);
+				c = c == null ? 1 : c + 1;
+				count.put(argName, c);
+				return className + " " + argName + c;
+			});
+			argList = mkString(args, ", ");
+		}
 		final String methodName = method.getName();
 		final String returnTypeName = method.getReturnType().getSimpleName();
 

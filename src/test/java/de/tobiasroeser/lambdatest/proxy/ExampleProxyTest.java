@@ -165,7 +165,7 @@ public class ExampleProxyTest extends FreeSpec {
 							() -> {
 								final Dependency dep = TestProxy.proxy(Dependency.class);
 								intercept(UnsupportedOperationException.class,
-										"(?s).*public Object baz\\(List list0\\).*",
+										"(?s).*public Object baz\\(List list1\\).*",
 										() -> dep.baz(new ArrayList()));
 							});
 					test("case: String list(List<String> strings)",
