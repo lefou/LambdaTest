@@ -200,7 +200,7 @@ public class TestProxy {
 		if (type instanceof Class<?>) {
 			return ((Class<?>) type).getSimpleName();
 		} else {
-			return removeAllPackages(type.toString());
+			return type.toString().replaceAll("[a-zA-Z0-1_]+\\.", "");
 		}
 	}
 
@@ -233,10 +233,6 @@ public class TestProxy {
 			argsWithClassAndParameterName.add(className + " " + argName + c);
 		}
 		return mkString(argsWithClassAndParameterName, " ,");
-	}
-
-	private static String removeAllPackages(final String argWithPackages) {
-		return argWithPackages.replaceAll("[a-zA-Z0-1_]+\\.", "");
 	}
 
 	/**
