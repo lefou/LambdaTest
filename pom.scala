@@ -169,14 +169,6 @@ Model(
               target = "1.7",
               mainOutputDir = "${project.build.directory}/java7-classes"
             )
-          ),
-          Execution(
-            id = "process-java6-classes",
-            goals = Seq("process-main"),
-            configuration = Config(
-              target = "1.6",
-              mainOutputDir = "${project.build.directory}/java6-classes"
-            )
           )
         )
       ),
