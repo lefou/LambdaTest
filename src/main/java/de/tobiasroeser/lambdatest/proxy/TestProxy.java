@@ -3,17 +3,18 @@ package de.tobiasroeser.lambdatest.proxy;
 import static de.tobiasroeser.lambdatest.internal.Util.decapitalize;
 import static de.tobiasroeser.lambdatest.internal.Util.filterType;
 import static de.tobiasroeser.lambdatest.internal.Util.find;
-import static de.tobiasroeser.lambdatest.internal.Util.map;
 import static de.tobiasroeser.lambdatest.internal.Util.mkString;
+import static de.tobiasroeser.lambdatest.internal.Util.zipWithIndex;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import de.tobiasroeser.lambdatest.Optional;
 import de.tobiasroeser.lambdatest.internal.LoggerFactory;
@@ -25,7 +26,7 @@ import de.tobiasroeser.lambdatest.internal.LoggerFactory;
  * mocks or dummies as dependencies. As some interfaces are rather large and
  * contain many methods, implementing them for each test results in lots of
  * boilerplate code which is also hard to maintain.
- * 
+ *
  * This class provides an alternative way to easily create proxys with the
  * `proxy`-methods. You can either use the more explicit way with
  * {@link #proxy(ClassLoader, List, List, List)} or the more compact
@@ -135,43 +136,83 @@ public class TestProxy {
 				return "Proxy[" + mkString(interfaces, " & ") + "]@" + System.identityHashCode(proxy);
 			} else {
 				final String methodSignature = methodSignature(method);
-				throw new UnsupportedOperationException("" +
+
+				final String optionalMethodSignature = hasTypeParameter(interfaces)
+						? "\nOR ==>  " + methodSignatureWithoutGenerics(method) + " { ... } "
+						: "";
+
+				throw new UnsupportedOperationException(
 						"Unhandled call: proxy=" + proxy + ", method=" + method + ", args=" +
-						(args == null ? "null" : mkString(args, ", ")) +
-						"\nTo handle this call in the proxy delegate object, add a method with the following signature:"
-						+
-						"\n  " + methodSignature + " {\n  }" +
-						"\n");
+								(args == null ? "null" : mkString(args, ", ")) +
+								"\nTo handle this call in the proxy delegate object, " +
+								"add a method with the following signature:" +
+								"\n   ==>  " + methodSignature + " { ... }  " +
+								optionalMethodSignature +
+								"\n");
 			}
 		});
 	}
 
-	private static String methodSignature(final Method method) {
-		final String argList = mkArgListString(method.getParameterTypes());
+	private static boolean hasTypeParameter(List<Class<?>> interfaces) {
+		return interfaces.stream().anyMatch(i -> i.getTypeParameters().length > 0);
+	}
+
+	private static String methodSignatureWithoutGenerics(final Method method) {
+		final String argList = mkString(zipWithIndex(Arrays.asList(method.getParameterTypes()),
+				(i,c) ->
+						c.getSimpleName() + " " + selectLetterAndNumbers(decapitalize(c.getSimpleName())) + i)
+				, ", ");
 		final String methodName = method.getName();
 		final String returnTypeName = method.getReturnType().getSimpleName();
+
 		return "public " + returnTypeName + " " + methodName + "(" + argList + ")";
 	}
 
-	private static String mkArgListString(Class<?>[] types) {
-		if (types == null) {
+	private static String methodSignature(final Method method) {
+		final String argList = mkArgListString(method);
+		final String methodName = method.getName();
+		final String returnTypeName = removeAllPackages(method.getGenericReturnType().getTypeName());
+		final TypeVariable<Method>[] typeParameters = method.getTypeParameters();
+		final String typeVariables = typeParameters == null || typeParameters.length == 0 ? "" : mkTypeVariablesList(typeParameters) + " ";
+
+		return "public " + typeVariables + returnTypeName + " " + methodName + "(" + argList + ")";
+	}
+
+	private static String selectLetterAndNumbers(String string) {
+		return string.replaceAll("[^a-zA-Z0-9]","");
+	}
+
+	private static String mkTypeVariablesList(TypeVariable<Method>[] typeParameters){
+		return "<" + mkString(Arrays.stream(typeParameters).map(t -> t.getTypeName()).collect(Collectors.toList()),", ") + ">";
+	}
+	private static String mkArgListString(Method method) {
+
+		final Type[] parameterTypes = method.getGenericParameterTypes();
+		final Class<?>[] parameterClasses = method.getParameterTypes();
+
+		if (parameterTypes == null || parameterClasses == null) {
 			return "";
 		}
 
-		// type count to avoid clashing names
-		final Map<String, Integer> count = new LinkedHashMap<>();
+		final List<String> argsWithClassAndParameterName = new LinkedList<>();
+		for(int i =0; i < parameterTypes.length; i++) {
+			final Type arg = parameterTypes[i];
+			final Class<?> clazz = parameterClasses[i];
+			boolean isErasedOrObject = Object.class.equals(clazz);
 
-		final List<Class<?>> paramList = Arrays.asList(types);
-		final List<String> args = map(paramList, o -> {
-			final String className = o.getSimpleName();
-			final String argName = decapitalize(className);
-			Integer c = count.get(argName);
-			c = c == null ? 1 : c + 1;
-			count.put(argName, c);
-			return className + " " + argName + c;
-		});
+			final String clazzSimpleName = clazz.getSimpleName();
+			final String argWithPackages = arg.getTypeName();
 
-		return mkString(args, ", ");
+			final String className = isErasedOrObject ? "Object" : removeAllPackages(argWithPackages);
+			final String argName = selectLetterAndNumbers(decapitalize(clazzSimpleName));
+
+			argsWithClassAndParameterName.add(className + " " + argName + i);
+		}
+		return mkString(argsWithClassAndParameterName," ,");
+	}
+
+	private static String removeAllPackages(final String argWithPackages) {
+		return argWithPackages.replaceAll("[a-zA-Z0-1_]+\\.","");
 	}
 
 	/**
