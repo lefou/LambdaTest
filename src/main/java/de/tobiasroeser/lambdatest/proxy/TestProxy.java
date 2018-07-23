@@ -90,8 +90,8 @@ public class TestProxy {
 	 * @param delegates
 	 *            The objects to which method-invocations of the proxy will be
 	 *            delegated to.
-	 * @return The invocation result of the delegated method calls, if found. If
-	 *         no delegate was found, an exception.
+	 * @return The invocation result of the delegated method calls, if found. If no
+	 *         delegate was found, an exception.
 	 *
 	 * @throws UnsupportedOperationException
 	 *             If no delegate method was found.
@@ -186,18 +186,16 @@ public class TestProxy {
 		final String methodName = method.getName();
 		final String returnTypeName = removeAllPackages(method.getGenericReturnType().getTypeName());
 		final TypeVariable<Method>[] typeParameters = method.getTypeParameters();
-		final String typeVariables = typeParameters == null || typeParameters.length == 0 ? "" : mkTypeVariablesList(typeParameters) + " ";
+		final String typeVariables = typeParameters == null || typeParameters.length == 0 ? ""
+				: mkTypeVariablesList(typeParameters) + " ";
 
 		return "public " + typeVariables + returnTypeName + " " + methodName + "(" + argList + ")";
-	}
-
-	private static String selectLetterAndNumbers(String string) {
-		return string.replaceAll("[^a-zA-Z0-9]","");
 	}
 
 	private static String mkTypeVariablesList(TypeVariable<Method>[] typeParameters) {
 		return "<" + mkString(map(typeParameters, t -> t.getTypeName()), ", ") + ">";
 	}
+
 	private static String mkArgListString(Method method) {
 
 		final Type[] parameterTypes = method.getGenericParameterTypes();
@@ -220,7 +218,7 @@ public class TestProxy {
 			final String argWithPackages = arg.getTypeName();
 
 			final String className = isErasedOrObject ? "Object" : removeAllPackages(argWithPackages);
-			final String argName = selectLetterAndNumbers(decapitalize(clazzSimpleName));
+			final String argName = decapitalize(clazzSimpleName);
 
 			Integer c = count.get(argName);
 			c = c == null ? 1 : c + 1;
@@ -232,19 +230,18 @@ public class TestProxy {
 	}
 
 	private static String removeAllPackages(final String argWithPackages) {
-		return argWithPackages.replaceAll("[a-zA-Z0-1_]+\\.","");
+		return argWithPackages.replaceAll("[a-zA-Z0-1_]+\\.", "");
 	}
 
 	/**
 	 * Compact version of {@link #proxy(ClassLoader, List, List, List)}.
 	 *
 	 * @param classLoaderOrInterfaceOrDelegateOrOption
-	 *            Variable set of parameters used the following way: 1) if
-	 *            instance of {@link Option}, than used as option, 2) if
-	 *            instance of ClassLoader, then used to create the proxy
-	 *            instance, 3) if a class (no interface), used as delegate
-	 *            object, 4) else it will be used as interface to be implemented
-	 *            by the proxy.
+	 *            Variable set of parameters used the following way: 1) if instance
+	 *            of {@link Option}, than used as option, 2) if instance of
+	 *            ClassLoader, then used to create the proxy instance, 3) if a class
+	 *            (no interface), used as delegate object, 4) else it will be used
+	 *            as interface to be implemented by the proxy.
 	 *
 	 * @see #proxy(ClassLoader, List, List, List)
 	 */
