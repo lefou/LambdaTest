@@ -121,7 +121,7 @@ public class ExampleProxyTest extends FreeSpec {
 				}
 			});
 			intercept(UnsupportedOperationException.class,
-					"(?s).*\\Qpublic boolean genericArg(Object object0)\\E.*",
+					"(?s).*\\Qpublic boolean genericArg(Object object1)\\E.*",
 					() -> dep.genericArg("1"));
 		});
 
@@ -151,28 +151,28 @@ public class ExampleProxyTest extends FreeSpec {
 							() -> {
 								final Dependency dep = TestProxy.proxy(Dependency.class);
 								intercept(UnsupportedOperationException.class,
-										"(?s).*public int foobar\\(String string0 ,int int1\\).*",
+										"(?s).*\\Qpublic int foobar(String string1 ,int int1)\\E.*",
 										() -> dep.foobar("a", 1));
 							});
 					test("case: U baz(List<U> arg1)",
 							() -> {
 								final Dependency dep = TestProxy.proxy(Dependency.class);
 								intercept(UnsupportedOperationException.class,
-										"(?s).*public U baz\\(List<U> list0\\).*",
+										"(?s).*\\Qpublic U baz(List<U> list1)\\E.*",
 										() -> dep.baz(new ArrayList()));
 							});
 					test("case: Object baz(List arg1)",
 							() -> {
 								final Dependency dep = TestProxy.proxy(Dependency.class);
 								intercept(UnsupportedOperationException.class,
-										"(?s).*public Object baz\\(List list1\\).*",
+										"(?s).*\\Qpublic Object baz(List list1)\\E.*",
 										() -> dep.baz(new ArrayList()));
 							});
 					test("case: String list(List<String> strings)",
 							() -> {
 								final Dependency dep = TestProxy.proxy(Dependency.class);
 								intercept(UnsupportedOperationException.class,
-										"(?s).*public String list\\(List<String> list0\\).*",
+										"(?s).*\\Qpublic String list(List<String> list1)\\E.*",
 										() -> dep.list(new ArrayList<>()));
 							});
 
@@ -180,14 +180,14 @@ public class ExampleProxyTest extends FreeSpec {
 							() -> {
 								final Dependency dep = TestProxy.proxy(Dependency.class);
 								intercept(UnsupportedOperationException.class,
-										"(?s).*public <T> T generics1\\(List<T> list0\\).*",
+										"(?s).*\\Qpublic <T> T generics1(List<T> list1)\\E.*",
 										() -> dep.generics1(new ArrayList<String>()));
 							});
 					test("case: <T, S> T generics2(List<S> ts)",
 							() -> {
 								final Dependency dep = TestProxy.proxy(Dependency.class);
 								intercept(UnsupportedOperationException.class,
-										"(?s).*public <T, S> T generics2\\(List<S> list0\\).*",
+										"(?s).*\\Qpublic <T, S> T generics2(List<S> list1)\\E.*",
 										() -> dep.generics2(new ArrayList<String>()));
 							});
 
@@ -195,10 +195,8 @@ public class ExampleProxyTest extends FreeSpec {
 							() -> {
 								final Dependency dep = TestProxy.proxy(Dependency.class);
 								intercept(UnsupportedOperationException.class,
-										"(?s).*public <T, S> T generics3\\(Map<S, List<T>> map0\\).*",
-										() -> {
-											dep.generics3(new LinkedHashMap<String, List<String>>());
-										});
+										"(?s).*\\Qpublic <T, S> T generics3(Map<S, List<T>> map1)\\E.*",
+										() -> dep.generics3(new LinkedHashMap<String, List<String>>()));
 							});
 				});
 	}

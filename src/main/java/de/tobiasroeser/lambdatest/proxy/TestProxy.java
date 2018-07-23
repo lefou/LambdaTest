@@ -207,11 +207,14 @@ public class TestProxy {
 			return "";
 		}
 
+		final Map<String, Integer> count = new LinkedHashMap<>();
+
 		final List<String> argsWithClassAndParameterName = new LinkedList<>();
-		for(int i =0; i < parameterTypes.length; i++) {
+		for (int i = 0; i < parameterTypes.length; i++) {
 			final Type arg = parameterTypes[i];
 			final Class<?> clazz = parameterClasses[i];
-			boolean isErasedOrObject = Object.class.equals(clazz);
+
+			final boolean isErasedOrObject = Object.class.equals(clazz);
 
 			final String clazzSimpleName = clazz.getSimpleName();
 			final String argWithPackages = arg.getTypeName();
@@ -219,9 +222,13 @@ public class TestProxy {
 			final String className = isErasedOrObject ? "Object" : removeAllPackages(argWithPackages);
 			final String argName = selectLetterAndNumbers(decapitalize(clazzSimpleName));
 
-			argsWithClassAndParameterName.add(className + " " + argName + i);
+			Integer c = count.get(argName);
+			c = c == null ? 1 : c + 1;
+			count.put(argName, c);
+
+			argsWithClassAndParameterName.add(className + " " + argName + c);
 		}
-		return mkString(argsWithClassAndParameterName," ,");
+		return mkString(argsWithClassAndParameterName, " ,");
 	}
 
 	private static String removeAllPackages(final String argWithPackages) {
