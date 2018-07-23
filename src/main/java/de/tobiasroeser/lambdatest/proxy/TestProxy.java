@@ -184,7 +184,7 @@ public class TestProxy {
 	private static String methodSignature(final Method method) {
 		final String argList = mkArgListString(method);
 		final String methodName = method.getName();
-		final String returnTypeName = removeAllPackages(method.getGenericReturnType().getTypeName());
+		final String returnTypeName = getTypeName(method.getGenericReturnType());
 		final TypeVariable<Method>[] typeParameters = method.getTypeParameters();
 		final String typeVariables = typeParameters == null || typeParameters.length == 0 ? ""
 				: mkTypeVariablesList(typeParameters) + " ";
@@ -193,7 +193,15 @@ public class TestProxy {
 	}
 
 	private static String mkTypeVariablesList(TypeVariable<Method>[] typeParameters) {
-		return "<" + mkString(map(typeParameters, t -> t.getTypeName()), ", ") + ">";
+		return "<" + mkString(map(typeParameters, t -> getTypeName(t)), ", ") + ">";
+	}
+
+	private static String getTypeName(Type type) {
+		if (type instanceof Class<?>) {
+			return ((Class<?>) type).getSimpleName();
+		} else {
+			return removeAllPackages(type.toString());
+		}
 	}
 
 	private static String mkArgListString(Method method) {
@@ -215,10 +223,8 @@ public class TestProxy {
 			final boolean isErasedOrObject = Object.class.equals(clazz);
 
 			final String clazzSimpleName = clazz.getSimpleName();
-			final String argWithPackages = arg.getTypeName();
-
-			final String className = isErasedOrObject ? "Object" : removeAllPackages(argWithPackages);
 			final String argName = decapitalize(clazzSimpleName);
+			final String className = isErasedOrObject ? "Object" : getTypeName(arg);
 
 			Integer c = count.get(argName);
 			c = c == null ? 1 : c + 1;
