@@ -60,6 +60,7 @@ public class Util {
 		return true;
 	}
 
+	
 	public static <R, T> List<R> map(final Iterable<T> source, final F1<? super T, ? extends R> convert) {
 		final List<R> result = (source instanceof Collection<?>) ? new ArrayList<R>(((Collection<?>) source).size())
 				: new LinkedList<R>();
@@ -67,6 +68,9 @@ public class Util {
 			result.add(convert.apply(t));
 		}
 		return result;
+	}
+	public static <R, T> List<R> map(final T[] source, final F1<? super T, ? extends R> convert) {
+		return map(Arrays.asList(source), convert);
 	}
 
 	public static String mkString(final Iterable<?> source, final String separator) {

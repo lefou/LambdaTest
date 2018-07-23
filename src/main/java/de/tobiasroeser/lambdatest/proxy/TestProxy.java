@@ -1,6 +1,7 @@
 package de.tobiasroeser.lambdatest.proxy;
 
 import static de.tobiasroeser.lambdatest.internal.Util.decapitalize;
+import static de.tobiasroeser.lambdatest.internal.Util.exists;
 import static de.tobiasroeser.lambdatest.internal.Util.filterType;
 import static de.tobiasroeser.lambdatest.internal.Util.find;
 import static de.tobiasroeser.lambdatest.internal.Util.map;
@@ -11,12 +12,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import de.tobiasroeser.lambdatest.Optional;
 import de.tobiasroeser.lambdatest.internal.LoggerFactory;
@@ -156,7 +155,7 @@ public class TestProxy {
 	}
 
 	private static boolean hasTypeParameter(List<Class<?>> interfaces) {
-		return interfaces.stream().anyMatch(i -> i.getTypeParameters().length > 0);
+		return exists(interfaces, i -> i.getTypeParameters().length > 0);
 	}
 
 	private static String methodSignatureWithoutGenerics(final Method method) {
@@ -166,7 +165,7 @@ public class TestProxy {
 			argList = "";
 		} else {
 			final Map<String, Integer> count = new LinkedHashMap<>();
-			final List<String> args = map(Arrays.asList(types), t -> {
+			final List<String> args = map(types, t -> {
 				final String className = t.getSimpleName();
 				final String argName = decapitalize(className);
 				Integer c = count.get(argName);
@@ -196,8 +195,8 @@ public class TestProxy {
 		return string.replaceAll("[^a-zA-Z0-9]","");
 	}
 
-	private static String mkTypeVariablesList(TypeVariable<Method>[] typeParameters){
-		return "<" + mkString(Arrays.stream(typeParameters).map(t -> t.getTypeName()).collect(Collectors.toList()),", ") + ">";
+	private static String mkTypeVariablesList(TypeVariable<Method>[] typeParameters) {
+		return "<" + mkString(map(typeParameters, t -> t.getTypeName()), ", ") + ">";
 	}
 	private static String mkArgListString(Method method) {
 
