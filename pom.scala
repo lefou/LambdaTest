@@ -212,10 +212,6 @@ Model(
           bndExecution(
             id = "bnd-process-java7",
             classesDir = "${project.build.directory}/java7-classes"
-          ),
-          bndExecution(
-            id = "bnd-process-java6",
-            classesDir = "${project.build.directory}/java6-classes"
           )
         )
       ),
@@ -231,11 +227,6 @@ Model(
             id = "jar-java7",
             classifier = "java7",
             classesDir = "${project.build.directory}/java7-classes"
-          ),
-          jarExecution(
-            id = "jar-java6",
-            classifier = "java6",
-            classesDir = "${project.build.directory}/java6-classes"
           )
         )
       ),
