@@ -1,8 +1,8 @@
 = Lambda Test
 :toc:
 :toc-placement: preamble
-:lambdatestversion: 0.6.0
-:documentationversion: 0.6.0
+:lambdatestversion: 0.6.1
+:documentationversion: 0.6.1
 :testngversion: 6.11
 :junitversion: 4.12
 :lambdatest: LambdaTest
@@ -348,14 +348,14 @@ public class ExampleProxyTest extends FreeSpec {
 }
 ----
 
-== Working on Java7 or below
+== Working on Java7
 
 Even though writing functional test makes most sence under Java 8,
 there are enough reasons to also use them on older Java versions which do not provide nice closures.
 
 {lambdatest} does not use any Java 8 API!
-Therefore, there is nothing that stops you. You can download pre-compiled binaries of LambdaTest for older Java Runtimes down to Java 6.
-To use the non-Java8 version with Maven, use a classifier ("java7", or "java6") to download the version you want.
+Therefore, there is nothing that stops you. You can download pre-compiled binaries of {lambdatest} for older Java 7 Runtimes.
+To use the non-Java8 version with Maven, use a classifier ("java7") to download the version you want.
 The compatibility packages are produced with the great https://github.com/orfjackal/retrolambda[retrolambda project].
 
 To use the Java7 version in Maven:
@@ -458,6 +458,12 @@ You can also find me on https://twitter.com/TobiasRoeser[Twitter as @TobiasRoese
 If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[GitHub]. This will help me to set my priorities. Thanks!
 
 == Changelog
+
+=== LambdaTest 0.6.1 - 2018-07-24
+
+* Dropped support for Java 6. (Technically speeking, Java 6 wasn't really supported by older versions, as a contructor of `java.lang.AssertionError` was used, which was only introduced in Java 7.)
+* Proxies created with `TestProxy` gained better copy'n'paste able error message in case of unimplemented methods were call. 
+
 
 === LambdaTest 0.6.0 - 2018-06-22
 
