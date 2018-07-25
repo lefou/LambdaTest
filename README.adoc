@@ -261,7 +261,7 @@ To inspect and assert maps, use the class `ExpectMap`, which is also returned, i
 
 == Testing files and directories with `TempFile`
 
-{lambdatest} comes with a helper class `de.tobiasroeser.lambdatest.TempFile` with contains useful methods to work with temporary files.
+{lambdatest} comes with a helper class `de.tobiasroeser.lambdatest.TempFile` which contains useful methods to work with temporary files.
 
 To create a temporary file with a given content and do something with it, you can use `TempFile.withTempFile` or it procedural version with does not return a value `TempFile.withTempFileP`. After the method completes, the temporary file will automatically deleted.
 
