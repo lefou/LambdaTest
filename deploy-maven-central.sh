@@ -23,7 +23,7 @@ read
 #mvn -s mvn-settings.xml clean
 #mvn -s mvn-settings.xml package test source:jar javadoc:jar
 
-echo "Signing and uploading. Press Enter"
+echo "Cleaning, building, signing and uploading. Press Enter"
 read
 
 REPO=https://oss.sonatype.org/service/local/staging/deploy/maven2/
