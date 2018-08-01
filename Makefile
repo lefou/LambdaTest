@@ -26,3 +26,7 @@ eclipse: pom.xml
 .PHONY: help # List of targets with descriptions
 help:
 	@grep '^[#.]PHONY: .* #' Makefile | sed 's/[#.]PHONY: \(.*\) # \(.*\)/\1\t\2/' | expand -t20
+
+.PHONY: deploy # Build and deploy to Maven central
+deploy:
+	sh deploy-maven-central.sh
