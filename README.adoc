@@ -1,8 +1,8 @@
 = Lambda Test
 :toc:
 :toc-placement: preamble
-:lambdatestversion: 0.6.1
-:documentationversion: 0.6.1
+:lambdatestversion: 0.6.2
+:documentationversion: 0.6.2
 :testngversion: 6.11
 :junitversion: 4.12
 :lambdatest: LambdaTest
@@ -458,6 +458,11 @@ You can also find me on https://twitter.com/TobiasRoeser[Twitter as @TobiasRoese
 If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[GitHub]. This will help me to set my priorities. Thanks!
 
 == Changelog
+
+=== LambdaTest 0.6.2 - 2018-08-01
+
+* Fixed invalid Manifest entry `Import-Package` present in older releases.
+
 
 === LambdaTest 0.6.1 - 2018-07-24
 
