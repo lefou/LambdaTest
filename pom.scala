@@ -49,9 +49,9 @@ def bndExecution(id: String, classesDir: String) = Execution(
     }
       |Import-Package: ${
       Seq(
-        """org.testng.*;version="6.8;resolution:=optional""",
-        """org.junit.*;resolution:=optional""",
-        """*;resolution:=optional"""
+        "org.testng.*;version=\"6.8\";resolution:=optional",
+        "org.junit.*;resolution:=optional",
+        "*;resolution:=optional"
       ).mkString(",")
     }
       |""".stripMargin
