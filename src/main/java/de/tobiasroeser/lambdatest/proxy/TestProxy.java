@@ -223,7 +223,8 @@ public class TestProxy {
 			final boolean isErasedOrObject = Object.class.equals(clazz);
 
 			final String clazzSimpleName = clazz.getSimpleName();
-			final String argName = decapitalize(clazzSimpleName);
+			final String argName1 = decapitalize(clazzSimpleName).replaceAll("[^a-zA-Z0-1_]+", "");
+			final String argName = argName1.length() == 0 ? "x" : argName1;
 			final String className = isErasedOrObject ? "Object" : getTypeName(arg);
 
 			Integer c = count.get(argName);
