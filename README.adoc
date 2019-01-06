@@ -262,6 +262,7 @@ To inspect and assert maps, use the class `ExpectMap`, which is also returned, i
 === Analyze Doubles with `ExpectDouble`
 
 To inspect and assert doubles, use the class `ExpectMap`, which is also returned, if you use `Expect.expectDouble`.
+
 .Methods of ExpectDouble
 * `isCloseTo`
 * `isNotCloseTo`
