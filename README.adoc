@@ -1,8 +1,8 @@
 = Lambda Test
 :toc:
 :toc-placement: preamble
-:lambdatestversion: 0.6.2
-:documentationversion: 0.6.2
+:lambdatestversion: 0.6.3
+:documentationversion: 0.6.3
 :testngversion: 6.11
 :junitversion: 4.12
 :lambdatest: LambdaTest
@@ -209,6 +209,7 @@ You can use these as an alternative to the assertion methods provides by other u
 * `expectNotEquals` - Assert non-equality of two given objects or values.
 * `expectTrue` - Assert a value evaluates to `true`
 * `expectFalse` - Assert a value evaluates to `false`
+* `expectDouble` - Assert that a given double is non-null and return an instance of `ExpectDouble`  with provides further checks on the actual double in a fluent API
 * `expectString` - Assert that a given string is non-null and return an instance of `ExpectString` with provides further checks on the actual string in a fluent API
 * `expectCollection` - Assert that a given collection is non-null and return an instance of `ExpectCollection` with provides further checks on the actual colletion in a fluent API
 * `expectMap` - Assert that a given map is non-null and return an instance of `ExpectMap` with provides further checks on the actual map in a fluent API
@@ -258,6 +259,16 @@ To inspect and assert collections, use the class `ExpectCollection`, which is al
 
 To inspect and assert maps, use the class `ExpectMap`, which is also returned, if you use `Expect.expectMap`.
 
+=== Analyze Double with `ExpectDouble`
+
+To inspect and assert doupble, use the class `ExpectMap`, which is also returned, if you use `Expect.expectDouble`.
+.Methods of ExpectDouble
+* `isCloseTo`
+* `isNotCloseTo`
+* `isBetween`
+* `isNotBetween`
+* `isNaN`
+* `isNotNaN`
 
 == Testing files and directories with `TempFile`
 
