@@ -472,6 +472,8 @@ If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[
 
 === LambdaTest {master}
 
+=== LambdaTest 0.6.3 - 2019-01-06
+* Added `Expect.expectDouble` and `ExpectDouble` class to assert properties of double values with a fluent API.
 * Improved error message in TestProxy for missing implemented proxy methods with array parameters
 
 === LambdaTest 0.6.2 - 2018-08-01
