@@ -167,7 +167,7 @@ public class TestProxy {
 			final Map<String, Integer> count = new LinkedHashMap<>();
 			final List<String> args = map(types, t -> {
 				final String className = t.getSimpleName();
-				final String argName = decapitalize(className);
+				final String argName = decapitalize(className).replace("[]","");
 				Integer c = count.get(argName);
 				c = c == null ? 1 : c + 1;
 				count.put(argName, c);
