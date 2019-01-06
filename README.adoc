@@ -259,9 +259,9 @@ To inspect and assert collections, use the class `ExpectCollection`, which is al
 
 To inspect and assert maps, use the class `ExpectMap`, which is also returned, if you use `Expect.expectMap`.
 
-=== Analyze Double with `ExpectDouble`
+=== Analyze Doubles with `ExpectDouble`
 
-To inspect and assert doupble, use the class `ExpectMap`, which is also returned, if you use `Expect.expectDouble`.
+To inspect and assert doubles, use the class `ExpectMap`, which is also returned, if you use `Expect.expectDouble`.
 .Methods of ExpectDouble
 * `isCloseTo`
 * `isNotCloseTo`
