@@ -204,7 +204,7 @@ public class ExampleProxyTest extends FreeSpec {
 							() -> {
 								final Dependency dep = TestProxy.proxy(Dependency.class);
 								intercept(UnsupportedOperationException.class,
-										"(?s).*\\Qpublic void xarrayParam(String[] string1)\\E.*",
+										"(?s).*\\Qpublic void arrayParam(String[] string1)\\E.*",
 										() -> dep.arrayParam(new String[0]));
 							});
 				});
