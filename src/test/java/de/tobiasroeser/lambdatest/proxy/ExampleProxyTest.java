@@ -30,6 +30,8 @@ public class ExampleProxyTest extends FreeSpec {
 		<T, S> T generics2(List<S> ts);
 
 		<T, S> T generics3(Map<S, List<T>> ts);
+
+		void arrayParam(String[] strings);
 	}
 
 	class ServiceWithDependency {
@@ -197,6 +199,13 @@ public class ExampleProxyTest extends FreeSpec {
 								intercept(UnsupportedOperationException.class,
 										"(?s).*\\Qpublic <T, S> T generics3(Map<S, List<T>> map1)\\E.*",
 										() -> dep.generics3(new LinkedHashMap<String, List<String>>()));
+							});
+					test("case: void arrayParam(String[] string1)",
+							() -> {
+								final Dependency dep = TestProxy.proxy(Dependency.class);
+								intercept(UnsupportedOperationException.class,
+										"(?s).*\\Qpublic void arrayParam(String[] string1)\\E.*",
+										() -> dep.arrayParam(new String[0]));
 							});
 				});
 	}
