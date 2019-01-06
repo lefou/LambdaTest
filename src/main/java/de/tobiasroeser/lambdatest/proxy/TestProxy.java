@@ -161,21 +161,17 @@ public class TestProxy {
 	private static String methodSignatureWithoutGenerics(final Method method) {
 		final Class<?>[] types = method.getParameterTypes();
 		final String argList;
-		if (types == null) {
-			argList = "";
-		} else {
-			final Map<String, Integer> count = new LinkedHashMap<>();
-			final List<String> args = map(types, t -> {
-				final String className = t.getSimpleName();
-				final String argName = decapitalize(className).replace("[]","");
-				Integer c = count.get(argName);
-				c = c == null ? 1 : c + 1;
-				count.put(argName, c);
-				return className + " " + argName + c;
-			});
-			argList = mkString(args, ", ");
-		}
-		final String methodName = method.getName();
+    final Map<String, Integer> count = new LinkedHashMap<>();
+    final List<String> args = map(types, t -> {
+      final String className = t.getSimpleName();
+      final String argName = decapitalize(className).replace("[]","");
+      Integer c = count.get(argName);
+      c = c == null ? 1 : c + 1;
+      count.put(argName, c);
+      return className + " " + argName + c;
+    });
+    argList = mkString(args, ", ");
+    final String methodName = method.getName();
 		final String returnTypeName = method.getReturnType().getSimpleName();
 
 		return "public " + returnTypeName + " " + methodName + "(" + argList + ")";
