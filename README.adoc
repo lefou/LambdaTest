@@ -459,6 +459,10 @@ If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[
 
 == Changelog
 
+=== LambdaTest {master}
+
+* Improved error message in TestProxy for missing implemented proxy methods with array parameters
+
 === LambdaTest 0.6.2 - 2018-08-01
 
 * Fixed invalid Manifest entry `Import-Package` present in older releases.
