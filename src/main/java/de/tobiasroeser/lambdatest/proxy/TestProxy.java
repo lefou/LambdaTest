@@ -205,7 +205,7 @@ public class TestProxy {
 		final Type[] parameterTypes = method.getGenericParameterTypes();
 		final Class<?>[] parameterClasses = method.getParameterTypes();
 
-		if (parameterTypes == null || parameterClasses == null) {
+		if (parameterTypes == null) {
 			return "";
 		}
 
