@@ -166,6 +166,21 @@ public class Expect {
 	}
 
 	/**
+	 * Check for non-null {@link Double} and provided further checks on the
+	 * actual double in a fluent API.
+	 *
+	 * @see ExpectDouble
+	 *
+	 * @param actual
+	 *            The double to check.
+	 * @return A {@link ExpectDouble} to express further expectations on the
+	 *         actual double.
+	 */
+	public static ExpectDouble expectDouble(final Double actual){
+		return new ExpectDouble(actual);
+	}
+
+	/**
 	 * Check for non-null {@link String} and provided further checks on the
 	 * actual string in a fluent API.
 	 *
