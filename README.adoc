@@ -209,6 +209,7 @@ You can use these as an alternative to the assertion methods provides by other u
 * `expectNotEquals` - Assert non-equality of two given objects or values.
 * `expectTrue` - Assert a value evaluates to `true`
 * `expectFalse` - Assert a value evaluates to `false`
+* `expectDouble` - Assert that a given double is non-null and return an instance of `ExpectDouble`  with provides further checks on the actual double in a fluent API
 * `expectString` - Assert that a given string is non-null and return an instance of `ExpectString` with provides further checks on the actual string in a fluent API
 * `expectCollection` - Assert that a given collection is non-null and return an instance of `ExpectCollection` with provides further checks on the actual colletion in a fluent API
 * `expectMap` - Assert that a given map is non-null and return an instance of `ExpectMap` with provides further checks on the actual map in a fluent API
@@ -258,6 +259,17 @@ To inspect and assert collections, use the class `ExpectCollection`, which is al
 
 To inspect and assert maps, use the class `ExpectMap`, which is also returned, if you use `Expect.expectMap`.
 
+=== Analyze Doubles with `ExpectDouble`
+
+To inspect and assert doubles, use the class `ExpectMap`, which is also returned, if you use `Expect.expectDouble`.
+
+.Methods of ExpectDouble
+* `isCloseTo`
+* `isNotCloseTo`
+* `isBetween`
+* `isNotBetween`
+* `isNaN`
+* `isNotNaN`
 
 == Testing files and directories with `TempFile`
 
@@ -461,6 +473,7 @@ If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[
 
 === LambdaTest {master}
 
+* Added `Expect.expectDouble` and `ExpectDouble` class to assert properties of double values with a fluent API.
 * Improved error message in TestProxy for missing implemented proxy methods with array parameters
 
 === LambdaTest 0.6.2 - 2018-08-01
