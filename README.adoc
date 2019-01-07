@@ -2,7 +2,7 @@
 :toc:
 :toc-placement: preamble
 :lambdatestversion: 0.6.2
-:documentationversion: 0.6.2
+:documentationversion: 0.6.3-SNAPSHOT
 :testngversion: 6.11
 :junitversion: 4.12
 :lambdatest: LambdaTest
