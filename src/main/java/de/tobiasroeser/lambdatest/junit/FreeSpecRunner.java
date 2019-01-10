@@ -37,7 +37,7 @@ public class FreeSpecRunner extends ParentRunner<DefaultTestCase> {
 			expectFailFast = freeSpec.getExpectFailFast();
 
 		} catch (final Exception e) {
-			throw new InitializationError("Could not intantiate test class " + freeSpecClass.getName());
+			throw new InitializationError("Could not instantiate test class " + freeSpecClass.getName());
 		}
 	}
 
