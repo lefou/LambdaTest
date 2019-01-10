@@ -5,4 +5,5 @@
 /target-ide/
 /.mvn.polyglot/
 /gh-pages/
-
+/.idea/
+/.idea_modules/
