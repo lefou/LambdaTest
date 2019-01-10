@@ -1,8 +1,8 @@
 = Lambda Test
 :toc:
 :toc-placement: preamble
-:lambdatestversion: 0.6.2
-:documentationversion: 0.6.3-SNAPSHOT
+:lambdatestversion: 0.7.0
+:documentationversion: 0.7.0
 :testngversion: 6.11
 :junitversion: 4.12
 :lambdatest: LambdaTest
@@ -471,7 +471,7 @@ If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[
 
 == Changelog
 
-=== LambdaTest {master}
+=== LambdaTest 0.7.0 - 2019-01-10
 
 * Added `Expect.expectDouble` and `ExpectDouble` class to assert properties of double values with a fluent API.
 * Improved error message in TestProxy for missing implemented proxy methods with array parameters
