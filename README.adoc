@@ -52,7 +52,7 @@ Most important features are:
 
 == Documentation
 
-Beside this document, you can also read the https://lefou.github.io/LambdaTest/javadoc/{lambdatestversion}/[JavadDoc for LambdaTest {lambdatestversion}]
+Beside this document, you can also read the https://lefou.github.io/LambdaTest/javadoc/{lambdatestversion}[JavadDoc for LambdaTest {lambdatestversion}]
 
 == Download from Maven Central
 
