@@ -72,6 +72,17 @@ public class RuntimeTest {
 		List<String> output;
 	}
 
+	public static class SimpleLazyInitTest extends FreeSpec {
+		@Override
+		protected void initTests() {
+			if (runInnerTests) {
+				test("should succeed (lazy init)", () -> {
+					assertTrue(true);
+				});
+			}
+		}
+	}
+
 	/**
 	 * Need to test in separate process/JVM to avoid classes of the outer and
 	 * inner TestNG instances. Thank you global singletons. :(
@@ -159,5 +170,16 @@ public class RuntimeTest {
 			assertEquals(line.get(), "Total tests run: 1, Failures: 0, Skips: 1");
 		});
 	}
+
+	@Test(groups = { "testng" }, dependsOnGroups = { "tempfile" })
+	public void testLazyInitInSubProcess() throws Exception {
+		testInJvm(SimpleLazyInitTest.class.getName(), result -> {
+			assertEquals(result.exitCode, 0);
+			final Optional<String> line = Util.find(result.output, l -> l.startsWith("Total tests run"));
+			assertTrue(line.isDefined());
+			assertEquals(line.get(), "Total tests run: 1, Failures: 0, Skips: 0");
+		});
+	}
+
 
 }

@@ -16,7 +16,7 @@ import de.tobiasroeser.lambdatest.Section;
 /**
  * Common base class containing framework agnostic implementation of
  * FreeSpec-like classes.
- * 
+ *
  * @see de.tobiasroeser.lambdatest.junit.FreeSpec
  * @see de.tobiasroeser.lambdatest.testng.FreeSpec
  */
@@ -24,7 +24,7 @@ public abstract class FreeSpecBase implements LambdaTest {
 
 	/**
 	 * The ThreadLocal used to hold the current section.
-	 * 
+	 *
 	 * @see #section(String, Runnable)
 	 */
 	private static final ThreadLocal<Section> sectionHolder = new ThreadLocal<Section>();
@@ -37,7 +37,7 @@ public abstract class FreeSpecBase implements LambdaTest {
 
 	/**
 	 * Set the default reporter.
-	 * 
+	 *
 	 * @see #withDefaultReporter(Reporter, F0WithException)
 	 */
 	public static void setDefaultReporter(final Reporter reporter) {
@@ -51,7 +51,7 @@ public abstract class FreeSpecBase implements LambdaTest {
 	/**
 	 * Executes a given function `f` with the default reporter set to
 	 * `reporter`, and restored the previous default reporter afterwards.
-	 * 
+	 *
 	 * @param reporter
 	 *            The default reporter to be used while executing `f`.
 	 * @param f
@@ -71,12 +71,13 @@ public abstract class FreeSpecBase implements LambdaTest {
 	}
 
 	// END OF STATIC PART
-	
+
 	private Reporter reporter = defaultReporter;
 	private final List<DefaultTestCase> testCases = new LinkedList<>();
 	private String suiteName = getClass().getName();
 	private boolean expectFailFast;
 	private boolean runInParallel = false;
+	private volatile boolean lazyInitPending = true;
 
 	public boolean getRunInParallel() {
 		return runInParallel;
@@ -111,6 +112,15 @@ public abstract class FreeSpecBase implements LambdaTest {
 	}
 
 	/**
+	 * Override this method to initialize test cases after class construction.
+	 *
+	 * This method should only be called by LambdaTest.
+	 */
+	protected void initTests() {
+		// override this to add test cases after class construction
+	}
+
+	/**
 	 * Adds a test to the test suite.
 	 *
 	 * @param name
@@ -136,6 +146,14 @@ public abstract class FreeSpecBase implements LambdaTest {
 	}
 
 	public List<DefaultTestCase> getTestCases() {
+		if(lazyInitPending) {
+			synchronized (this) {
+				if(lazyInitPending) {
+					initTests();
+					lazyInitPending = false;
+				}
+			}
+		}
 		return testCases;
 	}
 

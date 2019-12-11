@@ -8,6 +8,7 @@ import de.tobiasroeser.lambdatest.generic.DefaultReporter;
 import de.tobiasroeser.lambdatest.testng.FreeSpec;
 
 public class SimpleTest extends FreeSpec {
+
 	public SimpleTest() {
 		setReporter(new DefaultReporter(System.out, false));
 
@@ -48,4 +49,20 @@ public class SimpleTest extends FreeSpec {
 			expectEquals("yes and no", "yes");
 		});
 	}
+
+	// You can also define test here, to avoid
+	// their initialization at class construction time
+	@Override
+	protected void initTests() {
+		test("should succeed (lazy init)", () -> {
+			expectTrue(true);
+		});
+	}
+
+	{
+		test("test in initializer", () -> {
+			expectTrue(true);
+		});
+	}
+
 }

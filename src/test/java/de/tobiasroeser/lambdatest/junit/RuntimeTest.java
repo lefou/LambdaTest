@@ -48,6 +48,15 @@ public class RuntimeTest {
 		}
 	}
 
+	public static class SimpleLazyInitTest extends FreeSpec {
+		@Override
+		protected void initTests() {
+			test("should succeed (lazy init)", () -> {
+				Assert.assertTrue(true);
+			});
+		}
+	}
+
 	@Test(groups = { "junit" })
 	public void testSuccess() {
 		final Result result = JUnitCore.runClasses(SimpleSuccessTest.class);
@@ -75,6 +84,14 @@ public class RuntimeTest {
 	@Test(groups = { "junit" })
 	public void testPendingWithReason() {
 		final Result result = JUnitCore.runClasses(SimplePendingWithReasonTest.class);
+		assertEquals(result.getRunCount(), 1);
+		assertEquals(result.getFailureCount(), 0);
+		assertEquals(result.getIgnoreCount(), 0);
+	}
+
+	@Test(groups = { "junit" })
+	public void testLazyInit() {
+		final Result result = JUnitCore.runClasses(SimpleLazyInitTest.class);
 		assertEquals(result.getRunCount(), 1);
 		assertEquals(result.getFailureCount(), 0);
 		assertEquals(result.getIgnoreCount(), 0);
