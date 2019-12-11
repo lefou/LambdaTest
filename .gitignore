@@ -7,3 +7,9 @@
 /gh-pages/
 /.idea/
 /.idea_modules/
+
+# TestNG
+/test-output/
+
+# mill
+/out/
