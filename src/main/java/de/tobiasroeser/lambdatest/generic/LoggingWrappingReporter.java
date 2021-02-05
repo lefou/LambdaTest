@@ -26,19 +26,19 @@ public class LoggingWrappingReporter implements Reporter {
 
 	@Override
 	public void testStart(final LambdaTestCase test) {
-		if (log.isInfoEnabled()) {
-			log.info("Test started: {}", formatTestCase(test));
+		if (log.isDebugEnabled()) {
+			log.debug("Test started: {}", formatTestCase(test));
 		}
 		underlying.testStart(test);
 	}
 
 	@Override
 	public void testSkipped(final LambdaTestCase test, final String message) {
-		if (log.isInfoEnabled()) {
+		if (log.isDebugEnabled()) {
 			if (PENDING_DEFAULT_MSG.equals(message)) {
-				log.info("Test skipped: {}", formatTestCase(test));
+				log.debug("Test skipped: {}", formatTestCase(test));
 			} else {
-				log.info("Test skipped: {} with message: {}", formatTestCase(test), message);
+				log.debug("Test skipped: {} with message: {}", formatTestCase(test), message);
 			}
 		}
 		underlying.testSkipped(test, message);
@@ -52,16 +52,16 @@ public class LoggingWrappingReporter implements Reporter {
 
 	@Override
 	public void testSucceeded(final LambdaTestCase test) {
-		if (log.isInfoEnabled()) {
-			log.info("Test succeeded: {}", formatTestCase(test));
+		if (log.isDebugEnabled()) {
+			log.debug("Test succeeded: {}", formatTestCase(test));
 		}
 		underlying.testSucceeded(test);
 	}
 
 	@Override
 	public void suiteStart(final String suiteName, final List<? extends LambdaTestCase> tests) {
-		if (log.isInfoEnabled()) {
-			log.info("Suite started with {} tests: {}", tests.size(), suiteName);
+		if (log.isDebugEnabled()) {
+			log.debug("Suite started with {} tests: {}", tests.size(), suiteName);
 		}
 		underlying.suiteStart(suiteName, tests);
 	}
