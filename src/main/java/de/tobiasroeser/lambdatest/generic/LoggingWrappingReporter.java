@@ -21,7 +21,7 @@ public class LoggingWrappingReporter implements Reporter {
 	}
 
 	protected String formatTestCase(final LambdaTestCase test) {
-		return "\"" + test.getName() + "\" (" + test.getSuiteName() + ")";
+		return "\"" + test.getSectionAndTestName(" / ") + "\" (" + test.getSuiteName() + ")";
 	}
 
 	@Override

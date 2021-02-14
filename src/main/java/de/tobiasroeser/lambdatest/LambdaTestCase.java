@@ -21,4 +21,9 @@ public interface LambdaTestCase {
 	 */
 	Optional<Section> getSection();
 
+	default String getSectionAndTestName(final String separator) {
+		final String prefix = getSection().map(s -> s.getFullName(separator) + separator).getOrElse("");
+		return prefix + getName();
+	}
+
 }

@@ -43,7 +43,7 @@ public class FreeSpecRunner extends ParentRunner<DefaultTestCase> {
 
 	@Override
 	protected Description describeChild(final DefaultTestCase testCase) {
-		return Description.createTestDescription(freeSpecClass, testCase.getName());
+		return Description.createTestDescription(freeSpecClass, testCase.getSectionAndTestName());
 	}
 
 	@Override
