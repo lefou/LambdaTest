@@ -12,7 +12,7 @@ ifndef::env-asciidoclet[:javasuffix: .java]
 ifdef::env-asciidoclet[:javasuffix: .html]
 
 ifdef::env-github[]
-image:https://travis-ci.org/lefou/LambdaTest.svg?branch=master["Build Status", link="https://travis-ci.org/lefou/LambdaTest"]
+image:https://github.com/lefou/LambdaTest/workflows/.github/workflows/build.yml/badge.svg["Build Status", link="https://github.com/lefou/LambdaTest/actions"]
 image:https://api.codacy.com/project/badge/Grade/e886bd7ca9784ecfb00fe8afb59b8909["Codacy code quality", link="https://www.codacy.com/app/lefou/LambdaTest"]
 image:https://badges.gitter.im/lefou/LambdaTest.svg["Chat on Gitter", link="https://gitter.im/lefou/LambdaTest"]
 endif::[]
