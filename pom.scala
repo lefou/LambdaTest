@@ -21,7 +21,7 @@ object Plugins {
   val bundle = "org.apache.felix" % "maven-bundle-plugin" % "3.3.0"
   val clean = "org.apache.maven.plugins" % "maven-clean-plugin" % "3.0.0"
   val jar = "org.apache.maven.plugins" % "maven-jar-plugin" % "2.5"
-  val retrolambda = "net.orfjackal.retrolambda" % "retrolambda-maven-plugin" % "1.8.0"
+  val retrolambda = "net.orfjackal.retrolambda" % "retrolambda-maven-plugin" % "2.5.7"
   val reproducibleBuild = "io.github.zlika" % "reproducible-build-maven-plugin" % "0.7"
   val translate = "io.takari.polyglot" % "polyglot-translate-plugin" % "0.3.1"
   val javadoc = "org.apache.maven.plugins" % "maven-javadoc-plugin" % "3.0.1"
