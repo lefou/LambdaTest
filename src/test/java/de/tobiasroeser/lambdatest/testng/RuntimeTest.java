@@ -88,40 +88,35 @@ public class RuntimeTest {
 	 * inner TestNG instances. Thank you global singletons. :(
 	 */
 	private JvmResult testInJvm(final String className, final File testDir) throws Exception {
-		final ClassLoader cl = getClass().getClassLoader();
-		if (cl instanceof URLClassLoader) {
-			final URL[] origUrLs = ((URLClassLoader) cl).getURLs();
-			final URL[] urls = Arrays.copyOf(origUrLs, origUrLs.length);
+		final String classpath = System.getProperty("java.class.path");
 
-			final String jvm = System.getProperty("java.home");
+		final String jvm = System.getProperty("java.home");
 
-			final ProcessBuilder pb = new ProcessBuilder(
-					jvm + "/bin/java",
-					"-classpath",
-					Util.mkString(urls, File.pathSeparator),
-					"-DRUN_INNER_TEST=1",
-					"org.testng.TestNG",
-					"-testclass",
-					className);
-			pb.directory(testDir);
-			final Process p = pb.start();
+		final ProcessBuilder pb = new ProcessBuilder(
+				jvm + "/bin/java",
+				"-classpath",
+				classpath,
+				"-DRUN_INNER_TEST=1",
+				"org.testng.TestNG",
+				"-testclass",
+				className);
+		pb.directory(testDir);
+		final Process p = pb.start();
 
-			final List<String> output = new LinkedList<>();
+		final List<String> output = new LinkedList<>();
 
-			final InputStream is = p.getInputStream();
-			final InputStreamReader isr = new InputStreamReader(is);
-			final BufferedReader br = new BufferedReader(isr);
-			String line;
-			while ((line = br.readLine()) != null) {
-				output.add(line);
-			}
-
-			final JvmResult result = new JvmResult();
-			result.exitCode = p.waitFor();
-			result.output = output;
-			return result;
+		final InputStream is = p.getInputStream();
+		final InputStreamReader isr = new InputStreamReader(is);
+		final BufferedReader br = new BufferedReader(isr);
+		String line;
+		while ((line = br.readLine()) != null) {
+			output.add(line);
 		}
-		throw new AssertionError("Could not run JVM");
+
+		final JvmResult result = new JvmResult();
+		result.exitCode = p.waitFor();
+		result.output = output;
+		return result;
 	}
 
 	private void testInJvm(final String className, final ProcedureWithException<JvmResult> f) throws Exception {
