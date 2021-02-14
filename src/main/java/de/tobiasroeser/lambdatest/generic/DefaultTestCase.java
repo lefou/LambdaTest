@@ -54,6 +54,11 @@ public class DefaultTestCase implements LambdaTestCase {
 		return name;
 	}
 
+	public String getSectionAndTestName(final String separator) {
+		final String prefix = getSection().map(s -> s.getFullName(separator) + separator).getOrElse("");
+		return prefix + getName();
+	}
+
 	public String getSectionAndTestName() {
 		return getSectionAndTestName(" / ");
 	}
