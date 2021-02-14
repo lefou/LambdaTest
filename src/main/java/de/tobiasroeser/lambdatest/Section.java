@@ -23,7 +23,7 @@ public class Section {
 
 	public String getFullName(final String separator) {
 		final String prefix = parent == null ? "" : parent.getFullName(separator) + separator;
-		return prefix + separator + getName();
+		return prefix + getName();
 	}
 
 	public Section getParent() {
