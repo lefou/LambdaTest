@@ -1,0 +1,37 @@
+language: java
+
+sudo: false
+
+jdk:
+- openjdk8
+
+before_script:
+- mvn -N io.takari:maven:wrapper -Dmaven=3.5.0
+
+script:
+- ./mvnw clean package source:jar javadoc:jar install
+
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        java-version: [8, 11]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java-version }}
+
+      - run: mvn -N io.takari:maven:wrapper -Dmaven=3.5.0
+
+      - ./mvnw clean package source:jar javadoc:jar install
