@@ -1,17 +1,3 @@
-language: java
-
-sudo: false
-
-jdk:
-- openjdk8
-
-before_script:
-- mvn -N io.takari:maven:wrapper -Dmaven=3.5.0
-
-script:
-- ./mvnw clean package source:jar javadoc:jar install
-
-
 on: [push, pull_request]
 
 jobs:
@@ -34,4 +20,4 @@ jobs:
 
       - run: mvn -N io.takari:maven:wrapper -Dmaven=3.5.0
 
-      - ./mvnw clean package source:jar javadoc:jar install
+      - run: ./mvnw clean package source:jar javadoc:jar install
