@@ -97,28 +97,28 @@ public class FreeSpec extends FreeSpecBase implements LambdaTest {
 
 		try {
 			ExpectContext.setup(getExpectFailFast());
-			Throwable uncatchedTestError = null;
+			Throwable uncaughtTestError = null;
 			Throwable delayedTestError = null;
 			try {
 				getReporter().testStart(testCase);
 				testCase.getTest().run();
 			} catch (final Throwable t) {
-				uncatchedTestError = t;
+				uncaughtTestError = t;
 			}
 			try {
 				ExpectContext.finish();
 			} catch (final Throwable t) {
 				delayedTestError = t;
 			}
-			if (uncatchedTestError != null && delayedTestError != null) {
+			if (uncaughtTestError != null && delayedTestError != null) {
 				throw new AssertionError(
-						"An error occured (see root cause) after some expectations failed. Failed Expectations:\n"
+						"An error occurred (see root cause) after some expectations failed. Failed Expectations:\n"
 								+ delayedTestError.getMessage(),
-						uncatchedTestError);
-			} else if (uncatchedTestError != null) {
+						uncaughtTestError);
+			} else if (uncaughtTestError != null) {
 				// if this was a SkipException, we still detect it, else some
 				// other errors occurred before
-				throw uncatchedTestError;
+				throw uncaughtTestError;
 			} else if (delayedTestError != null) {
 				throw delayedTestError;
 			}
