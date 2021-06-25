@@ -14,6 +14,7 @@ ifdef::env-asciidoclet[:javasuffix: .html]
 ifdef::env-github[]
 image:https://github.com/lefou/LambdaTest/workflows/.github/workflows/build.yml/badge.svg["Build Status", link="https://github.com/lefou/LambdaTest/actions"]
 image:https://api.codacy.com/project/badge/Grade/e886bd7ca9784ecfb00fe8afb59b8909["Codacy code quality", link="https://www.codacy.com/app/lefou/LambdaTest"]
+image:https://javadoc.io/badge2/de.tototec/de.tototec.utils.functional/javadoc.svg["JavaDoc", link="https://javadoc.io/doc/de.tototec/de.tototec.utils.functional"]
 image:https://badges.gitter.im/lefou/LambdaTest.svg["Chat on Gitter", link="https://gitter.im/lefou/LambdaTest"]
 endif::[]
 
@@ -52,7 +53,7 @@ Most important features are:
 
 == Documentation
 
-Beside this document, you can also read the https://lefou.github.io/LambdaTest/javadoc/{lambdatestversion}[JavadDoc for LambdaTest {lambdatestversion}]
+Beside this document, you can also read the https://javadoc.io/doc/de.tototec/de.tototec.utils.functional[JavadDoc for LambdaTest]
 
 == Download from Maven Central
 
