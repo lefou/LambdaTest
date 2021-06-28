@@ -1,8 +1,8 @@
 = Lambda Test
 :toc:
 :toc-placement: preamble
-:lambdatestversion: 0.7.0
-:documentationversion: 0.7.1-SNAPSHOT
+:lambdatestversion: 0.7.1
+:documentationversion: 0.7.1
 :testngversion: 6.11
 :junitversion: 4.12
 :lambdatest: LambdaTest
@@ -490,6 +490,10 @@ You can also find me on https://twitter.com/TobiasRoeser[Twitter as @TobiasRoese
 If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[GitHub]. This will help me to set my priorities. Thanks!
 
 == Changelog
+
+=== LambdaTest 0.7.1 - 2021-06-28
+
+* Added support for lazily initialized tests (with `initTests()`)
 
 === LambdaTest 0.7.0 - 2019-01-10
 
