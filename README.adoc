@@ -103,6 +103,20 @@ http://sbuild.org[SBuild] users can use the following dependencies:
   "mvn:org.testng:testng:{testngversion}"
 ----
 
+[NOTE]
+--
+If you use LambdaTest with `mill.testng.TestNGFramework` (in Mill or sbt), you may see extra verbose output.
+You can disable the progress output of `mill.testng.TestNGFramework` by setting the `mill.testng.printProgress` property to `0`.
+
+.`build.sc`: Make `mill.testng.TestNGFramework` runner less verbose in Mill
+[source,scala,subs="attributes"]
+----
+object test extends TestModule.TestNg {
+  override def forkArgs = T{ super.forkArgs() ++ Seq("-Dmill.testng.printProgress=0") }
+}
+----
+--
+
 == Choose your favorite Unit-Test Runner: JUnit or TestNG
 
 With {lambdatest}, you need to only know LambdaTests very simple and minimalistic API but can use it to write test for JUnit and TestNG.
