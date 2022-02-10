@@ -103,6 +103,18 @@ http://sbuild.org[SBuild] users can use the following dependencies:
   "mvn:org.testng:testng:{testngversion}"
 ----
 
+== Choose your favorite Unit-Test Runner: JUnit or TestNG
+
+With {lambdatest}, you need to only know LambdaTests very simple and minimalistic API but can use it to write test for JUnit and TestNG.
+
+To avoid a dependency to both frameworks at the same time, your test class  inherits a different base class, but besides that, everything else is the same.
+
+For JUnit you inherit link:{srcdir}de/tobiasroeser/lambdatest/junit/FreeSpec{javasuffix}[`de.tobiasroeser.lambdatest.junit.FreeSpec`].
+
+For TestNG you inherit
+link:{srcdir}de/tobiasroeser/lambdatest/testng/FreeSpec{javasuffix}[`de.tobiasroeser.lambdatest.testng.FreeSpec`].
+
+
 [NOTE]
 --
 If you use LambdaTest with `mill.testng.TestNGFramework` (in Mill or sbt), you may see extra verbose output.
@@ -116,17 +128,6 @@ object test extends TestModule.TestNg {
 }
 ----
 --
-
-== Choose your favorite Unit-Test Runner: JUnit or TestNG
-
-With {lambdatest}, you need to only know LambdaTests very simple and minimalistic API but can use it to write test for JUnit and TestNG.
-
-To avoid a dependency to both frameworks at the same time, your test class  inherits a different base class, but besides that, everything else is the same.
-
-For JUnit you inherit link:{srcdir}de/tobiasroeser/lambdatest/junit/FreeSpec{javasuffix}[`de.tobiasroeser.lambdatest.junit.FreeSpec`].
-
-For TestNG you inherit
-link:{srcdir}de/tobiasroeser/lambdatest/testng/FreeSpec{javasuffix}[`de.tobiasroeser.lambdatest.testng.FreeSpec`].
 
 == Writing tests with Lambda Test
 
