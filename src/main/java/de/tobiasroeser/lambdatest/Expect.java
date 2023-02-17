@@ -202,7 +202,7 @@ public class Expect {
 	 * @see ExpectCollection
 	 *
 	 * @param actual
-	 *            The Collection<T> to check.
+	 *            The Collection to check.
 	 * @return A {@link ExpectCollection} to express further expectations on the
 	 *         actual collection.
 	 */
@@ -217,7 +217,7 @@ public class Expect {
 	 * @see ExpectMap
 	 *
 	 * @param actual
-	 *            The Map<K,V> to check.
+	 *            The Map to check.
 	 * @return A {@link ExpectMap} to express further expectations on the actual
 	 *         map.
 	 */

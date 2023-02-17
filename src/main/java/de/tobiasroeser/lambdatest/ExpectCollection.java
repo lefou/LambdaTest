@@ -25,7 +25,7 @@ public class ExpectCollection<T> extends ExpectBase<ExpectCollection<T>> {
 	 * @see ExpectCollection
 	 *
 	 * @param actual
-	 *            The Collection<T> to check.
+	 *            The Collection to check.
 	 * @return A {@link ExpectCollection} to express further expectations on the
 	 *         actual collection.
 	 */
@@ -39,7 +39,7 @@ public class ExpectCollection<T> extends ExpectBase<ExpectCollection<T>> {
 	 * Creates an instance for the non-null collection `actual`.
 	 *
 	 * @param actual
-	 *            The Collection<T> to check.
+	 *            The Collection to check.
 	 */
 	public ExpectCollection(final Collection<T> actual) {
 		check(actual != null, "Actual is not a Collection but null.");
@@ -134,7 +134,7 @@ public class ExpectCollection<T> extends ExpectBase<ExpectCollection<T>> {
 	/**
 	 * Checks, that the collection does not contain the given element.
 	 * 
-	 * @param element
+	 * @param fragment
 	 *            The element that must be not contained in the collection.
 	 */
 	public ExpectCollection<T> containsNot(final T fragment) {
