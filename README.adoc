@@ -31,7 +31,7 @@ Documentation for LambdaTest {documentationversion}.
 When constrained to work in a Java-only toolchain, I really miss http://scalatest.org[ScalaTest].
 I tried some lambda enabled test frameworks, but until now (2014), did not find a suitable solution without compromizing the integration benefits.
 
-Thus I decided to write a small and generic test library that allows writing of functional test without reinventing the wheel.
+Thus, I decided to write a small and generic test library that allows writing of functional test without reinventing the wheel.
 LambdaTest works on top of JUnit and TestNG, all you need is to add it to the test classpath.
 No further adaptions to your existing test setup are needed.
 You will immediately gain the joy of Lambda-enabled functional testing, better assertion messages and nicely colored output.
@@ -397,11 +397,11 @@ public class ExampleProxyTest extends FreeSpec {
 
 == Working on Java7
 
-Even though writing functional test makes most sence under Java 8,
+Even though writing functional test makes most sense under Java 8,
 there are enough reasons to also use them on older Java versions which do not provide nice closures.
 
-{lambdatest} does not use any Java 8 API!
-Therefore, there is nothing that stops you. You can download pre-compiled binaries of {lambdatest} for older Java 7 Runtimes.
+{lambdatest} versions up to 0.7.1 didn't use any Java 8 API!
+You can download pre-compiled binaries of {lambdatest} for older Java 7 Runtimes.
 To use the non-Java8 version with Maven, use a classifier ("java7") to download the version you want.
 The compatibility packages are produced with the great https://github.com/orfjackal/retrolambda[retrolambda project].
 
@@ -413,7 +413,7 @@ To use the Java7 version in Maven:
   <dependency>
     <groupId>de.tototec</groupId>
     <artifactId>de.tobiasroeser.lambdatest</artifactId>
-    <version>{lambdatestversion}</version>
+    <version>0.7.1</version>
     <classifier>java7</classifier>
     <scope>test</scope>
   </dependency>
@@ -425,7 +425,7 @@ or in SBuild:
 
 [source,scala,subs="attributes"]
 ----
-"mvn:de.tototoec:de.tobiasroeser.lambdatest:{lambdatestversion};classifier=java7"
+"mvn:de.tototoec:de.tobiasroeser.lambdatest:0.7.1;classifier=java7"
 ----
 
 Instead of Java 8 Closures, you have to create anonymous classes.

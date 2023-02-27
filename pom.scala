@@ -12,16 +12,13 @@ object Deps {
   val junit = "junit" % "junit" % "4.12"
   val slf4j = "org.slf4j" % "slf4j-api" % "1.7.25"
   val logbackClassic = "ch.qos.logback" % "logback-classic" % "1.2.3"
-  val java17Signature = "org.codehaus.mojo.signature" % "java17" % "1.0"
 }
 
 object Plugins {
-  val animalSniffer = "org.codehaus.mojo" % "animal-sniffer-maven-plugin" % "1.16"
   val bnd = "biz.aQute.bnd" % "bnd-maven-plugin" % "4.0.0"
   val bundle = "org.apache.felix" % "maven-bundle-plugin" % "3.3.0"
   val clean = "org.apache.maven.plugins" % "maven-clean-plugin" % "3.0.0"
   val jar = "org.apache.maven.plugins" % "maven-jar-plugin" % "2.5"
-  val retrolambda = "net.orfjackal.retrolambda" % "retrolambda-maven-plugin" % "2.5.7"
   val reproducibleBuild = "io.github.zlika" % "reproducible-build-maven-plugin" % "0.7"
   val translate = "io.takari.polyglot" % "polyglot-translate-plugin" % "0.3.1"
   val javadoc = "org.apache.maven.plugins" % "maven-javadoc-plugin" % "3.0.1"
@@ -162,36 +159,6 @@ Model(
     ),
     plugins = Seq(
       Plugin(
-        Plugins.animalSniffer,
-        executions = Seq(
-          Execution(
-            id = "check-java17-signature",
-            goals = Seq("check"),
-            phase = "process-classes"
-          )
-        ),
-        configuration = Config(
-          signature = Config(
-            groupId = Deps.java17Signature.groupId.get,
-            artifactId = Deps.java17Signature.artifactId,
-            version = Deps.java17Signature.version.get
-          )
-        )
-      ),
-      Plugin(
-        Plugins.retrolambda,
-        executions = Seq(
-          Execution(
-            id = "process-java7-classes",
-            goals = Seq("process-main"),
-            configuration = Config(
-              target = "1.7",
-              mainOutputDir = "${project.build.directory}/java7-classes"
-            )
-          )
-        )
-      ),
-      Plugin(
         gav = Plugins.bundle,
         executions = Seq(
           Execution(
@@ -208,25 +175,6 @@ Model(
           bndExecution(
             id = "bnd-process-java8",
             classesDir = "${project.build.outputDirectory}"
-          ),
-          bndExecution(
-            id = "bnd-process-java7",
-            classesDir = "${project.build.directory}/java7-classes"
-          )
-        )
-      ),
-      Plugin(
-        Plugins.jar,
-        executions = Seq(
-          jarExecution(
-            id = "default-jar",
-            classifier = "",
-            classesDir = "${project.build.outputDirectory}"
-          ),
-          jarExecution(
-            id = "jar-java7",
-            classifier = "java7",
-            classesDir = "${project.build.directory}/java7-classes"
           )
         )
       ),
