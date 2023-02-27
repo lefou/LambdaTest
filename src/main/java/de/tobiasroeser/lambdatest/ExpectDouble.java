@@ -28,7 +28,7 @@ public class ExpectDouble extends ExpectBase<ExpectDouble> {
 	/**
 	 * Checks, if actual is close to expected regarding eps.
 	 *
-	 * Mathematically |actual - expected| < eps
+	 * Mathematically |actual - expected| &lt; eps
 	 *
 	 * @param expected
 	 *            The expected double near of actual.
@@ -43,7 +43,7 @@ public class ExpectDouble extends ExpectBase<ExpectDouble> {
 	/**
 	 * Checks, if actual is not close to expected regarding eps.
 	 *
-	 * Mathematically |actual - expected| >= eps
+	 * Mathematically |actual - expected| &gt;= eps
 	 *
 	 * @param expected
 	 *            The expected double near of actual.
@@ -74,7 +74,7 @@ public class ExpectDouble extends ExpectBase<ExpectDouble> {
   /**
  	 * Checks, if actual is between start (inclusive) and end (exclusive).
  	 *
- 	 * Mathematically start <= actual < end.
+ 	 * Mathematically start &lt;= actual &lt; end.
  	 *
  	 * @param start
  	 *            Interval start (inclusive).
