@@ -9,8 +9,10 @@ val url = "https://github.com/lefou/LambdaTest"
 object Deps {
   val testng = "org.testng" % "testng" % "6.11"
   val junit = "junit" % "junit" % "4.12"
-  val slf4j = "org.slf4j" % "slf4j-api" % "1.7.25"
+  val jupiter = "org.junit.jupiter" % "junit-jupiter" % "5.9.2"
+  val jupiterInterface = "net.aichler" % "jupiter-interface" % "0.9.0"
   val logbackClassic = "ch.qos.logback" % "logback-classic" % "1.2.3"
+  val slf4j = "org.slf4j" % "slf4j-api" % "1.7.25"
 }
 
 object Plugins {
@@ -129,6 +131,8 @@ Model(
     Deps.testng % "provided",
     Deps.junit % "provided",
     Deps.slf4j % "provided",
+    Deps.jupiter % "provided",
+    Deps.jupiterInterface % "provided",
     Deps.logbackClassic % "test"
   ),
   properties = Map(
