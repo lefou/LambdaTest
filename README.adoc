@@ -1,10 +1,11 @@
 = Lambda Test
 :toc:
 :toc-placement: preamble
-:lambdatestversion: 0.7.1
+:lambdatestversion: 0.7.2-SNAPSHOT
 :documentationversion: 0.7.1
 :testngversion: 6.11
 :junitversion: 4.12
+:jupiterversion: 5.9.2
 :lambdatest: LambdaTest
 ifndef::env-asciidoclet[:srcdir: src/main/java/]
 ifdef::env-asciidoclet[:srcdir:]
@@ -22,6 +23,8 @@ ifndef::env-github[Project Homepage: https://github.com/lefou/LambdaTest]
 
 
 Lambda-enabled functional testing on top of JUnit and TestNG.
+
+Use the same DSL with on any testing framework.
 
 Documentation for LambdaTest {documentationversion}.
 
@@ -84,32 +87,25 @@ Maven users can use the following dependency declaration:
     <version>{testngversion}</version>
     <scope>test</scope>
   </dependency>
+  <!-- If you use LambdaTest with Jupiter / Junit5 -->
+  <dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter</artifactId>
+    <version>{jupiterversion}</version>
+    <scope>test</scope>
+  </dependency>
 </dependencies>
 ----
 
-http://sbuild.org[SBuild] users can use the following dependencies:
-
-.Use with JUnit
-[source,scala,subs="attributes"]
-----
-"mvn:de.tototec:de.tobiasroeser.lambdatest:{lambdatestversion}" ~
-  "mvn:junit:junit:{junitversion}"
-----
-
-.Use with TestNG
-[source,scala,subs="attributes"]
-----
-"mvn:de.tototec:de.tobiasroeser.lambdatest:{lambdatestversion}" ~
-  "mvn:org.testng:testng:{testngversion}"
-----
-
-== Choose your favorite Unit-Test Runner: JUnit or TestNG
+== Choose your favorite Unit-Test Runner: TestNG, JUnit, Jupiter (JUnit5)
 
 With {lambdatest}, you need to only know LambdaTests very simple and minimalistic API but can use it to write test for JUnit and TestNG.
 
 To avoid a dependency to both frameworks at the same time, your test class  inherits a different base class, but besides that, everything else is the same.
 
 For JUnit you inherit link:{srcdir}de/tobiasroeser/lambdatest/junit/FreeSpec{javasuffix}[`de.tobiasroeser.lambdatest.junit.FreeSpec`].
+
+For Jupiter (JUnit5) you inherit link:{srcdir}de/tobiasroeser/lambdatest/jupiter/FreeSpec{javasuffix}[`de.tobiasroeser.lambdatest.jupiter.FreeSpec`].
 
 For TestNG you inherit
 link:{srcdir}de/tobiasroeser/lambdatest/testng/FreeSpec{javasuffix}[`de.tobiasroeser.lambdatest.testng.FreeSpec`].
@@ -143,8 +139,9 @@ You need to extend from class `de.tobiasroeser.lambdatest.testng.FreeSpec`.
 [source,java]
 ----
 import static de.tobiasroeser.lambdatest.Expect.expectEquals;
-// You can also use JUnit based tests with
+// You can also use JUnit or Jupiter based tests with
 // import de.tobiasroeser.lambdatest.junit.FreeSpec;
+// import de.tobiasroeser.lambdatest.junpiter.FreeSpec;
 import de.tobiasroeser.lambdatest.testng.FreeSpec;
 
 public class SimpleTest extends FreeSpec {
@@ -397,15 +394,15 @@ public class ExampleProxyTest extends FreeSpec {
 
 == Working on Java7
 
-Even though writing functional test makes most sense under Java 8,
+Even though writing functional test makes most sense under Java 8+,
 there are enough reasons to also use them on older Java versions which do not provide nice closures.
 
 {lambdatest} versions up to 0.7.1 didn't use any Java 8 API!
 You can download pre-compiled binaries of {lambdatest} for older Java 7 Runtimes.
 To use the non-Java8 version with Maven, use a classifier ("java7") to download the version you want.
-The compatibility packages are produced with the great https://github.com/orfjackal/retrolambda[retrolambda project].
+The compatibility packages were produced with the great https://github.com/orfjackal/retrolambda[retrolambda project].
 
-To use the Java7 version in Maven:
+To use the latest Java7 compatible version 0.7.1 in Maven:
 
 [source,xml,subs="attributes,verbatim"]
 ----
@@ -419,13 +416,6 @@ To use the Java7 version in Maven:
   </dependency>
   <!-- Also you need one of JUnit or TestNG, see above -->
 </dependencies>
-----
-
-or in SBuild:
-
-[source,scala,subs="attributes"]
-----
-"mvn:de.tototoec:de.tobiasroeser.lambdatest:0.7.1;classifier=java7"
 ----
 
 Instead of Java 8 Closures, you have to create anonymous classes.
