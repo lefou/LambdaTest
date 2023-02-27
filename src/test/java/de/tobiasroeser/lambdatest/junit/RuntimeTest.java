@@ -57,9 +57,13 @@ public class RuntimeTest {
 		}
 	}
 
+	private Result runTestClasses(Class<?>... classes) {
+		return JUnitCore.runClasses(classes);
+	}
+
 	@Test(groups = { "junit" })
 	public void testSuccess() {
-		final Result result = JUnitCore.runClasses(SimpleSuccessTest.class);
+		final Result result = runTestClasses(SimpleSuccessTest.class);
 		assertEquals(result.getRunCount(), 1);
 		assertEquals(result.getFailureCount(), 0);
 		assertEquals(result.getIgnoreCount(), 0);
@@ -67,7 +71,7 @@ public class RuntimeTest {
 
 	@Test(groups = { "junit" })
 	public void testFailure() {
-		final Result result = JUnitCore.runClasses(SimpleFailureTest.class);
+		final Result result = runTestClasses(SimpleFailureTest.class);
 		assertEquals(result.getRunCount(), 1);
 		assertEquals(result.getFailureCount(), 1);
 		assertEquals(result.getIgnoreCount(), 0);
@@ -75,7 +79,7 @@ public class RuntimeTest {
 
 	@Test(groups = { "junit" })
 	public void testPending() {
-		final Result result = JUnitCore.runClasses(SimplePendingTest.class);
+		final Result result = runTestClasses(SimplePendingTest.class);
 		assertEquals(result.getRunCount(), 1);
 		assertEquals(result.getFailureCount(), 0);
 		assertEquals(result.getIgnoreCount(), 0);
@@ -83,7 +87,7 @@ public class RuntimeTest {
 
 	@Test(groups = { "junit" })
 	public void testPendingWithReason() {
-		final Result result = JUnitCore.runClasses(SimplePendingWithReasonTest.class);
+		final Result result = runTestClasses(SimplePendingWithReasonTest.class);
 		assertEquals(result.getRunCount(), 1);
 		assertEquals(result.getFailureCount(), 0);
 		assertEquals(result.getIgnoreCount(), 0);

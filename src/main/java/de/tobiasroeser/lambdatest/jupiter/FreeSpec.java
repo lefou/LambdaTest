@@ -33,8 +33,6 @@ public class FreeSpec extends FreeSpecBase implements LambdaTest {
 
     private DynamicTest testFor(DefaultTestCase testCase) {
         return DynamicTest.dynamicTest(testCase.getName(), () -> {
-            System.err.println("Running Test Case: " + testCase);
-            //			testCase.getTest().run();
             runTestCase(testCase);
         });
     }
@@ -43,28 +41,25 @@ public class FreeSpec extends FreeSpecBase implements LambdaTest {
     @DisplayName("FreeSpec")
     public Iterable<DynamicNode> testFactory() {
         final List<DefaultTestCase> testCases = getTestCases();
-        System.err.println("Test Cases: " + testCases);
-
         List<Section> sections = Util.distinct(Util.flatMap(testCases, tc -> sectionsOf(tc)));
-        final LinkedHashMap<Section, DynamicContainer> containers = new LinkedHashMap<Section, DynamicContainer>();
 
+        final LinkedHashMap<Section, DynamicContainer> containers = new LinkedHashMap<>();
         final Map<Optional<Section>, List<DefaultTestCase>> testsBySection = Util.groupBy(
                 testCases,
                 tc -> tc.getSection()
         );
-        //		final Map<Section, List<Section>> sectionBySection = FList.groupBy(sections, s -> s.getParent());
 
         class CreateContainer {
             DynamicContainer create(Section section) {
                 if (!containers.containsKey(section)) {
-
+                    // completely populate this section and recurse into subsections
                     final List<Section> children = Util.filter(sections, sub -> sub.getParent() != null && sub.getParent().equals(section));
                     final List<DynamicContainer> subContainer = Util.map(children, c -> create(c));
 
-                    final List<DefaultTestCase> sectionTests = testsBySection.getOrDefault(section, Collections.emptyList());
+                    final List<DefaultTestCase> sectionTests = testsBySection.getOrDefault(Optional.lift(section), Collections.emptyList());
                     final List<DynamicTest> subTests = Util.map(sectionTests, t -> testFor(t));
 
-                    DynamicContainer cont = DynamicContainer.dynamicContainer(section.getName(), subContainer);
+                    DynamicContainer cont = DynamicContainer.dynamicContainer(section.getName(), Util.concat(subContainer, subTests));
                     containers.put(section, cont);
                     return cont;
                 } else {
@@ -79,16 +74,18 @@ public class FreeSpec extends FreeSpecBase implements LambdaTest {
             createContainer.create(s);
         });
 
+
         final List<DynamicNode> topLevelContainers = Util.map(
                 Util.filter(sections, s -> s.getParent() == null),
                 s -> containers.get(s)
         );
         final List<DynamicNode> topLevelTests = Util.map(
-                Util.filter(testCases, tc -> tc.getSection().isDefined()),
+                Util.filter(testCases, tc -> !tc.getSection().isDefined()),
                 t -> testFor(t)
         );
 
-        return Util.concat(topLevelContainers, topLevelTests);
+        List<DynamicNode> res = Util.concat(topLevelContainers, topLevelTests);
+        return res;
     }
 
     private void runTestCase(DefaultTestCase testCase) throws Throwable {
