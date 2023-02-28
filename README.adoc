@@ -24,7 +24,7 @@ ifndef::env-github[Project Homepage: https://github.com/lefou/LambdaTest]
 
 Lambda-enabled functional testing on top of JUnit and TestNG.
 
-Use the same DSL with on any testing framework.
+Use the same DSL with any testing framework.
 
 Documentation for LambdaTest {documentationversion}.
 
