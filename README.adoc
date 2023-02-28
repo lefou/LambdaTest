@@ -87,7 +87,7 @@ Maven users can use the following dependency declaration:
     <version>{testngversion}</version>
     <scope>test</scope>
   </dependency>
-  <!-- If you use LambdaTest with Jupiter / Junit5 -->
+  <!-- If you use LambdaTest with JUnit5 / Jupiter -->
   <dependency>
     <groupId>org.junit.jupiter</groupId>
     <artifactId>junit-jupiter</artifactId>
@@ -97,7 +97,7 @@ Maven users can use the following dependency declaration:
 </dependencies>
 ----
 
-== Choose your favorite Unit-Test Runner: TestNG, JUnit, Jupiter (JUnit5)
+== Choose your favorite Unit-Test Runner: TestNG, JUnit, Junit5 (Jupiter)
 
 With {lambdatest}, you need to only know LambdaTests very simple and minimalistic API but can use it to write test for JUnit and TestNG.
 
@@ -105,7 +105,7 @@ To avoid a dependency to both frameworks at the same time, your test class  inhe
 
 For JUnit you inherit link:{srcdir}de/tobiasroeser/lambdatest/junit/FreeSpec{javasuffix}[`de.tobiasroeser.lambdatest.junit.FreeSpec`].
 
-For Jupiter (JUnit5) you inherit link:{srcdir}de/tobiasroeser/lambdatest/jupiter/FreeSpec{javasuffix}[`de.tobiasroeser.lambdatest.jupiter.FreeSpec`].
+For Junit 5 (Jupiter) you inherit link:{srcdir}de/tobiasroeser/lambdatest/junit5/FreeSpec{javasuffix}[`de.tobiasroeser.lambdatest.junit5.FreeSpec`].
 
 For TestNG you inherit
 link:{srcdir}de/tobiasroeser/lambdatest/testng/FreeSpec{javasuffix}[`de.tobiasroeser.lambdatest.testng.FreeSpec`].
@@ -139,9 +139,9 @@ You need to extend from class `de.tobiasroeser.lambdatest.testng.FreeSpec`.
 [source,java]
 ----
 import static de.tobiasroeser.lambdatest.Expect.expectEquals;
-// You can also use JUnit or Jupiter based tests with
+// You can also use JUnit or Junit 5 (Jupiter) based tests with
 // import de.tobiasroeser.lambdatest.junit.FreeSpec;
-// import de.tobiasroeser.lambdatest.junpiter.FreeSpec;
+// import de.tobiasroeser.lambdatest.junit5.FreeSpec;
 import de.tobiasroeser.lambdatest.testng.FreeSpec;
 
 public class SimpleTest extends FreeSpec {

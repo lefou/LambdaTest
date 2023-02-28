@@ -40,7 +40,7 @@ def bndExecution(id: String, classesDir: String) = Execution(
         namespace,
         namespace + ".generic",
         namespace + ".junit",
-        namespace + ".jupiter",
+        namespace + ".junit5",
         namespace + ".testng",
         namespace + ".proxy"
 

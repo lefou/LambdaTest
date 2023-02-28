@@ -1,4 +1,4 @@
-package de.tobiasroeser.lambdatest.jupiter;
+package de.tobiasroeser.lambdatest.junit5;
 
 import de.tobiasroeser.lambdatest.generic.DefaultReporter;
 import de.tobiasroeser.lambdatest.generic.LoggingWrappingReporter;
