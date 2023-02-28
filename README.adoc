@@ -1,7 +1,7 @@
 = Lambda Test
 :toc:
 :toc-placement: preamble
-:lambdatestversion: 0.8.0-SNAPSHOT
+:lambdatestversion: 0.8.0
 :documentationversion: {lambdatestversion}
 :testngversion: 6.11
 :junitversion: 4.12
@@ -495,6 +495,12 @@ You can also find me on https://twitter.com/TobiasRoeser[Twitter as @TobiasRoese
 If you like {lambdatest}, please star it on https://github.com/lefou/LambdaTest[GitHub]. This will help me to set my priorities. Thanks!
 
 == Changelog
+
+=== LambdaTest 0.8.0 - 2023-02-28
+
+* Added support for JUnit 5 aka Jupiter.
+* Dropped released for Java 7
+* No longer use Asciidoclet to generate JavaDoc
 
 === LambdaTest 0.7.1 - 2021-06-28
 
