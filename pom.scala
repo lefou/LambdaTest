@@ -178,6 +178,16 @@ Model(
         )
       ),
       Plugin(
+        Plugins.jar,
+        executions = Seq(
+          jarExecution(
+            id = "default-jar",
+            classifier = "",
+            classesDir = "${project.build.outputDirectory}"
+          )
+        )
+      ),
+      Plugin(
         Plugins.reproducibleBuild,
         executions = Seq(
           Execution(
